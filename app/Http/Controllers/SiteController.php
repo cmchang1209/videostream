@@ -19,6 +19,6 @@ class SiteController extends Controller
 
     public function info(Request $request)
     {
-        echo phpinfo();
+        //echo phpinfo();
     }
 }

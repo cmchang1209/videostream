@@ -17,10 +17,10 @@
                     </el-table-column>
                     <el-table-column :label="$store.state.langData.cont.pageFn.table.Name">
                         <template v-if="scope.$index === 0" slot-scope="scope">
-                            <el-select v-model="form.players[0].name" multiple filterable remote :multiple-limit="1" reserve-keyword :placeholder="$store.state.langData.cont.msg.placeholder.ph0002" :remote-method="getPlayer" :loading="playerOptions.loading" :loading-text="$store.state.langData.cont.msg.data.d0003" :no-data-text="$store.state.langData.cont.msg.data.d0001" :no-match-text="$store.state.langData.cont.msg.data.d0002">
-                                <el-option v-for="item in playerOptions.data" :key="item.value" :label="item.label" :value="item.value">
+                            <el-select v-model="form.players[0].name" multiple filterable remote :multiple-limit="1" :placeholder="$store.state.langData.cont.msg.placeholder.ph0002" :remote-method="getPlayer" :loading="playerOptions.loading" :loading-text="$store.state.langData.cont.msg.data.d0003" :no-data-text="$store.state.langData.cont.msg.data.d0001" :no-match-text="$store.state.langData.cont.msg.data.d0002" style="width: 100%">
+                                <el-option v-for="item in getPlayerOptions" :key="item.id" :label="item.label" :value="item.id">
                                     <span style="float: left">{{ item.label }}</span>
-                                    <span style="float: right; color: #8492a6; font-size: 13px">{{ item.value }}</span>
+                                    <span style="float: right; color: #8492a6; font-size: 13px">{{ item.fidoID }}</span>
                                 </el-option>
                             </el-select>
                         </template>
@@ -132,6 +132,22 @@ export default {
             })
             this.form.players[0].track = selectData[0]
             return selectData
+        },
+        getPlayerOptions() {
+            this.playerOptions.data.map(iteam => {
+                iteam.label = ''
+                if(this.isBase64(iteam.name)) {
+                    iteam.label = `${Base64.decode(iteam.name)}`
+                }
+                if(this.isBase64(iteam.nickName)) {
+                    if(iteam.label === '') {
+                        iteam.label = `${Base64.decode(iteam.nickName)}`
+                    } else {
+                        iteam.label = `${iteam.label}(${Base64.decode(iteam.nickName)})`
+                    }
+                }
+            })
+            return this.playerOptions.data
         }
     },
     methods: {
@@ -164,22 +180,23 @@ export default {
                     .get('/api/getTournamentData', { params: { name: query } })
                     .then(response => {
                         let data = response.data.data
-                        /*data.players.map(iteam => {
-                            iteam.nickName = iteam.nickName !== ''? Base64.decode(iteam.nickName) : ''
-                        })*/
-                        console.log(data.players)
+                        this.playerOptions.data = data.players
+                        this.playerOptions.loading = false
                     }).catch(error => {
                         console.log(error)
                     })
-                /*setTimeout(() => {
-                    this.loading = false;
-                    this.options = this.list.filter(item => {
-                        return item.label.toLowerCase()
-                            .indexOf(query.toLowerCase()) > -1;
-                    });
-                }, 200);*/
             } else {
                 this.playerOptions.data = []
+            }
+        },
+        isBase64(str) {
+            if (str === '' || str.trim() === '') {
+                return false
+            }
+            try {
+                return btoa(atob(str)) == str
+            } catch (err) {
+                return false
             }
         }
     }

@@ -167,7 +167,7 @@ export default {
                         /*data.players.map(iteam => {
                             iteam.nickName = iteam.nickName !== ''? Base64.decode(iteam.nickName) : ''
                         })*/
-                        console.log(data.players)
+                        //console.log(data.players)
                     }).catch(error => {
                         console.log(error)
                     })

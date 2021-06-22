@@ -29,18 +29,7 @@ class ApiController extends Controller
         $data['errorCode'] = 'er0000';
         $sql = 'SELECT id, fidoID, name, nickName FROM users';
         $players = DB::connection('mysql')->select($sql);
-        $filtered = [];
-        foreach ($players as $key => $item) {
-            /*if(strpos($item->fidoID, $request->name) !== FALSE || strpos(base64_decode($item->name), $request->name) !== FALSE || strpos(base64_decode($item->nickName), $request->name)){
-                array_push($filtered, $item);
-            }*/
-            array_push($filtered, $item);
-        }
-        /*$players = collect($players);
-        $filtered = $players->filter(function ($item) use ($request) {
-            return (strpos($item->fidoID, $request->name) !== FALSE || strpos(base64_decode($item->name), $request->name) !== FALSE || strpos(base64_decode($item->nickName), $request->name));
-        });*/
-        $data['players'] = $filtered;
+        $data['players'] = $players;
         return compact('data');
     }
 

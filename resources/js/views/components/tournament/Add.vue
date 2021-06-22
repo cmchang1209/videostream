@@ -17,12 +17,13 @@
                     </el-table-column>
                     <el-table-column :label="$store.state.langData.cont.pageFn.table.Name">
                         <template v-if="scope.$index === 0" slot-scope="scope">
-                            <el-select v-model="form.players[0].name" multiple filterable remote :multiple-limit="1" :placeholder="$store.state.langData.cont.msg.placeholder.ph0002" :remote-method="getPlayer" :loading="playerOptions.loading" :loading-text="$store.state.langData.cont.msg.data.d0003" :no-data-text="$store.state.langData.cont.msg.data.d0001" :no-match-text="$store.state.langData.cont.msg.data.d0002" style="width: 100%">
+                            <!-- <el-select v-model="form.players[0].name" multiple filterable remote :multiple-limit="1" :placeholder="$store.state.langData.cont.msg.placeholder.ph0002" :remote-method="getPlayer" :loading="playerOptions.loading" :loading-text="$store.state.langData.cont.msg.data.d0003" :no-data-text="$store.state.langData.cont.msg.data.d0001" :no-match-text="$store.state.langData.cont.msg.data.d0002" style="width: 100%">
                                 <el-option v-for="item in getPlayerOptions" :key="item.id" :label="item.label" :value="item.id">
                                     <span style="float: left">{{ item.label }}</span>
                                     <span style="float: right; color: #8492a6; font-size: 13px">{{ item.fidoID }}</span>
                                 </el-option>
-                            </el-select>
+                            </el-select> -->
+                            <el-autocomplete v-model="form.players[0].name" :fetch-suggestions="querySearchAsync" :placeholder="$store.state.langData.cont.msg.placeholder.ph0002" @select="handleSelect" style="width: 100%"></el-autocomplete>
                         </template>
                     </el-table-column>
                     <el-table-column :label="$store.state.langData.cont.pageFn.table.Equipment">
@@ -78,7 +79,7 @@ export default {
                 name: '',
                 players: [{
                     track: null,
-                    name: [],
+                    name: '',
                     pi: null
                 }, {
                     name: '',
@@ -112,10 +113,7 @@ export default {
                     { validator: validateName, required: true, trigger: 'no' }
                 ],
             },
-            playerOptions: {
-                loading: false,
-                data: []
-            }
+            playerOptions: []
         }
     },
     created() {
@@ -133,14 +131,14 @@ export default {
             this.form.players[0].track = selectData[0]
             return selectData
         },
-        getPlayerOptions() {
+        /*getPlayerOptions() {
             this.playerOptions.data.map(iteam => {
                 iteam.label = ''
-                if(this.isBase64(iteam.name)) {
+                if (this.isBase64(iteam.name)) {
                     iteam.label = `${Base64.decode(iteam.name)}`
                 }
-                if(this.isBase64(iteam.nickName)) {
-                    if(iteam.label === '') {
+                if (this.isBase64(iteam.nickName)) {
+                    if (iteam.label === '') {
                         iteam.label = `${Base64.decode(iteam.nickName)}`
                     } else {
                         iteam.label = `${iteam.label}(${Base64.decode(iteam.nickName)})`
@@ -148,19 +146,9 @@ export default {
                 }
             })
             return this.playerOptions.data
-        }
+        }*/
     },
     methods: {
-        fetchData() {
-            /*axios
-                .get('/api/getTournamentData')
-                .then(response => {
-                    let data = response.data.data
-                    console.log(data)
-                }).catch(error => {
-                    console.log(error)
-                })*/
-        },
         add() {
             this.$refs['ruleForm'].validate((valid) => {
                 if (valid) {
@@ -173,21 +161,51 @@ export default {
         cancel() {
 
         },
-        getPlayer(query) {
-            if (query !== '') {
-                this.playerOptions.loading = true
-                axios
-                    .get('/api/getTournamentData', { params: { name: query } })
-                    .then(response => {
-                        let data = response.data.data
-                        this.playerOptions.data = data.players
-                        this.playerOptions.loading = false
-                    }).catch(error => {
-                        console.log(error)
+        fetchData() {
+            axios
+                .get('/api/getTournamentData')
+                .then(response => {
+                    let data = response.data.data
+                    data.players.map(iteam => {
+                        var opt = {}
+                        iteam.value = ''
+                        if (this.isBase64(iteam.name)) {
+                            iteam.name = `${Base64.decode(iteam.name)}`
+                            iteam.value = iteam.name
+                        }
+                        if (this.isBase64(iteam.nickName)) {
+                            iteam.nickName = `${Base64.decode(iteam.nickName)}`
+                            if (iteam.value === '') {
+                                iteam.value = iteam.nickName
+                            } else {
+                                if (iteam.name !== iteam.nickName) {
+                                    iteam.value = `${iteam.value}(${iteam.nickName})`
+                                }
+                            }
+                        }
+
+                        iteam.value = `${iteam.value} ${iteam.fidoID}`
+                        opt.value = iteam.value
+                        opt.id = iteam.id
+                        this.playerOptions.push(opt)
                     })
-            } else {
-                this.playerOptions.data = []
+                    console.log(this.playerOptions)
+                }).catch(error => {
+                    console.log(error)
+                })
+        },
+        querySearchAsync(queryString, cb) {
+            var restaurants = this.playerOptions
+            var results = queryString ? restaurants.filter(this.createStateFilter(queryString)) : restaurants
+            cb(results)
+        },
+        createStateFilter(queryString) {
+            return (restaurants) => {
+                return (restaurants.value.toLowerCase().indexOf(queryString.toLowerCase()) !== -1)
             }
+        },
+        handleSelect() {
+
         },
         isBase64(str) {
             if (str === '' || str.trim() === '') {

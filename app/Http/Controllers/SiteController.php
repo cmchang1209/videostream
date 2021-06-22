@@ -16,4 +16,9 @@ class SiteController extends Controller
     	$texts = json_encode($texts);
     	return view('admin', compact('texts'));
     }
+
+    public function info(Request $request)
+    {
+        echo phpinfo();
+    }
 }

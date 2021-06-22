@@ -1,0 +1,37 @@
+body {
+  margin: 0;
+  overflow: hidden;
+}
+
+body .el-menu {
+  border-right: 0px;
+}
+
+body .el-menu:not(.el-menu--collapse) {
+  width: 200px;
+  /* min-height: 400px; */
+}
+
+body .el-menu .toggle-button {
+  font-size: 10px;
+  line-height: 24px;
+  text-align: center;
+  letter-spacing: 0.2em;
+  cursor: pointer;
+  border-right: 0;
+  border-bottom: solid 1px #e6e6e6;
+}
+
+body .main {
+  border-left: solid 1px #e6e6e6;
+}
+
+body .main .el-main {
+  height: calc(100vh - 60px);
+  overflow-y: auto;
+}
+
+body .main .el-main .el-breadcrumb * {
+  font-size: 1.15rem;
+}
+

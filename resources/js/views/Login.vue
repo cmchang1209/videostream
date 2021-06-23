@@ -75,7 +75,7 @@ export default {
                         .then(response => {
                             let data = response.data.data
                             if (data.errorCode === 'er0000') {
-                                sessionStorage.setItem('id', data.data)
+                                localStorage.setItem('id', data.data)
                                 this.changeLoginStatus(false)
                                 this.$router.push({ path: '/' })
                             } else {

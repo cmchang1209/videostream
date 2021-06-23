@@ -30,8 +30,8 @@ export default {
     },
     created() {
         this.setLangCont(this.text)
-        if (sessionStorage.getItem('id') !== null) {
-            var id = Base64.decode(sessionStorage.getItem('id'))
+        if (localStorage.getItem('id') !== null) {
+            var id = Base64.decode(localStorage.getItem('id'))
             var ids = id.split(',')
             this.setMe({
                 id : ids[0],

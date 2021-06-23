@@ -28,7 +28,7 @@ export default new VueRouter({
             name: 'Home',
             component: Home,
             beforeEnter(to, from, next) {
-                if (sessionStorage.getItem('id') === null) {
+                if (localStorage.getItem('id') === null) {
                     next('/login')
                 } else {
                     next()
@@ -40,7 +40,7 @@ export default new VueRouter({
             name: 'Login',
             component: Login,
             beforeEnter(to, from, next) {
-                if (sessionStorage.getItem('id') !== null) {
+                if (localStorage.getItem('id') !== null) {
                     next('/')
                 } else {
                     next()
@@ -51,7 +51,7 @@ export default new VueRouter({
             path: '/tournament',
             component: Tournament,
             beforeEnter(to, from, next) {
-                if (sessionStorage.getItem('id') === null) {
+                if (localStorage.getItem('id') === null) {
                     next('/login')
                 } else {
                     next()

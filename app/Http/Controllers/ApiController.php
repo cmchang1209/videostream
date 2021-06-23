@@ -74,12 +74,14 @@ class ApiController extends Controller
         foreach ($equipments as $key => $value) {
             $d = $value->name;
             if($value->store_id !== NULL) {
-                $d = $d.' '.$s[$value->store_id]['name'].' '.$s[$value->store_id]['fidoStoreId'];
+                //$d = $d.' '.$s[$value->store_id]['name'].' '.$s[$value->store_id]['fidoStoreId'];
+                dump($s[$value->store_id]);
             }
-            if(strpos(strtolower($d), strtolower($request->name)) !== false) {
+            /*if(strpos(strtolower($d), strtolower($request->name)) !== false) {
                 array_push($data['equipments'], ['id' => $value->id, 'value' => $d]);
-            }
+            }*/
         }
+        dd('ok');
         
         return compact('data');
     }

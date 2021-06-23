@@ -81,7 +81,7 @@ export default {
                 players: [{
                     track: null,
                     name: '',
-                    pi: null
+                    pi: ''
                 }, {
                     name: '',
                     pi: null
@@ -145,7 +145,7 @@ export default {
         },
         querySearchAsync(queryString, cb) {
             var restaurants = []
-            if (queryString.length >= 3) {
+            if (queryString.length >= 3 && !(queryString === '' || queryString.trim() === '')) {
                 axios
                     .get('/api/getPlayersData', {
                         params: { name: queryString }
@@ -162,6 +162,7 @@ export default {
                             cb(restaurants)
                         }
                     }).catch(error => {
+                        cb(restaurants)
                         console.log(error)
                     })
             } else {
@@ -172,43 +173,29 @@ export default {
 
         },
         querySearchAsyncEquipment(queryString, cb) {
-            var results = []
-            if (queryString === null || queryString === '' || queryString.trim() === '') {
-                cb([])
-            } else {
+            var restaurants = []
+            if (queryString.length >= 1 && !(queryString === '' || queryString.trim() === '')) {
                 axios
                     .get('/api/getEquipmentData', {
-                        params: { distributor_id: this.$store.state.gobalData.me.roleID }
+                        params: { distributor_id: this.$store.state.gobalData.me.roleID, name: queryString }
                     })
                     .then(response => {
                         let data = response.data.data
-                        var restaurants = []
                         if (data.errorCode === 'er0000') {
                             data.equipments.map(iteam => {
-                                if (this.$store.state.gobalData.me.roleID === null || this.$store.state.gobalData.me.roleID === '' || iteam.distributor_id === this.$store.state.gobalData.me.roleID) {
-                                    var opt = {}
-                                    var store = data.store[iteam.store_id]
-                                    iteam.value = `${iteam.name}`
-                                    if(store) {
-                                        iteam.value = `${iteam.name} ${store.name} ${store.fidoStoreId}`
-                                    }
-                                    opt.value = iteam.value
-                                    opt.id = iteam.id
-                                    restaurants.push(opt)
-                                }
+                                var opt = {}
+                                opt.value = iteam.value
+                                opt.id = iteam.id
+                                restaurants.push(opt)
                             })
-                            results = queryString ? restaurants.filter(this.createStateFilter(queryString)) : restaurants
-                            cb(results)
+                            cb(restaurants)
                         }
                     }).catch(error => {
-                        cb(results)
+                        cb(restaurants)
                         console.log(error)
                     })
-            }
-        },
-        createStateFilter(queryString) {
-            return (state) => {
-                return (state.value.toLowerCase().indexOf(queryString.toLowerCase()) !== -1);
+            } else {
+                cb(restaurants)
             }
         },
         handleSelectEquipment() {

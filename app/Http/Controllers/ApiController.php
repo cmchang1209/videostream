@@ -54,17 +54,33 @@ class ApiController extends Controller
     public function getEquipmentData(Request $request) {
         $data = [];
         $data['errorCode'] = 'er0000';
+        $data['equipments'] = [];
         if($request->distributor_id === null || $request->distributor_id === '') {
-            $store = DB::connection('mysql')->select('SELECT id, name, fidoStoreId FROM store');
+            $equipments = DB::connection('mysql_video')->select('SELECT id, name, store_id FROM iteam_pi');
+        } else {
+            $sql = 'SELECT id, name, store_id FROM iteam_pi WHERE distributor_id=:distributor_id';
+            $equipments = DB::connection('mysql_video')->select($sql, ['distributor_id' => $request->distributor_id]);
+        }
+        if($request->distributor_id === null || $request->distributor_id === '') {
+            $stores = DB::connection('mysql')->select('SELECT id, name, fidoStoreId FROM store');
         } else {
             $sql = 'SELECT id, name, fidoStoreId FROM store WHERE distributor_id=:distributor_id';
-            $store = DB::connection('mysql')->select($sql, ['distributor_id' => $request->distributor_id]);
+            $stores = DB::connection('mysql')->select($sql, ['distributor_id' => $request->distributor_id]);
         }
-        foreach ($store as $key => $value) {
-            $data['store'][$value->id] = [ 'fidoStoreId' => $value->fidoStoreId, 'name' => $value->name ];
+        $s = [];
+        foreach ($stores as $key => $value) {
+            $s[$value->id] = [ 'fidoStoreId' => $value->fidoStoreId, 'name' => $value->name ];
         }
-        $sql = 'SELECT id, name, distributor_id, store_id FROM iteam_pi';
-        $data['equipments'] = DB::connection('mysql_video')->select($sql);
+        foreach ($equipments as $key => $value) {
+            $d = $value->name;
+            if($value->store_id !== NULL) {
+                $d = $d.' '.$s[$value->store_id]['name'].' '.$s[$value->store_id]['fidoStoreId'];
+            }
+            if(strpos(strtolower($d), strtolower($request->name)) !== false) {
+                array_push($data['equipments'], ['id' => $value->id, 'value' => $d]);
+            }
+        }
+        
         return compact('data');
     }
 

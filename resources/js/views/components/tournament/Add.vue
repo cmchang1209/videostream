@@ -6,24 +6,25 @@
                 <el-input v-model="form.name"></el-input>
             </el-form-item>
             <el-form-item :label="$store.state.langData.cont.pageFn.table.Players">
+                <el-row>
+                    <el-col :span="22" :offset="2">
+                        <el-form-item :label="$store.state.langData.cont.pageFn.table.Name">
+                            <el-autocomplete v-model="form.players[0].name" :fetch-suggestions="querySearchAsync" :placeholder="$store.state.langData.cont.msg.placeholder.ph0002" @select="handleSelect" style="width: 100%"></el-autocomplete>
+                        </el-form-item>
+                    </el-col>
+                    <el-col :span="22" :offset="2">
+                        <el-form-item :label="$store.state.langData.cont.pageFn.table.Equipment">
+                            <el-autocomplete v-model="form.players[0].pi" :fetch-suggestions="querySearchAsyncEquipment" :placeholder="$store.state.langData.cont.msg.placeholder.ph0002" @select="handleSelectEquipment" style="width: 100%"></el-autocomplete>
+                        </el-form-item>
+                    </el-col>
+                </el-row>
                 <el-table :data="form.players" style="width: 100%">
-                    <el-table-column :label="$store.state.langData.cont.pageFn.table.Race_track">
+                    <el-table-column :label="$store.state.langData.cont.pageFn.table.Race_track" width="120">
                         <template v-if="scope.$index === 0" slot-scope="scope">
-                            <el-select v-model="form.players[0].track" :placeholder="$store.state.langData.cont.msg.placeholder.ph0002" style="width: 100%" :no-data-text="$store.state.langData.cont.msg.data.d0001" :no-match-text="$store.state.langData.cont.msg.data.d0002">
-                                <el-option v-for="item in track" :key="item" :label="item" :value="item">
-                                </el-option>
-                            </el-select>
                         </template>
                     </el-table-column>
-                    <el-table-column :label="$store.state.langData.cont.pageFn.table.Name">
+                    <el-table-column :label="$store.state.langData.cont.pageFn.table.Name" width="400">
                         <template v-if="scope.$index === 0" slot-scope="scope">
-                            <!-- <el-select v-model="form.players[0].name" multiple filterable remote :multiple-limit="1" :placeholder="$store.state.langData.cont.msg.placeholder.ph0002" :remote-method="getPlayer" :loading="playerOptions.loading" :loading-text="$store.state.langData.cont.msg.data.d0003" :no-data-text="$store.state.langData.cont.msg.data.d0001" :no-match-text="$store.state.langData.cont.msg.data.d0002" style="width: 100%">
-                                <el-option v-for="item in getPlayerOptions" :key="item.id" :label="item.label" :value="item.id">
-                                    <span style="float: left">{{ item.label }}</span>
-                                    <span style="float: right; color: #8492a6; font-size: 13px">{{ item.fidoID }}</span>
-                                </el-option>
-                            </el-select> -->
-                            <el-autocomplete v-model="form.players[0].name" :fetch-suggestions="querySearchAsync" :placeholder="$store.state.langData.cont.msg.placeholder.ph0002" @select="handleSelect" style="width: 100%"></el-autocomplete>
                         </template>
                     </el-table-column>
                     <el-table-column :label="$store.state.langData.cont.pageFn.table.Equipment">
@@ -112,13 +113,10 @@ export default {
                 name: [
                     { validator: validateName, required: true, trigger: 'no' }
                 ],
-            },
-            playerOptions: []
+            }
         }
     },
-    created() {
-        this.fetchData()
-    },
+    created() {},
     computed: {
         track() {
             let data = [1, 2, 3, 4, 5, 6, 7, 8]
@@ -130,23 +128,7 @@ export default {
             })
             this.form.players[0].track = selectData[0]
             return selectData
-        },
-        /*getPlayerOptions() {
-            this.playerOptions.data.map(iteam => {
-                iteam.label = ''
-                if (this.isBase64(iteam.name)) {
-                    iteam.label = `${Base64.decode(iteam.name)}`
-                }
-                if (this.isBase64(iteam.nickName)) {
-                    if (iteam.label === '') {
-                        iteam.label = `${Base64.decode(iteam.nickName)}`
-                    } else {
-                        iteam.label = `${iteam.label}(${Base64.decode(iteam.nickName)})`
-                    }
-                }
-            })
-            return this.playerOptions.data
-        }*/
+        }
     },
     methods: {
         add() {
@@ -161,61 +143,76 @@ export default {
         cancel() {
 
         },
-        fetchData() {
-            axios
-                .get('/api/getTournamentData')
-                .then(response => {
-                    let data = response.data.data
-                    data.players.map(iteam => {
-                        var opt = {}
-                        iteam.value = ''
-                        if (this.isBase64(iteam.name)) {
-                            iteam.name = `${Base64.decode(iteam.name)}`
-                            iteam.value = iteam.name
-                        }
-                        if (this.isBase64(iteam.nickName)) {
-                            iteam.nickName = `${Base64.decode(iteam.nickName)}`
-                            if (iteam.value === '') {
-                                iteam.value = iteam.nickName
-                            } else {
-                                if (iteam.name !== iteam.nickName) {
-                                    iteam.value = `${iteam.value}(${iteam.nickName})`
-                                }
-                            }
-                        }
-
-                        iteam.value = `${iteam.value} ${iteam.fidoID}`
-                        opt.value = iteam.value
-                        opt.id = iteam.id
-                        this.playerOptions.push(opt)
-                    })
-                    console.log(this.playerOptions)
-                }).catch(error => {
-                    console.log(error)
-                })
-        },
         querySearchAsync(queryString, cb) {
-            var restaurants = this.playerOptions
-            var results = queryString ? restaurants.filter(this.createStateFilter(queryString)) : restaurants
-            cb(results)
-        },
-        createStateFilter(queryString) {
-            return (restaurants) => {
-                return (restaurants.value.toLowerCase().indexOf(queryString.toLowerCase()) !== -1)
+            var restaurants = []
+            if (queryString.length >= 3) {
+                axios
+                    .get('/api/getPlayersData', {
+                        params: { name: queryString }
+                    })
+                    .then(response => {
+                        let data = response.data.data
+                        if (data.errorCode === 'er0000') {
+                            data.players.map(iteam => {
+                                var opt = {}
+                                opt.value = `${Base64.decode(iteam.value)}`
+                                opt.id = iteam.id
+                                restaurants.push(opt)
+                            })
+                            cb(restaurants)
+                        }
+                    }).catch(error => {
+                        console.log(error)
+                    })
+            } else {
+                cb(restaurants)
             }
         },
         handleSelect() {
 
         },
-        isBase64(str) {
-            if (str === '' || str.trim() === '') {
-                return false
+        querySearchAsyncEquipment(queryString, cb) {
+            var results = []
+            if (queryString === null || queryString === '' || queryString.trim() === '') {
+                cb([])
+            } else {
+                axios
+                    .get('/api/getEquipmentData', {
+                        params: { distributor_id: this.$store.state.gobalData.me.roleID }
+                    })
+                    .then(response => {
+                        let data = response.data.data
+                        var restaurants = []
+                        if (data.errorCode === 'er0000') {
+                            data.equipments.map(iteam => {
+                                if (this.$store.state.gobalData.me.roleID === null || this.$store.state.gobalData.me.roleID === '' || iteam.distributor_id === this.$store.state.gobalData.me.roleID) {
+                                    var opt = {}
+                                    var store = data.store[iteam.store_id]
+                                    iteam.value = `${iteam.name}`
+                                    if(store) {
+                                        iteam.value = `${iteam.name} ${store.name} ${store.fidoStoreId}`
+                                    }
+                                    opt.value = iteam.value
+                                    opt.id = iteam.id
+                                    restaurants.push(opt)
+                                }
+                            })
+                            results = queryString ? restaurants.filter(this.createStateFilter(queryString)) : restaurants
+                            cb(results)
+                        }
+                    }).catch(error => {
+                        cb(results)
+                        console.log(error)
+                    })
             }
-            try {
-                return btoa(atob(str)) == str
-            } catch (err) {
-                return false
+        },
+        createStateFilter(queryString) {
+            return (state) => {
+                return (state.value.toLowerCase().indexOf(queryString.toLowerCase()) !== -1);
             }
+        },
+        handleSelectEquipment() {
+
         }
     }
 }

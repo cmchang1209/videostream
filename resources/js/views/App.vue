@@ -2,11 +2,18 @@
     <div>
         <el-container v-if="!isGuest" v-loading="appLoading" element-loading-spinner="el-icon-loading">
             <!-- 側邊欄 -->
-            <Aside />
+            <div class="hidden-sm-and-down">
+                <Aside />
+            </div>
             <!-- 右側內容主體 -->
             <Main />
         </el-container>
         <router-view v-else></router-view>
+        <!-- left menu for phone -->
+        <el-drawer title="" :visible="drawer" :direction="direction" :size="'100%'" custom-class="hidden-md-and-up" @close="changeDrawerStatus(false)">
+            <!-- 側邊欄 -->
+            <Aside />
+        </el-drawer>
     </div>
 </template>
 <script>
@@ -18,22 +25,30 @@ export default {
     props: ['text'],
     data() {
         return {
-
+            direction: 'ltr'
         }
     },
     created() {
         this.setLangCont(this.text)
         if (sessionStorage.getItem('id') !== null) {
+            var id = Base64.decode(sessionStorage.getItem('id'))
+            var ids = id.split(',')
+            this.setMe({
+                id : ids[0],
+                roleID: ids[1],
+                roleCode: ids[2] * 1
+            })
             this.changeLoginStatus(false)
         }
     },
     computed: mapState({
         isGuest: state => state.gobalData.isGuest,
         appLoading: state => state.gobalData.appLoading,
+        drawer: state => state.gobalData.drawer,
     }),
     mounted() {},
     methods: {
-        ...mapActions(['setLangCont', 'changeLoginStatus'])
+        ...mapActions(['setLangCont', 'changeLoginStatus', 'changeDrawerStatus', 'setMe'])
     },
     watch: {}
 }

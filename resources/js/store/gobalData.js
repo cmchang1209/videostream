@@ -1,30 +1,44 @@
 export default {
     state: {
         isGuest: true,
-        appLoading: false
+        me: {},
+        appLoading: false,
+        drawer: false
     },
     getters: {
-        isTouchDevice(state){
+        isTouchDevice(state) {
             return ('ontouchstart' in window || navigator.msMaxTouchPoints) || false
         }
     },
     mutations: {
+        setMe(state, val) {
+            state.me = val
+        },
         changeLoginStatus(state, val) {
             state.isGuest = val
         },
         changeAppLoadingStatus(state, val) {
             state.appLoading = val
+        },
+        changeDrawerStatus(state, val) {
+            state.drawer = val
         }
     },
     actions: {
-    	changeTitle: ({commit}, val) => {
+        setMe: ({ commit }, val) => {
+            commit('setMe', val)
+        },
+        changeTitle: ({ commit }, val) => {
             document.title = `${val}::`;
         },
-        changeLoginStatus: ({commit}, val) => {
+        changeLoginStatus: ({ commit }, val) => {
             commit('changeLoginStatus', val)
         },
-        changeAppLoadingStatus: ({commit}, val) => {
+        changeAppLoadingStatus: ({ commit }, val) => {
             commit('changeAppLoadingStatus', val)
+        },
+        changeDrawerStatus: ({ commit }, val) => {
+            commit('changeDrawerStatus', val)
         }
     }
 }

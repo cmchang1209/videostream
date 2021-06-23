@@ -1,8 +1,8 @@
 <template>
-    <div class="hidden-sm-and-down">
+    <div>
         <!-- 側邊欄菜單區域 -->
-        <el-menu unique-opened :collapse="isCollapse" router :default-active="$router.currentRoute.path" :unique-opened="true">
-            <div class="toggle-button" @click="isCollapse = !isCollapse">|||</div>
+        <el-menu unique-opened :collapse="isCollapse" router :default-active="$router.currentRoute.path" :unique-opened="true" @select="changeDrawerStatus(false)">
+            <div class="toggle-button hidden-sm-and-down" @click="isCollapse = !isCollapse">|||</div>
             <el-menu-item index="/">
                 <i class="el-icon-setting"></i>
                 <span slot="title">
@@ -53,13 +53,17 @@
     </div>
 </template>
 <script>
+import { mapActions } from 'vuex'
 export default {
     data() {
         return {
             isCollapse: false
         }
     },
-    computed: {}
+    computed: {},
+    methods: {
+        ...mapActions(['changeDrawerStatus'])
+    }
 }
 
 </script>

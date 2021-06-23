@@ -13,7 +13,7 @@
                 </el-form-item>
                 <br>
                 <el-form-item>
-                    <el-button type="primary" @click="submitForm">{{ $store.state.langData.cont.pageFn.login.submit }}</el-button>
+                    <el-button type="primary" :loading="loading" @click="submitForm">{{ $store.state.langData.cont.pageFn.login.submit }}</el-button>
                 </el-form-item>
             </el-form>
         </el-col>
@@ -54,7 +54,8 @@ export default {
                 pass: [
                     { validator: validatePass, required: true, trigger: 'no' }
                 ]
-            }
+            },
+            loading: false
         }
     },
     computed: {
@@ -65,8 +66,9 @@ export default {
         this.changeTitle(`${pageName.title.admin}::${pageName.login}`)
     },
     methods: {
-        ...mapActions(['changeTitle', 'changeLoginStatus']),
+        ...mapActions(['changeTitle', 'changeLoginStatus', 'setMe']),
         submitForm() {
+            this.loading = true
             this.$refs['ruleForm'].validate((valid) => {
                 if (valid) {
                     axios.post('/api/login', this.ruleForm)
@@ -77,6 +79,7 @@ export default {
                                 this.changeLoginStatus(false)
                                 this.$router.push({ path: '/' })
                             } else {
+                                this.loading = false
                                 this.ruleForm.error = true
                                 this.$refs['ruleForm'].clearValidate()
                                 this.$refs['ruleForm'].validateField('pass', (valid) => {
@@ -91,6 +94,7 @@ export default {
                         .catch(error => { // 請求失敗處理
                         })
                 } else {
+                    this.loading = false
                     return false
                 }
             })

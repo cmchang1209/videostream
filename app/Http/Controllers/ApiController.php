@@ -71,7 +71,7 @@ class ApiController extends Controller
         foreach ($stores as $key => $value) {
             $s[$value->id] = [ 'fidoStoreId' => $value->fidoStoreId, 'name' => $value->name ];
         }
-        dd($s);
+        dd($s['53919d9d-78d1-11eb-b978-06a38d921342']);
         foreach ($equipments as $key => $value) {
             $d = $value->name;
             if($value->store_id !== NULL) {

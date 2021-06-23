@@ -56,15 +56,15 @@ class ApiController extends Controller
         $data['errorCode'] = 'er0000';
         $data['equipments'] = [];
         if($request->distributor_id === null || $request->distributor_id === '') {
-            $equipments = DB::connection('mysql_video')->select('SELECT id, name, distributor_id, store_id FROM iteam_pi');
+            $equipments = DB::connection('mysql_video')->select('SELECT id, name, store_id FROM iteam_pi');
         } else {
-            $sql = 'SELECT id, name, distributor_id, store_id FROM iteam_pi WHERE distributor_id=:distributor_id';
+            $sql = 'SELECT id, name, store_id FROM iteam_pi WHERE distributor_id=:distributor_id';
             $equipments = DB::connection('mysql_video')->select($sql, ['distributor_id' => $request->distributor_id]);
         }
         if($request->distributor_id === null || $request->distributor_id === '') {
-            $stores = DB::connection('mysql')->select('SELECT id, name, fidoStoreId, distributor_id FROM store');
+            $stores = DB::connection('mysql')->select('SELECT id, name, fidoStoreId FROM store');
         } else {
-            $sql = 'SELECT id, name, fidoStoreId, distributor_id FROM store WHERE distributor_id=:distributor_id';
+            $sql = 'SELECT id, name, fidoStoreId FROM store WHERE distributorId=:distributor_id';
             $stores = DB::connection('mysql')->select($sql, ['distributor_id' => $request->distributor_id]);
         }
         $s = [];

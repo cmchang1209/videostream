@@ -19,15 +19,23 @@
             </el-table-column>
             <el-table-column fixed="right" :label="$store.state.langData.cont.pageFn.table.Operating" width="100">
                 <template slot-scope="scope">
-                    <el-button @click.native.prevent="handleEdit(scope.$index, scope.row)" type="text">
-                        {{ $store.state.langData.cont.pageFn.table.Edit }}
-                    </el-button>
+                    <p style="margin: 0;">
+                        <el-button @click.native.prevent="handleEdit(scope.$index, scope.row)" type="text">
+                            {{ $store.state.langData.cont.pageFn.table.Edit }}
+                        </el-button>
+                    </p>
+                    <p style="margin: 0;">
+                        <el-button @click.native.prevent="handleDelete(scope.$index, scope.row)" type="text">
+                            {{ $store.state.langData.cont.pageFn.table.Delete }}
+                        </el-button>
+                    </p>
                 </template>
             </el-table-column>
         </el-table>
     </div>
 </template>
 <script>
+import { mapActions } from 'vuex'
 import Breadcrumb from '../layout/Breadcrumb.vue'
 export default {
     components: { Breadcrumb },
@@ -48,6 +56,7 @@ export default {
         this.fetchData()
     },
     methods: {
+        ...mapActions(['changeAppLoadingStatus']),
         addTournament() {
             this.$router.push({ name: 'AddTournament' })
         },
@@ -65,6 +74,37 @@ export default {
         },
         handleEdit(index, row) {
             this.$router.push({ name: 'EditTournament', query: { id: row.id } })
+        },
+        handleDelete(index, row) {
+            this.changeAppLoadingStatus(true)
+            axios
+                .delete('/api/deleteTournament', { params: { id: row.id } })
+                .then(response => {
+                    let data = response.data.data
+                    if (data.errorCode === 'er0000') {
+                        this.$message({
+                            message: this.$store.state.langData.cont.msg.database.ok0003,
+                            type: 'success',
+                            offset: 90
+                        })
+                        this.fetchData()
+                        this.changeAppLoadingStatus(false)
+                    } else {
+                        this.$message({
+                            message: this.$store.state.langData.cont.msg.database[data.errorCode],
+                            type: 'error',
+                            offset: 90
+                        })
+                        this.changeAppLoadingStatus(false)
+                    }
+                }).catch(error => {
+                    this.changeAppLoadingStatus(false)
+                    this.$message({
+                        message: JSON.stringify(error),
+                        type: 'error',
+                        offset: 90
+                    })
+                })
         }
     }
 }

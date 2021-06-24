@@ -87,8 +87,8 @@ class ApiController extends Controller
     public function addTournament(Request $request) {
         $data = [];
         $sql = 'INSERT INTO iteam_tournament (name) VALUES (:name)';
-        $index = DB::connection('mysql_video')->insert($sql, ['name' => $request->data['name']]);
-        if($index) {
+        $result = DB::connection('mysql_video')->insert($sql, ['name' => $request->data['name']]);
+        if($result) {
             $id = DB::connection('mysql_video')->getPdo()->lastInsertId();
             $sql = 'INSERT INTO iteam_tournament_players (tournament_id, u_id, u_name, p_id, p_name) VALUES ';
             foreach ($request->data['players'] as $key => $value) {
@@ -97,8 +97,8 @@ class ApiController extends Controller
                     $sql .= ',';
                 }
             }
-            $index = DB::connection('mysql_video')->insert($sql);
-            if($index) {
+            $result = DB::connection('mysql_video')->insert($sql);
+            if($result) {
                 $data['errorCode'] = 'er0000';
             } else {
                 $data['errorCode'] = 'er0001';
@@ -113,9 +113,21 @@ class ApiController extends Controller
     public function getTournamentListData(Request $request) {
         $data = [];
         $data['errorCode'] = 'er0000';
-        $sql = 'SELECT * FROM iteam_tournament';
+        $sql = 'SELECT * FROM iteam_tournament WHERE is_delete=0';
         $data['data'] = DB::connection('mysql_video')->select($sql);
 
+        return compact('data');
+    }
+
+    public function deleteTournament(Request $request) {
+        $data = [];
+        $sql = 'UPDATE iteam_tournament SET is_delete=1 WHERE id=:id';
+        $result = DB::connection('mysql_video')->update($sql, ['id' => $request->id]);
+        if($result) {
+            $data['errorCode'] = 'er0000';
+        } else {
+            $data['errorCode'] = 'er0001';
+        }
         return compact('data');
     }
 }

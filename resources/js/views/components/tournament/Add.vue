@@ -18,7 +18,7 @@
                     </el-col>
                     <el-col :span="22" :offset="2">
                         <el-form-item :label="$store.state.langData.cont.pageFn.table.Equipment">
-                            <el-autocomplete v-model="player.pi" clearable placement="top-start" :fetch-suggestions="querySearchAsyncEquipment" :placeholder="$store.state.langData.cont.msg.placeholder.ph0002" @select="handleSelectEquipment" @blur="handleBlurEquipment" @clear="handleClearEquipment" style="width: 100%"></el-autocomplete>
+                            <el-autocomplete v-model="player.pi" clearable placement="top-start" :fetch-suggestions="querySearchAsyncEquipment" :placeholder="$store.state.langData.cont.msg.placeholder.ph0002" :no-match-text="$store.state.langData.cont.msg.data.d0002" :no-data-text="$store.state.langData.cont.msg.data.d0001" @select="handleSelectEquipment" @blur="handleBlurEquipment" @clear="handleClearEquipment" style="width: 100%"></el-autocomplete>
                         </el-form-item>
                     </el-col>
                 </el-row>

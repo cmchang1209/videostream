@@ -1,6 +1,7 @@
 body {
   margin: 0;
   overflow: hidden;
+  /*Fixes double tap on iOS*/
 }
 
 body .el-menu {
@@ -33,5 +34,9 @@ body .main .el-main {
 
 body .main .el-main .el-breadcrumb * {
   font-size: 1rem;
+}
+
+body .el-scrollbar > .el-scrollbar__bar {
+  opacity: 1;
 }
 

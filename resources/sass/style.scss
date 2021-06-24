@@ -37,12 +37,8 @@ body {
 
     /*Fixes double tap on iOS*/
     .el-scrollbar {
-        .el-scrollbar__bar {
+        >.el-scrollbar__bar {
             opacity: 1;
         }
-    }
-
-    .el-select-dropdown {
-        max-width: 100vw;
     }
 }

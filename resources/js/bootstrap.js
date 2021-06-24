@@ -10,7 +10,7 @@ window.axios = require('axios');
 
 //window.axios.defaults.headers.common['X-Requested-With'] = 'XMLHttpRequest';
 window.axios.defaults.headers.common = {
-    'X-CSRF-TOKEN':document.querySelector('meta[name="csrf-token"]').getAttribute('content'),
+    'X-CSRF-TOKEN': document.querySelector('meta[name="csrf-token"]').getAttribute('content'),
     'X-Requested-With': 'XMLHttpRequest',
     'Content-Type': 'application/json;charset=UTF-8'
 }
@@ -19,6 +19,15 @@ window.Vue = require('vue')
 window.Base64 = require('js-base64').Base64
 
 import ElementUI from 'element-ui'
+// Fixes an issue with filters not working on mobile
+ElementUi.Select.computed.readonly = function() {
+    // trade-off for IE input readonly problem: https://github.com/ElemeFE/element/issues/10403
+    const isIE = !this.$isServer && !Number.isNaN(Number(document.documentMode));
+
+    return !(this.filterable || this.multiple || !isIE) && !this.visible
+}
+
+export default ElementUi
 
 import 'element-ui/lib/theme-chalk/display.css'
 Vue.use(ElementUI)

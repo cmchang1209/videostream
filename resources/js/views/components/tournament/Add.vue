@@ -11,14 +11,14 @@
                         <!-- <el-form-item :label="$store.state.langData.cont.pageFn.table.Name">
                             <el-autocomplete v-model="player.name" :fetch-suggestions="querySearchAsync" :placeholder="$store.state.langData.cont.msg.placeholder.ph0002" @select="handleSelect" @change="handleSelect" style="width: 100%"></el-autocomplete>
                         </el-form-item> -->
-                        <el-select ref="select" v-model="player.name" filterable remote clearable :placeholder="$store.state.langData.cont.msg.placeholder.ph0002" :remote-method="remoteMethod" @select="handleSelect" :loading="player.loading" style="width: 100%" @clear="player.opt=[]" :loading-text="$store.state.langData.cont.msg.data.d0003" :no-match-text="$store.state.langData.cont.msg.data.d0002" :no-data-text="$store.state.langData.cont.msg.data.d0001" @click.native="handleClick">
+                        <el-select v-model="player.name" filterable remote clearable :placeholder="$store.state.langData.cont.msg.placeholder.ph0002" :remote-method="remoteMethod" @select="handleSelect" :loading="player.loading" style="width: 100%" @clear="player.opt=[]" :loading-text="$store.state.langData.cont.msg.data.d0003" :no-match-text="$store.state.langData.cont.msg.data.d0002" :no-data-text="$store.state.langData.cont.msg.data.d0001" @click.native="handleClick">
                             <el-option v-for="item in player.opt" :key="item.id" :label="item.value" :value="item.id">
                             </el-option>
                         </el-select>
                     </el-col>
                     <el-col :span="22" :offset="2">
                         <el-form-item :label="$store.state.langData.cont.pageFn.table.Equipment">
-                            <el-autocomplete v-model="player.pi" :fetch-suggestions="querySearchAsyncEquipment" :placeholder="$store.state.langData.cont.msg.placeholder.ph0002" @select="handleSelectEquipment" style="width: 100%"></el-autocomplete>
+                            <el-autocomplete v-model="player.pi" clearable :fetch-suggestions="querySearchAsyncEquipment" :placeholder="$store.state.langData.cont.msg.placeholder.ph0002" @select="handleSelectEquipment" @blur="handleBlurEquipment" @clear="handleClearEquipment" style="width: 100%"></el-autocomplete>
                         </el-form-item>
                     </el-col>
                 </el-row>
@@ -145,7 +145,7 @@ export default {
         },
         querySearchAsyncEquipment(queryString, cb) {
             var restaurants = []
-            if (queryString.length >= 1 && !(queryString === '' || queryString.trim() === '')) {
+            if (!this.player.readonly && queryString && queryString.length >= 1 && !(queryString === '' || queryString.trim() === '')) {
                 axios
                     .get('/api/getEquipmentData', {
                         params: { distributor_id: this.$store.state.gobalData.me.roleID, name: queryString }
@@ -169,8 +169,11 @@ export default {
                 cb(restaurants)
             }
         },
-        handleSelectEquipment() {
-
+        handleSelectEquipment(item) {
+            console.log(this.player)
+            this.player.add.p_id = item.id
+            this.player.add.p_name = item.value
+            //this.player.readonly = true
         },
         remoteMethod(query) {
             console.log(query)
@@ -207,19 +210,13 @@ export default {
         handleSelect() {
 
         },
-        handleClick() {
-            let elSelect = this.$refs.select;
-            let innerElInput = elSelect.$refs.reference;
-            // 先让input失去焦点
-            innerElInput.blur();
-            // 再重新获得焦点
-            innerElInput.focus();
+        handleBlurEquipment(event) {
+            console.log(event)
+            this.player.pi = this.player.add.p_name
         },
-
-        handleBlur() {
-            let elSelect = this.$refs.select;
-            // el-input失去焦点时让外层el-select也失去焦点
-            elSelect.blur();
+        handleClearEquipment() {
+            this.player.pi = this.player.add.p_name = ''
+            this.player.add.p_id = ''
         },
         addPlayer() {}
     }

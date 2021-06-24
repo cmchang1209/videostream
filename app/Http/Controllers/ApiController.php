@@ -84,4 +84,38 @@ class ApiController extends Controller
         return compact('data');
     }
 
+    public function addTournament(Request $request) {
+        $data = [];
+        $sql = 'INSERT INTO iteam_tournament (name) VALUES (:name)';
+        $index = DB::connection('mysql_video')->insert($sql, ['name' => $request->data['name']]);
+        if($index) {
+            $id = DB::connection('mysql_video')->getPdo()->lastInsertId();
+            $sql = 'INSERT INTO iteam_tournament_players (tournament_id, u_id, u_name, p_id, p_name) VALUES ';
+            foreach ($request->data['players'] as $key => $value) {
+                $sql .= '('.$id.', \''.$value['u_id'].'\', \''.$value['u_name'].'\', '.$value['p_id'].', \''.$value['p_name'].'\')';
+                if($key < count($request->data['players'])-1) {
+                    $sql .= ',';
+                }
+            }
+            $index = DB::connection('mysql_video')->insert($sql);
+            if($index) {
+                $data['errorCode'] = 'er0000';
+            } else {
+                $data['errorCode'] = 'er0001';
+            }
+        } else {
+            $data['errorCode'] = 'er0001';
+        }
+        
+        return compact('data');
+    }
+
+    public function getTournamentListData(Request $request) {
+        $data = [];
+        $data['errorCode'] = 'er0000';
+        $sql = 'SELECT * FROM iteam_tournament';
+        $data['data'] = DB::connection('mysql_video')->select($sql);
+
+        return compact('data');
+    }
 }

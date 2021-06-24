@@ -15,5 +15,9 @@ return [
     	'd0001' => 'no data',
     	'd0002' => 'No matching data',
         'd0003' => 'Loading'
+    ],
+    'database' => [
+        'ok0001' => 'Successfully added',
+        'er0001' => 'Database storage error',
     ]
 ];

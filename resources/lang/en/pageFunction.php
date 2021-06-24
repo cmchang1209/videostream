@@ -9,11 +9,15 @@ return [
 		'Back' => 'Back'
 	],
 	'table' => [
+		'Id' => 'ID',
 		'Players' => 'Players',
 		'Name' => 'Name',
 		'Equipment' => 'Equipment',
 		'Race_track' => 'Race track',
-		'Operating' => 'Operating'
+		'Operating' => 'Operating',
+		'createTime' => 'createTime',
+		'Delete' => 'Delete',
+		'Edit' => 'Edit'
 	],
     'login' => [
     	'label'  => 'Sign in',

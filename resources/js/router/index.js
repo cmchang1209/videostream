@@ -9,6 +9,7 @@ import League from '../views/League'
 
 import TournamentList from '../views/components/tournament/List'
 import AddTournament from '../views/components/tournament/Add'
+import EditTournament from '../views/components/tournament/Edit'
 import TournamentLive from '../views/components/tournament/Live'
 
 import LeagueLive from '../views/components/league/Live'
@@ -66,6 +67,12 @@ export default new VueRouter({
                     path: 'add',
                     name: 'AddTournament',
                     component: AddTournament
+                },
+                {
+                    path: 'edit',
+                    name: 'EditTournament',
+                    component: EditTournament,
+                    props: (route) => ({ id: route.query.id })
                 },
                 {
                     path: 'live',

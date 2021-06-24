@@ -18,6 +18,7 @@
                         </el-form-item>
                     </el-col>
                 </el-row>
+                <br>
                 <el-table-draggable handle=".handle">
                     <el-table :data="form.players" :empty-text="$store.state.langData.cont.msg.data.d0001" style="width: 100%">
                         <el-table-column :label="$store.state.langData.cont.pageFn.table.Race_track" width="120">
@@ -25,7 +26,7 @@
                                 <div class="handle">{{ scope.$index+1 }}</div>
                             </template>
                         </el-table-column>
-                        <el-table-column :label="$store.state.langData.cont.pageFn.table.Name" width="400">
+                        <el-table-column :label="$store.state.langData.cont.pageFn.table.Name">
                             <template slot-scope="scope">
                                 <div class="handle">{{ scope.row.u_name }}</div>
                             </template>
@@ -38,7 +39,7 @@
                         <el-table-column fixed="right" :label="$store.state.langData.cont.pageFn.table.Operating" width="100">
                             <template slot-scope="scope">
                                 <el-button @click.native.prevent="handleDelete(scope.$index, scope.row)" type="text">
-                                    Delete
+                                    {{ $store.state.langData.cont.pageFn.table.Delete }}
                                 </el-button>
                             </template>
                         </el-table-column>
@@ -113,13 +114,41 @@ export default {
             this.$refs['ruleForm'].validate((valid) => {
                 if (valid) {
                     this.loading = true
+                    axios
+                        .post('/api/addTournament', {
+                            data: this.form
+                        })
+                        .then(response => {
+                            let data = response.data.data
+                            if (data.errorCode === 'er0000') {
+                                this.$message({
+                                    message: this.$store.state.langData.cont.msg.database.ok0001,
+                                    type: 'success',
+                                    offset: 90
+                                })
+                                this.$router.replace({ name: 'TournamentList' })
+                            } else {
+                                this.$message({
+                                    message: this.$store.state.langData.cont.msg.database[data.errorCode],
+                                    type: 'error',
+                                    offset: 90
+                                })
+                            }
+                        }).catch(error => {
+                            this.loading = false
+                            this.$message({
+                                message: JSON.stringify(error),
+                                type: 'error',
+                                offset: 90
+                            })
+                        })
                 } else {
                     return false
                 }
             })
         },
         cancel() {
-            this.$router.replace({ name: 'TournamentList' });
+            this.$router.replace({ name: 'TournamentList' })
         },
         querySearchAsync(queryString, cb) {
             var restaurants = []
@@ -206,7 +235,7 @@ export default {
             }
         },
         handleDelete(index, row) {
-            console.log(index)
+            this.form.players.splice(index, 1)
         }
     }
 }

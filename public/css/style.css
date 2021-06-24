@@ -36,7 +36,7 @@ body .main .el-main .el-breadcrumb * {
   font-size: 1rem;
 }
 
-body .el-scrollbar > .el-scrollbar__bar {
+body .el-scrollbar .el-scrollbar__bar {
   opacity: 1;
 }
 

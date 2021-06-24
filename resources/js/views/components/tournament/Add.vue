@@ -8,37 +8,42 @@
             <el-form-item :label="$store.state.langData.cont.pageFn.table.Players">
                 <el-row>
                     <el-col :span="22" :offset="2">
-                        <!-- <el-form-item :label="$store.state.langData.cont.pageFn.table.Name">
-                            <el-autocomplete v-model="player.name" :fetch-suggestions="querySearchAsync" :placeholder="$store.state.langData.cont.msg.placeholder.ph0002" @select="handleSelect" @change="handleSelect" style="width: 100%"></el-autocomplete>
-                        </el-form-item> -->
-                        <el-select v-model="player.name" filterable remote clearable :placeholder="$store.state.langData.cont.msg.placeholder.ph0002" :remote-method="remoteMethod" @select="handleSelect" :loading="player.loading" style="width: 100%" @clear="player.opt=[]" :loading-text="$store.state.langData.cont.msg.data.d0003" :no-match-text="$store.state.langData.cont.msg.data.d0002" :no-data-text="$store.state.langData.cont.msg.data.d0001" @click.native="handleClick">
-                            <el-option v-for="item in player.opt" :key="item.id" :label="item.value" :value="item.id">
-                            </el-option>
-                        </el-select>
+                        <el-form-item :label="$store.state.langData.cont.pageFn.table.Name">
+                            <el-autocomplete v-model="player.name" clearable :placement="'top-start'" :fetch-suggestions="querySearchAsync" :placeholder="$store.state.langData.cont.msg.placeholder.ph0002" @select="handleSelect" @blur="handleBlur" @clear="handleClear" style="width: 100%"></el-autocomplete>
+                        </el-form-item>
                     </el-col>
                     <el-col :span="22" :offset="2">
                         <el-form-item :label="$store.state.langData.cont.pageFn.table.Equipment">
-                            <el-autocomplete v-model="player.pi" clearable placement="top-start" :fetch-suggestions="querySearchAsyncEquipment" :placeholder="$store.state.langData.cont.msg.placeholder.ph0002" :no-match-text="$store.state.langData.cont.msg.data.d0002" :no-data-text="$store.state.langData.cont.msg.data.d0001" @select="handleSelectEquipment" @blur="handleBlurEquipment" @clear="handleClearEquipment" style="width: 100%"></el-autocomplete>
+                            <el-autocomplete v-model="player.pi" clearable :placement="'top-start'" :fetch-suggestions="querySearchAsyncEquipment" :placeholder="$store.state.langData.cont.msg.placeholder.ph0002" @select="handleSelectEquipment" @blur="handleBlurEquipment" @clear="handleClearEquipment" style="width: 100%"></el-autocomplete>
                         </el-form-item>
                     </el-col>
                 </el-row>
-                <el-table :data="form.players" :empty-text="$store.state.langData.cont.msg.data.d0001" style="width: 100%">
-                    <el-table-column :label="$store.state.langData.cont.pageFn.table.Race_track" width="120">
-                        <template slot-scope="scope">
-                        </template>
-                    </el-table-column>
-                    <el-table-column :label="$store.state.langData.cont.pageFn.table.Name" width="400">
-                        <template slot-scope="scope">
-                        </template>
-                    </el-table-column>
-                    <el-table-column :label="$store.state.langData.cont.pageFn.table.Equipment">
-                        <template slot-scope="scope">
-                        </template>
-                    </el-table-column>
-                    <el-table-column fixed="right" :label="$store.state.langData.cont.pageFn.table.Operating" width="100">
-                        <template slot-scope="scope"></template>
-                    </el-table-column>
-                </el-table>
+                <el-table-draggable handle=".handle">
+                    <el-table :data="form.players" :empty-text="$store.state.langData.cont.msg.data.d0001" style="width: 100%">
+                        <el-table-column :label="$store.state.langData.cont.pageFn.table.Race_track" width="120">
+                            <template slot-scope="scope">
+                                <div class="handle">{{ scope.$index+1 }}</div>
+                            </template>
+                        </el-table-column>
+                        <el-table-column :label="$store.state.langData.cont.pageFn.table.Name" width="400">
+                            <template slot-scope="scope">
+                                <div class="handle">{{ scope.row.u_name }}</div>
+                            </template>
+                        </el-table-column>
+                        <el-table-column :label="$store.state.langData.cont.pageFn.table.Equipment">
+                            <template slot-scope="scope">
+                                <div class="handle">{{ scope.row.p_name }}</div>
+                            </template>
+                        </el-table-column>
+                        <el-table-column fixed="right" :label="$store.state.langData.cont.pageFn.table.Operating" width="100">
+                            <template slot-scope="scope">
+                                <el-button @click.native.prevent="handleDelete(scope.$index, scope.row)" type="text">
+                                    Delete
+                                </el-button>
+                            </template>
+                        </el-table-column>
+                    </el-table>
+                </el-table-draggable>
             </el-form-item>
             <el-form-item>
                 <el-button type="primary" @click="add" :loading="loading">
@@ -53,8 +58,9 @@
 </template>
 <script>
 import Breadcrumb from '../layout/Breadcrumb.vue'
+import ElTableDraggable from 'element-ui-el-table-draggable'
 export default {
-    components: { Breadcrumb },
+    components: { Breadcrumb, ElTableDraggable },
     props: [],
     data() {
         var validateName = (rule, value, callback) => {
@@ -86,9 +92,7 @@ export default {
                     u_name: '',
                     p_id: '',
                     p_name: ''
-                },
-                opt: [],
-                loading: false
+                }
             },
             form: {
                 name: '',
@@ -119,7 +123,7 @@ export default {
         },
         querySearchAsync(queryString, cb) {
             var restaurants = []
-            if (queryString.length >= 3 && !(queryString === '' || queryString.trim() === '')) {
+            if (queryString && queryString.length >= 1 && !(queryString === '' || queryString.trim() === '')) {
                 axios
                     .get('/api/getPlayersData', {
                         params: { name: queryString }
@@ -143,9 +147,21 @@ export default {
                 cb(restaurants)
             }
         },
+        handleSelect(item) {
+            this.player.add.u_id = item.id
+            this.player.add.u_name = item.value
+            this.addPlayer()
+        },
+        handleBlur() {
+            this.player.name = this.player.add.u_name
+        },
+        handleClear() {
+            this.player.name = this.player.add.u_name = ''
+            this.player.add.u_id = ''
+        },
         querySearchAsyncEquipment(queryString, cb) {
             var restaurants = []
-            if (!this.player.readonly && queryString && queryString.length >= 1 && !(queryString === '' || queryString.trim() === '')) {
+            if (queryString && queryString.length >= 1 && !(queryString === '' || queryString.trim() === '')) {
                 axios
                     .get('/api/getEquipmentData', {
                         params: { distributor_id: this.$store.state.gobalData.me.roleID, name: queryString }
@@ -170,55 +186,28 @@ export default {
             }
         },
         handleSelectEquipment(item) {
-            console.log(this.player)
             this.player.add.p_id = item.id
             this.player.add.p_name = item.value
-            //this.player.readonly = true
+            this.addPlayer()
         },
-        remoteMethod(query) {
-            console.log(query)
-            var restaurants = []
-            if (query.length >= 1 && !(query === '' || query.trim() === '')) {
-                this.player.loading = true
-                axios
-                    .get('/api/getPlayersData', {
-                        params: { name: query }
-                    })
-                    .then(response => {
-                        let data = response.data.data
-                        if (data.errorCode === 'er0000') {
-                            data.players.map(iteam => {
-                                let value = `${Base64.decode(iteam.value)}`
-                                if (value.toLowerCase().indexOf(query.toLowerCase()) > -1) {
-                                    var opt = {}
-                                    opt.value = value
-                                    opt.id = iteam.id
-                                    restaurants.push(opt)
-                                }
-
-                            })
-                            this.player.opt = restaurants
-                            this.player.loading = false
-                        }
-                    }).catch(error => {
-                        console.log(error)
-                    })
-            } else {
-                this.player.opt = restaurants
-            }
-        },
-        handleSelect() {
-
-        },
-        handleBlurEquipment(event) {
-            console.log(event)
+        handleBlurEquipment() {
             this.player.pi = this.player.add.p_name
         },
         handleClearEquipment() {
             this.player.pi = this.player.add.p_name = ''
             this.player.add.p_id = ''
         },
-        addPlayer() {}
+        addPlayer() {
+            if (this.player.name !== '' && this.player.pi !== '' && this.form.players.length <= 8) {
+                let copy = Object.assign({}, this.player.add)
+                this.form.players.push(copy)
+                this.handleClear()
+                this.handleClearEquipment()
+            }
+        },
+        handleDelete(index, row) {
+            console.log(index)
+        }
     }
 }
 

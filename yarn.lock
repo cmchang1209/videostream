@@ -2683,6 +2683,13 @@ electron-to-chromium@^1.3.723:
   resolved "https://registry.yarnpkg.com/electron-to-chromium/-/electron-to-chromium-1.3.749.tgz#0ecebc529ceb49dd2a7c838ae425236644c3439a"
   integrity sha512-F+v2zxZgw/fMwPz/VUGIggG4ZndDsYy0vlpthi3tjmDZlcfbhN5mYW0evXUsBr2sUtuDANFtle410A9u/sd/4A==
 
+element-ui-el-table-draggable@^1.2.10:
+  version "1.2.10"
+  resolved "https://registry.yarnpkg.com/element-ui-el-table-draggable/-/element-ui-el-table-draggable-1.2.10.tgz#3786e609545b0666d3f91a81d116498f12672ccc"
+  integrity sha512-MBAdC5+q6X0lsAaJT/eFN/3giBg87U5RbAmOI4/myOXenTnQgU5U2kPXchPEAbexj/PV9btAH1vvhWS20LtuEQ==
+  dependencies:
+    sortablejs "^1.9.0"
+
 element-ui@^2.15.2:
   version "2.15.2"
   resolved "https://registry.yarnpkg.com/element-ui/-/element-ui-2.15.2.tgz#1b4c4af582a37061de7d8146047a34f0099b52cc"
@@ -6296,6 +6303,11 @@ sockjs@^0.3.21:
     faye-websocket "^0.11.3"
     uuid "^3.4.0"
     websocket-driver "^0.7.4"
+
+sortablejs@^1.9.0:
+  version "1.13.0"
+  resolved "https://registry.yarnpkg.com/sortablejs/-/sortablejs-1.13.0.tgz#3ab2473f8c69ca63569e80b1cd1b5669b51269e9"
+  integrity sha512-RBJirPY0spWCrU5yCmWM1eFs/XgX2J5c6b275/YyxFRgnzPhKl/TDeU2hNR8Dt7ITq66NRPM4UlOt+e5O4CFHg==
 
 source-list-map@^2.0.0:
   version "2.0.1"

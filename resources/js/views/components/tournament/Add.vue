@@ -11,7 +11,7 @@
                         <!-- <el-form-item :label="$store.state.langData.cont.pageFn.table.Name">
                             <el-autocomplete v-model="player.name" :fetch-suggestions="querySearchAsync" :placeholder="$store.state.langData.cont.msg.placeholder.ph0002" @select="handleSelect" @change="handleSelect" style="width: 100%"></el-autocomplete>
                         </el-form-item> -->
-                        <el-select v-model="player.name" filterable remote clearable :placeholder="$store.state.langData.cont.msg.placeholder.ph0002" :remote-method="remoteMethod" @select="handleSelect" :loading="player.loading" style="width: 100%" @clear="player.opt=[]" :loading-text="$store.state.langData.cont.msg.data.d0003" :no-match-text="$store.state.langData.cont.msg.data.d0002" :no-data-text="$store.state.langData.cont.msg.data.d0001">
+                        <el-select ref="select" v-model="player.name" filterable remote clearable :placeholder="$store.state.langData.cont.msg.placeholder.ph0002" :remote-method="remoteMethod" @select="handleSelect" :loading="player.loading" style="width: 100%" @clear="player.opt=[]" :loading-text="$store.state.langData.cont.msg.data.d0003" :no-match-text="$store.state.langData.cont.msg.data.d0002" :no-data-text="$store.state.langData.cont.msg.data.d0001" @click.native="handleClick">
                             <el-option v-for="item in player.opt" :key="item.id" :label="item.value" :value="item.id">
                             </el-option>
                         </el-select>
@@ -206,6 +206,20 @@ export default {
         },
         handleSelect() {
 
+        },
+        handleClick() {
+            let elSelect = this.$refs.select;
+            let innerElInput = elSelect.$refs.reference;
+            // 先让input失去焦点
+            innerElInput.blur();
+            // 再重新获得焦点
+            innerElInput.focus();
+        },
+
+        handleBlur() {
+            let elSelect = this.$refs.select;
+            // el-input失去焦点时让外层el-select也失去焦点
+            elSelect.blur();
         },
         addPlayer() {}
     }

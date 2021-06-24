@@ -19,15 +19,6 @@ window.Vue = require('vue')
 window.Base64 = require('js-base64').Base64
 
 import ElementUI from 'element-ui'
-// Fixes an issue with filters not working on mobile
-ElementUI.Select.computed.readonly = function() {
-    // trade-off for IE input readonly problem: https://github.com/ElemeFE/element/issues/10403
-    const isIE = !this.$isServer && !Number.isNaN(Number(document.documentMode));
-
-    return !(this.filterable || this.multiple || !isIE) && !this.visible
-}
-
-export default ElementUI
 
 import 'element-ui/lib/theme-chalk/display.css'
 Vue.use(ElementUI)

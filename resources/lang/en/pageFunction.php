@@ -12,7 +12,8 @@ return [
 		'Players' => 'Players',
 		'Name' => 'Name',
 		'Equipment' => 'Equipment',
-		'Race_track' => 'Race track'
+		'Race_track' => 'Race track',
+		'Operating' => 'Operating'
 	],
     'login' => [
     	'label'  => 'Sign in',

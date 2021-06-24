@@ -8,32 +8,34 @@
             <el-form-item :label="$store.state.langData.cont.pageFn.table.Players">
                 <el-row>
                     <el-col :span="22" :offset="2">
-                        <el-form-item :label="$store.state.langData.cont.pageFn.table.Name">
-                            <el-autocomplete v-model="form.players[0].name" :fetch-suggestions="querySearchAsync" :placeholder="$store.state.langData.cont.msg.placeholder.ph0002" @select="handleSelect" style="width: 100%"></el-autocomplete>
-                        </el-form-item>
+                        <!-- <el-form-item :label="$store.state.langData.cont.pageFn.table.Name">
+                            <el-autocomplete v-model="player.name" :fetch-suggestions="querySearchAsync" :placeholder="$store.state.langData.cont.msg.placeholder.ph0002" @select="handleSelect" @change="handleSelect" style="width: 100%"></el-autocomplete>
+                        </el-form-item> -->
+                        <el-select v-model="player.name" filterable remote clearable :placeholder="$store.state.langData.cont.msg.placeholder.ph0002" :remote-method="remoteMethod" @select="handleSelect" :loading="player.loading" style="width: 100%" @clear="player.opt=[]" :loading-text="$store.state.langData.cont.msg.data.d0003" :no-match-text="$store.state.langData.cont.msg.data.d0002" :no-data-text="$store.state.langData.cont.msg.data.d0001">
+                            <el-option v-for="item in player.opt" :key="item.id" :label="item.value" :value="item.id">
+                            </el-option>
+                        </el-select>
                     </el-col>
                     <el-col :span="22" :offset="2">
                         <el-form-item :label="$store.state.langData.cont.pageFn.table.Equipment">
-                            <el-autocomplete v-model="form.players[0].pi" :fetch-suggestions="querySearchAsyncEquipment" :placeholder="$store.state.langData.cont.msg.placeholder.ph0002" @select="handleSelectEquipment" style="width: 100%"></el-autocomplete>
+                            <el-autocomplete v-model="player.pi" :fetch-suggestions="querySearchAsyncEquipment" :placeholder="$store.state.langData.cont.msg.placeholder.ph0002" @select="handleSelectEquipment" style="width: 100%"></el-autocomplete>
                         </el-form-item>
                     </el-col>
                 </el-row>
-                <el-table :data="form.players" style="width: 100%">
+                <el-table :data="form.players" :empty-text="$store.state.langData.cont.msg.data.d0001" style="width: 100%">
                     <el-table-column :label="$store.state.langData.cont.pageFn.table.Race_track" width="120">
-                        <template v-if="scope.$index === 0" slot-scope="scope">
+                        <template slot-scope="scope">
                         </template>
                     </el-table-column>
                     <el-table-column :label="$store.state.langData.cont.pageFn.table.Name" width="400">
-                        <template v-if="scope.$index === 0" slot-scope="scope">
+                        <template slot-scope="scope">
                         </template>
                     </el-table-column>
                     <el-table-column :label="$store.state.langData.cont.pageFn.table.Equipment">
-                        <template v-if="scope.$index === 0" slot-scope="scope">
-                            <el-input :placeholder="$store.state.langData.cont.msg.placeholder.ph0001"></el-input>
-                            <el-input :placeholder="$store.state.langData.cont.msg.placeholder.ph0001"></el-input>
+                        <template slot-scope="scope">
                         </template>
                     </el-table-column>
-                    <el-table-column fixed="right" label="操作" width="100">
+                    <el-table-column fixed="right" :label="$store.state.langData.cont.pageFn.table.Operating" width="100">
                         <template slot-scope="scope"></template>
                     </el-table-column>
                 </el-table>
@@ -76,37 +78,21 @@ export default {
                     isUrl: false
                 }
             ],
+            player: {
+                name: '',
+                pi: '',
+                add: {
+                    u_id: '',
+                    u_name: '',
+                    p_id: '',
+                    p_name: ''
+                },
+                opt: [],
+                loading: false
+            },
             form: {
                 name: '',
-                players: [{
-                    track: null,
-                    name: '',
-                    pi: ''
-                }, {
-                    name: '',
-                    pi: null
-                }, {
-                    name: '',
-                    pi: null
-                }, {
-                    name: '',
-                    pi: null
-                }, {
-                    name: '',
-                    pi: null
-                }, {
-                    name: '',
-                    pi: null
-                }, {
-                    name: '',
-                    pi: null
-                }, {
-                    name: '',
-                    pi: null
-                }, {
-                    name: '',
-                    pi: null
-                }]
+                players: []
             },
             loading: false,
             rules: {
@@ -117,19 +103,7 @@ export default {
         }
     },
     created() {},
-    computed: {
-        track() {
-            let data = [1, 2, 3, 4, 5, 6, 7, 8]
-            let selectData = []
-            data.map((iteam, index) => {
-                if (this.form.players[iteam].name === '') {
-                    selectData.push(iteam)
-                }
-            })
-            this.form.players[0].track = selectData[0]
-            return selectData
-        }
-    },
+    computed: {},
     methods: {
         add() {
             this.$refs['ruleForm'].validate((valid) => {
@@ -141,7 +115,7 @@ export default {
             })
         },
         cancel() {
-
+            this.$router.replace({ name: 'TournamentList' });
         },
         querySearchAsync(queryString, cb) {
             var restaurants = []
@@ -168,9 +142,6 @@ export default {
             } else {
                 cb(restaurants)
             }
-        },
-        handleSelect() {
-
         },
         querySearchAsyncEquipment(queryString, cb) {
             var restaurants = []
@@ -200,7 +171,43 @@ export default {
         },
         handleSelectEquipment() {
 
-        }
+        },
+        remoteMethod(query) {
+            console.log(query)
+            var restaurants = []
+            if (query.length >= 1 && !(query === '' || query.trim() === '')) {
+                this.player.loading = true
+                axios
+                    .get('/api/getPlayersData', {
+                        params: { name: query }
+                    })
+                    .then(response => {
+                        let data = response.data.data
+                        if (data.errorCode === 'er0000') {
+                            data.players.map(iteam => {
+                                let value = `${Base64.decode(iteam.value)}`
+                                if (value.toLowerCase().indexOf(query.toLowerCase()) > -1) {
+                                    var opt = {}
+                                    opt.value = value
+                                    opt.id = iteam.id
+                                    restaurants.push(opt)
+                                }
+
+                            })
+                            this.player.opt = restaurants
+                            this.player.loading = false
+                        }
+                    }).catch(error => {
+                        console.log(error)
+                    })
+            } else {
+                this.player.opt = restaurants
+            }
+        },
+        handleSelect() {
+
+        },
+        addPlayer() {}
     }
 }
 

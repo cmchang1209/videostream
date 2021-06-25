@@ -3,7 +3,9 @@
 return [
 	'golbal' => [
 		'Add' => 'Add',
-		'Cancel' => 'Cancel'
+		'Cancel' => 'Cancel',
+		'Edit' => 'Edit',
+		'Save' => 'Save'
 	],
 	'breadcrumb' => [
 		'Back' => 'Back'
@@ -15,6 +17,7 @@ return [
 		'Equipment' => 'Equipment',
 		'Race_track' => 'Race track',
 		'Operating' => 'Operating',
+		'Count' => 'Count',
 		'createTime' => 'createTime',
 		'Delete' => 'Delete',
 		'Edit' => 'Edit'

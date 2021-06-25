@@ -11,9 +11,11 @@
         <el-table :data="tableData" border :empty-text="$store.state.langData.cont.msg.data.d0001" style="width: 100%">
             <el-table-column type="index" width="50">
             </el-table-column>
-            <el-table-column prop="id" :label="$store.state.langData.cont.pageFn.table.Id">
-            </el-table-column>
+            <!-- <el-table-column prop="id" :label="$store.state.langData.cont.pageFn.table.Id">
+            </el-table-column> -->
             <el-table-column prop="name" :label="$store.state.langData.cont.pageFn.table.Name">
+            </el-table-column>
+            <el-table-column prop="count" :label="$store.state.langData.cont.pageFn.table.Count">
             </el-table-column>
             <el-table-column prop="createTime" :label="$store.state.langData.cont.pageFn.table.createTime">
             </el-table-column>

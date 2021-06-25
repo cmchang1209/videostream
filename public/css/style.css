@@ -40,3 +40,22 @@ body .el-scrollbar > .el-scrollbar__bar {
   opacity: 1;
 }
 
+body .el-message-box__wrapper .el-message-box {
+  margin-top: 15vh;
+  width: 50%;
+}
+
+body .el-message-box__wrapper:after {
+  height: 0;
+}
+
+@media (min-width: 40px) and (max-width: 575.98px) {
+  .el-message {
+    min-width: 90%;
+  }
+
+  .el-message-box {
+    width: 90% !important;
+  }
+}
+

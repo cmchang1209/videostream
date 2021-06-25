@@ -16,7 +16,9 @@ use Illuminate\Http\Request;
 Route::post('/login', 'ApiController@login')->name('login');
 
 Route::get('/getTournamentListData', 'ApiController@getTournamentListData')->name('getTournamentListData');
+Route::post('/addTournament', 'ApiController@addTournament')->name('addTournament');
+Route::post('/updateTournament', 'ApiController@updateTournament')->name('updateTournament');
 Route::delete('/deleteTournament', 'ApiController@deleteTournament')->name('deleteTournament');
 Route::get('/getPlayersData', 'ApiController@getPlayersData')->name('getPlayersData');
 Route::get('/getEquipmentData', 'ApiController@getEquipmentData')->name('getEquipmentData');
-Route::post('/addTournament', 'ApiController@addTournament')->name('addTournament');
+Route::get('/getTournamentData', 'ApiController@getTournamentData')->name('getTournamentData');

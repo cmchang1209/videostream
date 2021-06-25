@@ -18,6 +18,7 @@ return [
     ],
     'database' => [
         'ok0001' => 'Successfully added',
+        'ok0002' => 'Successfully updated',
         'ok0003' => 'Successfully deleted',
         'er0001' => 'Database storage error',
     ]

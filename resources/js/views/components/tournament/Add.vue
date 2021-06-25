@@ -103,7 +103,7 @@ export default {
             rules: {
                 name: [
                     { validator: validateName, required: true, trigger: 'no' }
-                ],
+                ]
             }
         }
     },

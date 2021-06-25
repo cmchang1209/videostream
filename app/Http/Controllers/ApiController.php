@@ -89,19 +89,23 @@ class ApiController extends Controller
         $sql = 'INSERT INTO iteam_tournament (name) VALUES (:name)';
         $result = DB::connection('mysql_video')->insert($sql, ['name' => $request->data['name']]);
         if($result) {
-            $id = DB::connection('mysql_video')->getPdo()->lastInsertId();
-            $sql = 'INSERT INTO iteam_tournament_players (tournament_id, u_id, u_name, p_id, p_name) VALUES ';
-            foreach ($request->data['players'] as $key => $value) {
-                $sql .= '('.$id.', \''.$value['u_id'].'\', \''.$value['u_name'].'\', '.$value['p_id'].', \''.$value['p_name'].'\')';
-                if($key < count($request->data['players'])-1) {
-                    $sql .= ',';
+            if(count($request->data['players']) > 0) {
+                $id = DB::connection('mysql_video')->getPdo()->lastInsertId();
+                $sql = 'INSERT INTO iteam_tournament_players (tournament_id, track, u_id, u_name, p_id, p_name) VALUES ';
+                foreach ($request->data['players'] as $key => $value) {
+                    $sql .= '('.$id.', '.($key+1).', \''.$value['u_id'].'\', \''.$value['u_name'].'\', '.$value['p_id'].', \''.$value['p_name'].'\')';
+                    if($key < count($request->data['players'])-1) {
+                        $sql .= ',';
+                    }
                 }
-            }
-            $result = DB::connection('mysql_video')->insert($sql);
-            if($result) {
-                $data['errorCode'] = 'er0000';
+                $result = DB::connection('mysql_video')->insert($sql);
+                if($result) {
+                    $data['errorCode'] = 'er0000';
+                } else {
+                    $data['errorCode'] = 'er0001';
+                }
             } else {
-                $data['errorCode'] = 'er0001';
+                $data['errorCode'] = 'er0000';
             }
         } else {
             $data['errorCode'] = 'er0001';
@@ -113,9 +117,8 @@ class ApiController extends Controller
     public function getTournamentListData(Request $request) {
         $data = [];
         $data['errorCode'] = 'er0000';
-        $sql = 'SELECT * FROM iteam_tournament WHERE is_delete=0';
+        $sql = 'SELECT t.id, t.name, t.createTime, count(p.id) AS count FROM iteam_tournament AS t LEFT JOIN iteam_tournament_players AS p ON p.tournament_id=t.id WHERE is_delete=0 GROUP BY t.id';
         $data['data'] = DB::connection('mysql_video')->select($sql);
-
         return compact('data');
     }
 
@@ -124,6 +127,67 @@ class ApiController extends Controller
         $sql = 'UPDATE iteam_tournament SET is_delete=1 WHERE id=:id';
         $result = DB::connection('mysql_video')->update($sql, ['id' => $request->id]);
         if($result) {
+            $data['errorCode'] = 'er0000';
+        } else {
+            $data['errorCode'] = 'er0001';
+        }
+        return compact('data');
+    }
+
+    public function getTournamentData(Request $request) {
+        $data = [];
+        $data['errorCode'] = 'er0000';
+        $data['data'] = [];
+        $data['data']['name'] = '';
+        $data['data']['players'] = [];
+        $sql = 'SELECT t.name, p.u_id, p.u_name, p.p_id, p.p_name FROM iteam_tournament AS t LEFT JOIN iteam_tournament_players AS p ON p.tournament_id=t.id WHERE t.id=:id ORDER BY p.track ASC';
+        $result = DB::connection('mysql_video')->select($sql, ['id' => $request->id]);
+        foreach ($result as $key => $value) {
+            $data['data']['name'] = $value->name;
+            if($value->u_id) {
+                $data['data']['players'][$key] = [
+                    'u_id' => $value->u_id,
+                    'u_name' => $value->u_name,
+                    'p_id' => $value->p_id,
+                    'p_name' => $value->p_name
+                ];
+            }
+        }
+        return compact('data');
+    }
+
+    public function updateTournament(Request $request) {
+        $data = [];
+        $sql = 'UPDATE iteam_tournament SET name=:name WHERE id=:id';
+        $result = DB::connection('mysql_video')->update($sql, ['name' => $request->name, 'id' => $request->id]);
+        if($result <= 1) {
+            $players = DB::connection('mysql_video')->select('SELECT track FROM iteam_tournament_players WHERE tournament_id=:id ORDER BY track ASC', ['id' => $request->id]);
+            for($i=0; $i<=7; $i++){
+                if(isset($request->players[$i])) {
+                    if(isset($players[$i])) {
+                        $sql = 'UPDATE iteam_tournament_players SET u_id=\''.$request->players[$i]['u_id'].'\', u_name=\''.$request->players[$i]['u_name'].'\', p_id='.$request->players[$i]['p_id'].', p_name=\''.$request->players[$i]['p_name'].'\' WHERE track='.($i+1).' AND tournament_id='.$request->id;
+                        DB::connection('mysql_video')->update($sql);
+                    } else {
+                        $sql = 'INSERT INTO iteam_tournament_players (tournament_id, track, u_id, u_name, p_id, p_name) VALUES (:id, :track, :u_id, :u_name, :p_id, :p_name)';
+                        DB::connection('mysql_video')->insert($sql, [
+                            'id' => $request->id,
+                            'track' => $i+1,
+                            'u_id' => $request->players[$i]['u_id'],
+                            'u_name' => $request->players[$i]['u_name'],
+                            'p_id' => $request->players[$i]['p_id'],
+                            'p_name' => $request->players[$i]['p_name']
+                        ]);
+                    }
+                } else {
+                    if(isset($players[$i])) {
+                        $sql = 'DELETE FROM iteam_tournament_players WHERE tournament_id=:id AND track=:track';
+                        DB::connection('mysql_video')->delete($sql, [
+                            'id' => $request->id,
+                            'track' => $i+1
+                        ]);
+                    }
+                }
+            }
             $data['errorCode'] = 'er0000';
         } else {
             $data['errorCode'] = 'er0001';

@@ -26,7 +26,9 @@ return [
 		'Distributor' => 'Distributor',
 		'MAC' => 'MAC',
 		'Status' => 'Status',
-		'IP' => 'IP'
+		'IP' => 'IP',
+		'MAC' => 'MAC',
+		'Description' => 'Description'
 	],
     'login' => [
     	'label'  => 'Sign in',

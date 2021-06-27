@@ -17,6 +17,11 @@ Route::post('/login', 'ApiController@login')->name('login');
 
 
 Route::get('/getEquipmentListData', 'ApiEquipmentController@getListData')->name('getEquipmentListData');
+Route::get('/getDistributorData', 'ApiEquipmentController@getDistributorData')->name('getDistributorData');
+Route::get('/getStoreData', 'ApiEquipmentController@getStoreData')->name('getStoreData');
+Route::post('/addEquipment', 'ApiEquipmentController@add')->name('addEquipment');
+
+Route::delete('/deleteEquipment', 'ApiEquipmentController@delete')->name('deleteEquipment');
 
 
 

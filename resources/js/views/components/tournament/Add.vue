@@ -47,10 +47,10 @@
                 </el-table-draggable>
             </el-form-item>
             <el-form-item>
-                <el-button type="primary" @click="add" :loading="loading">
+                <el-button type="primary" @click.native.prevent="add" :loading="loading">
                     {{ $store.state.langData.cont.pageFn.golbal.Add }}
                 </el-button>
-                <el-button @click="cancel">
+                <el-button @click.native.prevent="cancel">
                     {{ $store.state.langData.cont.pageFn.golbal.Cancel }}
                 </el-button>
             </el-form-item>

@@ -6,7 +6,11 @@ return [
     	'er0002' => 'Please enter your account',
     	'er0003' => 'Incorrect account and password',
     	'er0050' => 'Please enter name',
-        'er0100' => 'Operate the set upper limit'
+        'er0051' => 'Please enter mac',
+        'er0052' => 'Please enter password',
+        'er0053' => 'Please select distributor',
+        'er0100' => 'Operate the set upper limit',
+        'er0101' => 'Input format error'
     ],
     'placeholder' => [
     	'ph0001' => 'Please enter content',

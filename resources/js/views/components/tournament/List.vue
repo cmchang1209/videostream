@@ -3,23 +3,23 @@
         <Breadcrumb :iteams="br" />
         <el-row type="flex" justify="end" style="margin-bottom: 15px">
             <el-col :span="6" style="text-align: right;">
-                <el-button class="hidden-sm-and-down" type="success" round @click="addTournament">Add New tournament</el-button>
+                <el-button class="hidden-sm-and-down" type="success" round @click="addTournament">{{ $store.state.langData.cont.pageFn.tournament.addBtn }}</el-button>
                 <el-button class="hidden-md-and-up" type="success" icon="el-icon-plus" circle @click="addTournament"></el-button>
             </el-col>
         </el-row>
         <br>
         <el-table :data="tableData" border :empty-text="$store.state.langData.cont.msg.data.d0001" style="width: 100%">
-            <el-table-column type="index" width="50">
+            <el-table-column type="index" fixed >
             </el-table-column>
             <!-- <el-table-column prop="id" :label="$store.state.langData.cont.pageFn.table.Id">
             </el-table-column> -->
-            <el-table-column prop="name" :label="$store.state.langData.cont.pageFn.table.Name">
+            <el-table-column prop="name" fixed :label="$store.state.langData.cont.pageFn.table.Name">
             </el-table-column>
             <el-table-column prop="count" :label="$store.state.langData.cont.pageFn.table.Count">
             </el-table-column>
             <el-table-column prop="createTime" :label="$store.state.langData.cont.pageFn.table.createTime">
             </el-table-column>
-            <el-table-column fixed="right" :label="$store.state.langData.cont.pageFn.table.Operating" width="100">
+            <el-table-column :label="$store.state.langData.cont.pageFn.table.Operating" width="100">
                 <template slot-scope="scope">
                     <p style="margin: 0;">
                         <el-button @click.native.prevent="handleEdit(scope.$index, scope.row)" type="text">

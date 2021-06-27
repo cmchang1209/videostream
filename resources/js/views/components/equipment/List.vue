@@ -12,11 +12,11 @@
         </el-row>
         <br>
         <el-table :data="tableData" border :empty-text="$store.state.langData.cont.msg.data.d0001" style="width: 100%">
-            <el-table-column type="index" width="50">
+            <el-table-column type="index" fixed>
+            </el-table-column>
+            <el-table-column prop="s_name" fixed :label="$store.state.langData.cont.pageFn.table.Store">
             </el-table-column>
             <el-table-column prop="no" :label="$store.state.langData.cont.pageFn.table.SN">
-            </el-table-column>
-            <el-table-column prop="s_name" :label="$store.state.langData.cont.pageFn.table.Store" min-width="120">
             </el-table-column>
             <el-table-column prop="name" :label="$store.state.langData.cont.pageFn.table.Name" min-width="100">
             </el-table-column>
@@ -29,7 +29,7 @@
                     <el-link v-if="scope.row.status" type="success">{{ scope.row.ip }}</el-link>
                 </template>
             </el-table-column>
-            <el-table-column fixed="right" :label="$store.state.langData.cont.pageFn.table.Operating" width="100">
+            <el-table-column :label="$store.state.langData.cont.pageFn.table.Operating" width="100">
                 <template slot-scope="scope">
                     <p style="margin: 0;">
                         <el-button @click.native.prevent="handleEdit(scope.$index, scope.row)" type="text">
@@ -94,8 +94,35 @@ export default {
         handleEdit(index, row) {
             this.$router.push({ name: 'EditEquipment', query: { id: row.id } })
         },
-        handleDelete() {
-
+        handleDelete(index, row) {
+            this.changeAppLoadingStatus(true)
+            axios
+                .delete('/api/deleteEquipment', { params: { id: row.id } })
+                .then(response => {
+                    let data = response.data.data
+                    if (data.errorCode === 'er0000') {
+                        this.$message({
+                            message: this.$store.state.langData.cont.msg.database.ok0003,
+                            type: 'success',
+                            offset: 90
+                        })
+                        this.fetchData()
+                    } else {
+                        this.$message({
+                            message: this.$store.state.langData.cont.msg.database[data.errorCode],
+                            type: 'error',
+                            offset: 90
+                        })
+                        this.changeAppLoadingStatus(false)
+                    }
+                }).catch(error => {
+                    this.changeAppLoadingStatus(false)
+                    this.$message({
+                        message: JSON.stringify(error),
+                        type: 'error',
+                        offset: 90
+                    })
+                })
         }
     }
 }

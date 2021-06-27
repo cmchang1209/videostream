@@ -1,11 +1,11 @@
 <template>
     <div class="equipment-list">
         <Breadcrumb :iteams="br" />
-        <el-row v-if="$store.state.gobalData.me.roleCode === 1" type="flex" justify="space-between" style="margin-bottom: 15px">
+        <el-row type="flex" justify="space-between" style="margin-bottom: 15px">
             <el-col :span="6">
                 <el-button type="success" icon="el-icon-refresh" circle @click.native.prevent="handleRefresh"></el-button>
             </el-col>
-            <el-col :span="6" style="text-align: right;">
+            <el-col v-if="$store.state.gobalData.me.roleCode === 1" :span="6" style="text-align: right;">
                 <el-button class="hidden-sm-and-down" type="success" round @click="addEquipment">{{ $store.state.langData.cont.pageFn.equipment.addBtn }}</el-button>
                 <el-button class="hidden-md-and-up" type="success" icon="el-icon-plus" circle @click="addEquipment"></el-button>
             </el-col>

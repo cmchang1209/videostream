@@ -6,6 +6,11 @@ import Home from '../views/Home'
 import Login from '../views/Login'
 import Tournament from '../views/Tournament'
 import League from '../views/League'
+import View from '../views/View'
+
+import EquipmentList from '../views/components/equipment/List'
+import AddEquipment from '../views/components/equipment/Add'
+import EditEquipment from '../views/components/equipment/Edit'
 
 import TournamentList from '../views/components/tournament/List'
 import AddTournament from '../views/components/tournament/Add'
@@ -13,6 +18,9 @@ import EditTournament from '../views/components/tournament/Edit'
 import TournamentLive from '../views/components/tournament/Live'
 
 import LeagueLive from '../views/components/league/Live'
+
+
+import T3 from '../views/components/view/T3'
 
 //不允許導航到當前位置
 const originalPush = VueRouter.prototype.push
@@ -34,7 +42,21 @@ export default new VueRouter({
                 } else {
                     next()
                 }
-            }
+            },
+            children: [{
+                path: '',
+                name: 'EquipmentList',
+                component: EquipmentList
+            }, {
+                path: 'equipment/add',
+                name: 'AddEquipment',
+                component: AddEquipment
+            }, {
+                path: 'edit',
+                name: 'EditEquipment',
+                component: EditEquipment,
+                props: (route) => ({ id: route.query.id })
+            }, ]
         },
         {
             path: '/login',
@@ -88,6 +110,15 @@ export default new VueRouter({
                 path: 'live',
                 name: 'LeagueLive',
                 component: LeagueLive
+            }]
+        },
+        {
+            path: '/view',
+            component: View,
+            children: [{
+                path: 't3',
+                name: 'T3',
+                component: T3
             }]
         },
         {

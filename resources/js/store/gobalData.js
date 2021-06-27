@@ -3,7 +3,8 @@ export default {
         isGuest: true,
         me: {},
         appLoading: false,
-        drawer: false
+        drawer: false,
+        isView: false
     },
     getters: {
         isTouchDevice(state) {
@@ -22,6 +23,9 @@ export default {
         },
         changeDrawerStatus(state, val) {
             state.drawer = val
+        },
+        changeViewStatus(state, val) {
+            state.isView = val
         }
     },
     actions: {
@@ -39,6 +43,9 @@ export default {
         },
         changeDrawerStatus: ({ commit }, val) => {
             commit('changeDrawerStatus', val)
+        },
+        changeViewStatus: ({ commit }, val) => {
+            commit('changeViewStatus', val)
         }
     }
 }

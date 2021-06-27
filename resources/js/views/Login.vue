@@ -76,6 +76,13 @@ export default {
                             let data = response.data.data
                             if (data.errorCode === 'er0000') {
                                 localStorage.setItem('id', data.data)
+                                var id = Base64.decode(localStorage.getItem('id'))
+                                var ids = id.split(',')
+                                this.setMe({
+                                    id: ids[0],
+                                    roleID: ids[1],
+                                    roleCode: ids[2] * 1
+                                })
                                 this.changeLoginStatus(false)
                                 this.$router.push({ path: '/' })
                             } else {

@@ -3,12 +3,20 @@
         <!-- 側邊欄菜單區域 -->
         <el-menu unique-opened :collapse="isCollapse" router :default-active="$router.currentRoute.path" :unique-opened="true" @select="changeDrawerStatus(false)">
             <div class="toggle-button hidden-sm-and-down" @click="isCollapse = !isCollapse">|||</div>
-            <el-menu-item index="/">
-                <i class="el-icon-setting"></i>
-                <span slot="title">
-                    {{ $store.state.langData.cont.slideMenu.Equipment }}
-                </span>
-            </el-menu-item>
+            <el-submenu index="1">
+                <template slot="title">
+                    <i class="el-icon-setting"></i>
+                    <span slot="title">
+                        {{ $store.state.langData.cont.slideMenu.Equipment }}
+                    </span>
+                </template>
+                <el-menu-item index="/">
+                    <i class="el-icon-thirdlist"></i>
+                    <span slot="title">
+                        {{ $store.state.langData.cont.slideMenu.List }}
+                    </span>
+                </el-menu-item>
+            </el-submenu>
             <el-submenu index="2">
                 <template slot="title">
                     <i class="el-icon-thirdtournament"></i>
@@ -43,7 +51,7 @@
                     </span>
                 </el-menu-item>
             </el-submenu>
-            <el-menu-item index="4">
+            <el-menu-item index="4" @click.native.prevent="logout">
                 <i class="el-icon-thirdlogout"></i>
                 <span slot="title">
                     {{ $store.state.langData.cont.slideMenu.Logout }}
@@ -62,7 +70,13 @@ export default {
     },
     computed: {},
     methods: {
-        ...mapActions(['changeDrawerStatus'])
+        ...mapActions(['changeDrawerStatus', 'setMe', 'changeLoginStatus']),
+        logout() {
+            this.changeLoginStatus(true)
+            localStorage.removeItem('id')
+            this.setMe = {}
+            this.$router.push({ path: '/login' })
+        }
     }
 }
 

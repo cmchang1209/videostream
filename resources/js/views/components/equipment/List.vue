@@ -1,0 +1,103 @@
+<template>
+    <div class="equipment-list">
+        <Breadcrumb :iteams="br" />
+        <el-row v-if="$store.state.gobalData.me.roleCode === 1" type="flex" justify="space-between" style="margin-bottom: 15px">
+            <el-col :span="6">
+                <el-button type="success" icon="el-icon-refresh" circle @click.native.prevent="handleRefresh"></el-button>
+            </el-col>
+            <el-col :span="6" style="text-align: right;">
+                <el-button class="hidden-sm-and-down" type="success" round @click="addEquipment">{{ $store.state.langData.cont.pageFn.equipment.addBtn }}</el-button>
+                <el-button class="hidden-md-and-up" type="success" icon="el-icon-plus" circle @click="addEquipment"></el-button>
+            </el-col>
+        </el-row>
+        <br>
+        <el-table :data="tableData" border :empty-text="$store.state.langData.cont.msg.data.d0001" style="width: 100%">
+            <el-table-column type="index" width="50">
+            </el-table-column>
+            <el-table-column prop="no" :label="$store.state.langData.cont.pageFn.table.SN">
+            </el-table-column>
+            <el-table-column prop="s_name" :label="$store.state.langData.cont.pageFn.table.Store" min-width="120">
+            </el-table-column>
+            <el-table-column prop="name" :label="$store.state.langData.cont.pageFn.table.Name" min-width="100">
+            </el-table-column>
+            <el-table-column prop="d_name" :label="$store.state.langData.cont.pageFn.table.Distributor" v-if="$store.state.gobalData.me.roleCode === 1">
+            </el-table-column>
+            <el-table-column prop="mac" :label="$store.state.langData.cont.pageFn.table.MAC" v-if="$store.state.gobalData.me.roleCode === 1">
+            </el-table-column>
+            <el-table-column :label="$store.state.langData.cont.pageFn.table.IP">
+                <template slot-scope="scope">
+                    <el-link v-if="scope.row.status" type="success">{{ scope.row.ip }}</el-link>
+                </template>
+            </el-table-column>
+            <el-table-column fixed="right" :label="$store.state.langData.cont.pageFn.table.Operating" width="100">
+                <template slot-scope="scope">
+                    <p style="margin: 0;">
+                        <el-button @click.native.prevent="handleEdit(scope.$index, scope.row)" type="text">
+                            {{ $store.state.langData.cont.pageFn.table.Edit }}
+                        </el-button>
+                    </p>
+                    <p style="margin: 0;">
+                        <el-button @click.native.prevent="handleDelete(scope.$index, scope.row)" type="text">
+                            {{ $store.state.langData.cont.pageFn.table.Delete }}
+                        </el-button>
+                    </p>
+                </template>
+            </el-table-column>
+        </el-table>
+    </div>
+</template>
+<script>
+import { mapActions } from 'vuex'
+import Breadcrumb from '../layout/Breadcrumb.vue'
+export default {
+    components: { Breadcrumb },
+    data() {
+        return {
+            br: [{
+                title: this.$store.state.langData.cont.slideMenu.Equipment,
+                isUrl: false
+            }, {
+                title: this.$store.state.langData.cont.slideMenu.List,
+                isUrl: false
+            }],
+            tableData: []
+        }
+    },
+    created() {
+        this.fetchData()
+    },
+    methods: {
+        ...mapActions(['changeAppLoadingStatus']),
+        fetchData() {
+            axios
+                .get('/api/getEquipmentListData', {
+                    params: { distributor_id: this.$store.state.gobalData.me.roleID }
+                })
+                .then(response => {
+                    let data = response.data.data
+                    if (data.errorCode === 'er0000') {
+                        this.tableData = data.data
+                        this.changeAppLoadingStatus(false)
+                    }
+                }).catch(error => {
+                    this.changeAppLoadingStatus(false)
+                    console.log(error)
+                })
+        },
+        addEquipment() {
+            this.$router.push({ name: 'AddEquipment' })
+        },
+        handleRefresh() {
+            this.changeAppLoadingStatus(true)
+            this.fetchData()
+        },
+        handleEdit(index, row) {
+            this.$router.push({ name: 'EditEquipment', query: { id: row.id } })
+        },
+        handleDelete() {
+
+        }
+    }
+}
+
+</script>

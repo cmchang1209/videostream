@@ -15,6 +15,11 @@ use Illuminate\Http\Request;
 
 Route::post('/login', 'ApiController@login')->name('login');
 
+
+Route::get('/getEquipmentListData', 'ApiEquipmentController@getListData')->name('getEquipmentListData');
+
+
+
 Route::get('/getTournamentListData', 'ApiController@getTournamentListData')->name('getTournamentListData');
 Route::post('/addTournament', 'ApiController@addTournament')->name('addTournament');
 Route::post('/updateTournament', 'ApiController@updateTournament')->name('updateTournament');

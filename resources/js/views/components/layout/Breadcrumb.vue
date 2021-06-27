@@ -1,5 +1,5 @@
 <template>
-    <div>
+    <div style="margin-bottom: 1.25rem;">
         <el-breadcrumb separator="|">
             <template v-for="(item, index) in iteams">
                 <el-breadcrumb-item v-if="item.hasback" :to="{ name: item.name }" :key="index">

@@ -20,10 +20,22 @@ return [
 		'Count' => 'Count',
 		'createTime' => 'createTime',
 		'Delete' => 'Delete',
-		'Edit' => 'Edit'
+		'Edit' => 'Edit',
+		'SN' => 'S/N',
+		'Store' => 'Store',
+		'Distributor' => 'Distributor',
+		'MAC' => 'MAC',
+		'Status' => 'Status',
+		'IP' => 'IP'
 	],
     'login' => [
     	'label'  => 'Sign in',
     	'submit' => 'Submit'
+    ],
+    'tournament' => [
+    	'addBtn' => 'Add New tournament'
+    ],
+    'equipment' => [
+    	'addBtn' => 'Add New equipment'
     ]
 ];

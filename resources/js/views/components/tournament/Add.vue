@@ -227,9 +227,17 @@ export default {
             this.player.add.p_id = ''
         },
         addPlayer() {
-            if (this.player.name !== '' && this.player.pi !== '' && this.form.players.length <= 8) {
+            if (this.player.name !== '' && this.player.pi !== '' && this.form.players.length < 8) {
                 let copy = Object.assign({}, this.player.add)
                 this.form.players.push(copy)
+                this.handleClear()
+                this.handleClearEquipment()
+            } else {
+                this.$message({
+                    message: this.$store.state.langData.cont.msg.validate.er0100,
+                    type: 'error',
+                    offset: 90
+                })
                 this.handleClear()
                 this.handleClearEquipment()
             }

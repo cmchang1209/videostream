@@ -5,7 +5,8 @@ return [
     	'er0001' => 'Please enter your account',
     	'er0002' => 'Please enter your account',
     	'er0003' => 'Incorrect account and password',
-    	'er0050' => 'Please enter name'
+    	'er0050' => 'Please enter name',
+        'er0100' => 'Operate the set upper limit'
     ],
     'placeholder' => [
     	'ph0001' => 'Please enter content',

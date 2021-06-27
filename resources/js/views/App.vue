@@ -1,6 +1,6 @@
 <template>
     <div>
-        <el-container v-if="!isGuest" v-loading="appLoading" element-loading-spinner="el-icon-loading">
+        <el-container v-if="!isGuest && !isView" v-loading="appLoading" element-loading-spinner="el-icon-loading">
             <!-- 側邊欄 -->
             <div class="hidden-sm-and-down">
                 <Aside />
@@ -34,21 +34,28 @@ export default {
             var id = Base64.decode(localStorage.getItem('id'))
             var ids = id.split(',')
             this.setMe({
-                id : ids[0],
+                id: ids[0],
                 roleID: ids[1],
                 roleCode: ids[2] * 1
             })
             this.changeLoginStatus(false)
+        }
+        const path = this.$router.currentRoute.path.split('/')
+        if (path[1] === 'view') {
+            this.changeViewStatus(true)
+        } else {
+            this.changeViewStatus(false)
         }
     },
     computed: mapState({
         isGuest: state => state.gobalData.isGuest,
         appLoading: state => state.gobalData.appLoading,
         drawer: state => state.gobalData.drawer,
+        isView: state => state.gobalData.isView,
     }),
     mounted() {},
     methods: {
-        ...mapActions(['setLangCont', 'changeLoginStatus', 'changeDrawerStatus', 'setMe'])
+        ...mapActions(['setLangCont', 'changeLoginStatus', 'changeDrawerStatus', 'setMe', 'changeViewStatus'])
     },
     watch: {}
 }

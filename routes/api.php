@@ -20,8 +20,13 @@ Route::get('/getEquipmentListData', 'ApiEquipmentController@getListData')->name(
 Route::get('/getDistributorData', 'ApiEquipmentController@getDistributorData')->name('getDistributorData');
 Route::get('/getStoreData', 'ApiEquipmentController@getStoreData')->name('getStoreData');
 Route::post('/addEquipment', 'ApiEquipmentController@add')->name('addEquipment');
-
+Route::get('/getEquipment', 'ApiEquipmentController@getData')->name('getEquipment');
+Route::post('/updateEquipment', 'ApiEquipmentController@update')->name('updateEquipment');
 Route::delete('/deleteEquipment', 'ApiEquipmentController@delete')->name('deleteEquipment');
+Route::get('/getEquipmentStatus', 'ApiEquipmentController@getStatus')->name('getEquipmentStatus');
+Route::get('/getEquipmentPort', 'ApiEquipmentController@getPort')->name('getEquipmentPort');
+Route::post('/setAudio', 'ApiEquipmentController@setAudio')->name('setAudio');
+
 
 
 

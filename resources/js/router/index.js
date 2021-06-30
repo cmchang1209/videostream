@@ -6,11 +6,11 @@ import Home from '../views/Home'
 import Login from '../views/Login'
 import Tournament from '../views/Tournament'
 import League from '../views/League'
-import View from '../views/View'
 
 import EquipmentList from '../views/components/equipment/List'
 import AddEquipment from '../views/components/equipment/Add'
 import EditEquipment from '../views/components/equipment/Edit'
+import PortEquipment from '../views/components/equipment/Port'
 
 import TournamentList from '../views/components/tournament/List'
 import AddTournament from '../views/components/tournament/Add'
@@ -34,7 +34,7 @@ export default new VueRouter({
     mode: 'history',
     routes: [{
             path: '/',
-            name: 'Home',
+            //name: 'Home',
             component: Home,
             beforeEnter(to, from, next) {
                 if (localStorage.getItem('id') === null) {
@@ -48,15 +48,63 @@ export default new VueRouter({
                 name: 'EquipmentList',
                 component: EquipmentList
             }, {
-                path: 'equipment/add',
+                path: 'add',
                 name: 'AddEquipment',
-                component: AddEquipment
+                component: AddEquipment,
+                beforeEnter(to, from, next) {
+                    if (localStorage.getItem('id') === null) {
+                        next('/')
+                    } else {
+                        var id = Base64.decode(localStorage.getItem('id'))
+                        var ids = id.split(',')
+                        if (ids[2] * 1 === 1) {
+                            next()
+                        } else {
+                            next('/')
+                        }
+                    }
+                }
             }, {
                 path: 'edit',
                 name: 'EditEquipment',
                 component: EditEquipment,
-                props: (route) => ({ id: route.query.id })
-            }, ]
+                props: (route) => ({ id: route.query.id }),
+                beforeEnter(to, from, next) {
+                    if (localStorage.getItem('id') === null) {
+                        next('/')
+                    } else {
+                        var id = Base64.decode(localStorage.getItem('id'))
+                        var ids = id.split(',')
+                        if (ids[2] * 1 === 1) {
+                            next()
+                        } else {
+                            next('/')
+                        }
+                    }
+                }
+            }, {
+                path: 'port',
+                name: 'PortEquipment',
+                component: PortEquipment,
+                props: (route) => ({ id: route.query.id }),
+                beforeEnter(to, from, next) {
+                    axios
+                        .get('/api/getEquipmentStatus', {
+                            params: { id: to.query.id }
+                        })
+                        .then(response => {
+                            let data = response.data.data
+                            if (data.data) {
+                                next()
+                            } else {
+                                next('/')
+                            }
+                        })
+                        .catch(error => {
+                            next('/')
+                        })
+                }
+            }]
         },
         {
             path: '/login',
@@ -110,15 +158,6 @@ export default new VueRouter({
                 path: 'live',
                 name: 'LeagueLive',
                 component: LeagueLive
-            }]
-        },
-        {
-            path: '/view',
-            component: View,
-            children: [{
-                path: 't3',
-                name: 'T3',
-                component: T3
             }]
         },
         {

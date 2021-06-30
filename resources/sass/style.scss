@@ -54,6 +54,16 @@ body {
     }
 }
 
+.work {
+    height: 100vh;
+    width: 100vw;
+    background-image: url('./images/obs_bg.png');
+    background-color: #252525;
+    background-size: contain;
+    background-repeat: no-repeat;
+    position: relative;
+}
+
 @media (min-width: 40px) and (max-width: 575.98px) {
     .el-message {
         min-width: 90%;

@@ -49,6 +49,16 @@ body .el-message-box__wrapper:after {
   height: 0;
 }
 
+.work {
+  height: 100vh;
+  width: 100vw;
+  background-image: url(/images/obs_bg.png?4fa6b4d26a373f0c1c5cc9dc2e533090);
+  background-color: #252525;
+  background-size: contain;
+  background-repeat: no-repeat;
+  position: relative;
+}
+
 @media (min-width: 40px) and (max-width: 575.98px) {
   .el-message {
     min-width: 90%;

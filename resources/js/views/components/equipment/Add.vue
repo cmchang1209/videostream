@@ -4,10 +4,10 @@
         <br>
         <el-form :model="form" :rules="rules" ref="ruleForm" label-position="top">
             <el-form-item :label="$store.state.langData.cont.pageFn.table.Distributor" prop="distributor">
-                <el-autocomplete v-model="form.distributor" clearable :fetch-suggestions="querySearchAsync" :placeholder="$store.state.langData.cont.msg.placeholder.ph0002" @select="handleSelect" @blur="handleBlur" @clear="handleClear" style="width: 100%"></el-autocomplete>
+                <el-autocomplete ref="distributor" v-model="form.distributor" clearable :fetch-suggestions="querySearchAsync" :placeholder="$store.state.langData.cont.msg.placeholder.ph0002" @select="handleSelect" @blur="handleBlur" @clear="handleClear" style="width: 100%"></el-autocomplete>
             </el-form-item>
             <el-form-item :label="$store.state.langData.cont.pageFn.table.Store" prop="store">
-                <el-autocomplete v-model="form.store" clearable :fetch-suggestions="querySearchStoreAsync" :placeholder="$store.state.langData.cont.msg.placeholder.ph0002" @select="handleStoreSelect" @blur="handleStoreBlur" @clear="handleStoreClear" style="width: 100%"></el-autocomplete>
+                <el-autocomplete ref="store" v-model="form.store" clearable :fetch-suggestions="querySearchStoreAsync" :placeholder="$store.state.langData.cont.msg.placeholder.ph0002" @select="handleStoreSelect" @blur="handleStoreBlur" @clear="handleStoreClear" style="width: 100%"></el-autocomplete>
             </el-form-item>
             <el-form-item :label="$store.state.langData.cont.pageFn.table.MAC" prop="mac">
                 <el-input v-model="form.mac"></el-input>
@@ -30,6 +30,7 @@
     </div>
 </template>
 <script>
+import { mapState } from 'vuex'
 import Breadcrumb from '../layout/Breadcrumb.vue'
 export default {
     components: { Breadcrumb },
@@ -42,7 +43,7 @@ export default {
                 if (regexp.test(value)) {
                     callback()
                 } else {
-                    callback(new Error(this.$store.state.langData.cont.msg.validate.er00101))
+                    callback(new Error(this.$store.state.langData.cont.msg.validate.er0101))
                 }
             }
         }
@@ -152,6 +153,7 @@ export default {
             this.form.distributor = this.selected.distributor.value
         },
         handleClear() {
+            this.$refs.distributor.$el.getElementsByTagName('input')[0].blur()
             this.form.distributor = this.selected.distributor.value = ''
             this.form.distributorId = ''
             this.handleStoreClear()
@@ -203,6 +205,7 @@ export default {
             this.form.store = this.selected.store.value
         },
         handleStoreClear() {
+            this.$refs.store.$el.getElementsByTagName('input')[0].blur()
             this.form.store = this.selected.store.value = ''
             this.form.storeId = ''
             this.selected.store.distributorId = ''

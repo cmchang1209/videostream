@@ -55,6 +55,7 @@ export default {
         }
     },
     created() {
+        this.changeAppLoadingStatus(true)
         this.fetchData()
     },
     methods: {
@@ -69,8 +70,10 @@ export default {
                     let data = response.data.data
                     if (data.errorCode === 'er0000') {
                         this.tableData = data.data
+                        this.changeAppLoadingStatus(false)
                     }
                 }).catch(error => {
+                    this.changeAppLoadingStatus(false)
                     console.log(error)
                 })
         },

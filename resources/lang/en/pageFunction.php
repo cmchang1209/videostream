@@ -5,7 +5,8 @@ return [
 		'Add' => 'Add',
 		'Cancel' => 'Cancel',
 		'Edit' => 'Edit',
-		'Save' => 'Save'
+		'Save' => 'Save',
+		'Port' => 'Port'
 	],
 	'breadcrumb' => [
 		'Back' => 'Back'
@@ -28,7 +29,14 @@ return [
 		'Status' => 'Status',
 		'IP' => 'IP',
 		'MAC' => 'MAC',
-		'Description' => 'Description'
+		'Description' => 'Description',
+		'USB' => 'USB',
+		'Type' => 'Type',
+		'Port' => 'Port',
+		'View' => 'View',
+		'Mute' => 'Mute',
+		'Audio' => 'Audio',
+		'CopyUrl' => 'CopyUrl'
 	],
     'login' => [
     	'label'  => 'Sign in',
@@ -38,6 +46,12 @@ return [
     	'addBtn' => 'Add New tournament'
     ],
     'equipment' => [
-    	'addBtn' => 'Add New equipment'
+    	'addBtn' => 'Add New equipment',
+    	'portFunction' => [
+    		'Screen',
+    		'Dart target',
+    		'-',
+    		'Player'
+    	]
     ]
 ];

@@ -26,7 +26,7 @@
             </el-table-column>
             <el-table-column :label="$store.state.langData.cont.pageFn.table.IP">
                 <template slot-scope="scope">
-                    <el-link v-if="scope.row.status" type="success">{{ scope.row.ip }}</el-link>
+                    <el-link v-if="scope.row.status" type="success" @click.native.prevent="handlePort(scope.$index, scope.row)">{{ scope.row.ip }}</el-link>
                 </template>
             </el-table-column>
             <el-table-column :label="$store.state.langData.cont.pageFn.table.Operating" width="100">
@@ -64,6 +64,7 @@ export default {
         }
     },
     created() {
+        this.changeAppLoadingStatus(true)
         this.fetchData()
     },
     methods: {
@@ -123,6 +124,9 @@ export default {
                         offset: 90
                     })
                 })
+        },
+        handlePort(index, row) {
+            this.$router.push({ name: 'PortEquipment', query: { id: row.id } })
         }
     }
 }

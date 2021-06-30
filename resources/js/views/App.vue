@@ -1,6 +1,6 @@
 <template>
     <div>
-        <el-container v-if="!isGuest && !isView" v-loading="appLoading" element-loading-spinner="el-icon-loading">
+        <el-container v-if="!isGuest" v-loading="appLoading" element-loading-spinner="el-icon-loading">
             <!-- 側邊欄 -->
             <div class="hidden-sm-and-down">
                 <Aside />
@@ -40,12 +40,6 @@ export default {
             })
             this.changeLoginStatus(false)
         }
-        const path = this.$router.currentRoute.path.split('/')
-        if (path[1] === 'view') {
-            this.changeViewStatus(true)
-        } else {
-            this.changeViewStatus(false)
-        }
     },
     computed: mapState({
         isGuest: state => state.gobalData.isGuest,
@@ -55,7 +49,7 @@ export default {
     }),
     mounted() {},
     methods: {
-        ...mapActions(['setLangCont', 'changeLoginStatus', 'changeDrawerStatus', 'setMe', 'changeViewStatus'])
+        ...mapActions(['setLangCont', 'changeLoginStatus', 'changeDrawerStatus', 'setMe'])
     },
     watch: {}
 }

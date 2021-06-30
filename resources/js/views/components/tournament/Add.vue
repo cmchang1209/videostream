@@ -9,12 +9,12 @@
                 <el-row>
                     <el-col :span="22" :offset="2">
                         <el-form-item :label="$store.state.langData.cont.pageFn.table.Name">
-                            <el-autocomplete v-model="player.name" clearable :placement="'top-start'" :fetch-suggestions="querySearchAsync" :placeholder="$store.state.langData.cont.msg.placeholder.ph0002" @select="handleSelect" @blur="handleBlur" @clear="handleClear" style="width: 100%"></el-autocomplete>
+                            <el-autocomplete ref="name" v-model="player.name" clearable :fetch-suggestions="querySearchAsync" :placeholder="$store.state.langData.cont.msg.placeholder.ph0002" @select="handleSelect" @blur="handleBlur" @clear="handleClear" style="width: 100%"></el-autocomplete>
                         </el-form-item>
                     </el-col>
                     <el-col :span="22" :offset="2">
                         <el-form-item :label="$store.state.langData.cont.pageFn.table.Equipment">
-                            <el-autocomplete v-model="player.pi" clearable :placement="'top-start'" :fetch-suggestions="querySearchAsyncEquipment" :placeholder="$store.state.langData.cont.msg.placeholder.ph0002" @select="handleSelectEquipment" @blur="handleBlurEquipment" @clear="handleClearEquipment" style="width: 100%"></el-autocomplete>
+                            <el-autocomplete ref="pi" v-model="player.pi" clearable :fetch-suggestions="querySearchAsyncEquipment" :placeholder="$store.state.langData.cont.msg.placeholder.ph0002" @select="handleSelectEquipment" @blur="handleBlurEquipment" @clear="handleClearEquipment" style="width: 100%"></el-autocomplete>
                         </el-form-item>
                     </el-col>
                 </el-row>
@@ -185,6 +185,7 @@ export default {
             this.player.name = this.player.add.u_name
         },
         handleClear() {
+            this.$refs.name.$el.getElementsByTagName('input')[0].blur()
             this.player.name = this.player.add.u_name = ''
             this.player.add.u_id = ''
         },
@@ -223,28 +224,31 @@ export default {
             this.player.pi = this.player.add.p_name
         },
         handleClearEquipment() {
+            this.$refs.pi.$el.getElementsByTagName('input')[0].blur()
             this.player.pi = this.player.add.p_name = ''
             this.player.add.p_id = ''
         },
         addPlayer() {
-            if (this.player.name !== '' && this.player.pi !== '' && this.form.players.length < 8) {
-                let copy = Object.assign({}, this.player.add)
-                this.form.players.push(copy)
-                this.handleClear()
-                this.handleClearEquipment()
-            } else {
-                this.$message({
-                    message: this.$store.state.langData.cont.msg.validate.er0100,
-                    type: 'error',
-                    offset: 90
-                })
-                this.handleClear()
-                this.handleClearEquipment()
+            if (this.player.name !== '' && this.player.pi !== '') {
+                if (this.form.players.length < 8) {
+                    let copy = Object.assign({}, this.player.add)
+                    this.form.players.push(copy)
+                    this.handleClear()
+                    this.handleClearEquipment()
+                } else {
+                    this.$message({
+                        message: this.$store.state.langData.cont.msg.validate.er0100,
+                        type: 'error',
+                        offset: 90
+                    })
+                    this.handleClear()
+                    this.handleClearEquipment()
+                }
             }
-        },
-        handleDelete(index, row) {
-            this.form.players.splice(index, 1)
         }
+    },
+    handleDelete(index, row) {
+        this.form.players.splice(index, 1)
     }
 }
 

@@ -123,6 +123,55 @@ class ApiEquipmentController extends Controller
         return compact('data');
     }
 
+    public function getData(Request $request)
+    {
+        $data = [];
+        $data['errorCode'] = 'er0000';
+        $data['data'] = [];
+        $sql = 'SELECT id, mac, name, password, distributor_id AS distributorId, store_id AS storeId, description FROM iteam_pi WHERE id=:id';
+        $result = DB::connection('mysql_video')->select($sql, [ 'id' => $request->id ]);
+        if($result) {
+            $result[0]->distributor = '';
+            $sql = 'SELECT CONCAT( name, " ", nation ) AS fullname FROM distributor WHERE id=:id';
+            $distributor = DB::connection('mysql')->select($sql, [ 'id' => $result[0]->distributorId ]);
+            if($distributor) {
+                $result[0]->distributor = $distributor[0]->fullname;
+            }
+            if($result[0]->storeId) {
+                $sql = 'SELECT CONCAT( name, " ", fidoStoreId ) AS fullname  FROM store WHERE id=:id';
+                $store = DB::connection('mysql')->select($sql, [ 'id' => $result[0]->storeId ]);
+                $result[0]->store = $store[0]->fullname;
+            } else {
+                $result[0]->store = '';
+            }
+            $data['data'] = $result[0];            
+        }
+        
+        return compact('data');
+    }
+
+    public function update(Request $request)
+    {
+        $data = [];
+        $sql = 'UPDATE iteam_pi SET mac=:mac, name=:name, password=:password, distributor_id=:distributor_id, store_id=:store_id, description=:description WHERE id=:id';
+        $result = DB::connection('mysql_video')->update($sql, [
+            'mac' => $request->mac,
+            'name' => $request->name,
+            'password' => $request->password,
+            'distributor_id' => $request->distributorId,
+            'store_id' => $request->storeId,
+            'description' => $request->description,
+            'id' => $request->id
+        ]);
+        if($result <= 1) {
+            $data['errorCode'] = 'er0000';
+        } else {
+            $data['errorCode'] = 'er0001';
+        }
+
+        return compact('data');
+    }
+
     public function delete(Request $request)
     {
     	$data = [];
@@ -134,5 +183,49 @@ class ApiEquipmentController extends Controller
             $data['errorCode'] = 'er0001';
         }
         return compact('data');
+    }
+
+    public function getStatus(Request $request)
+    {
+        $data = [];
+        $data['errorCode'] = 'er0000';
+        $data['data'] = 0;
+        $sql = 'SELECT status FROM iteam_connect_pi WHERE pi_id=:id';
+        $result = DB::connection('mysql_video')->select($sql, ['id' => $request->id]);
+        if($result) {
+            $data['data'] = $result[0]->status;
+        }
+        
+        return compact('data');
+    }
+
+    public function getPort(Request $request)
+    {
+        $data = [];
+        $data['errorCode'] = 'er0000';
+        $data['data'] = [];
+        $sql = 'SELECT u.usb_id, u.port_no, u.dev_name, p.audio FROM iteam_port_used AS u LEFT JOIN iteam_pi AS p ON p.id=u.pi_id WHERE pi_id=:id';
+        $result = DB::connection('mysql_video')->select($sql, ['id' => $request->id]);
+        if($result) {
+            $data['data'] = $result;
+        }
+        return compact('data');
+    }
+
+    public function setAudio(Request $request)
+    {
+        $data = [];
+        $sql = 'UPDATE iteam_pi SET audio=:audio WHERE id=:id';
+        $result = DB::connection('mysql_video')->update($sql, [
+            'audio' => $request->audio===1 ? 0 : 1,
+            'id' => $request->id
+        ]);
+        if($result) {
+            $data['errorCode'] = 'er0000';
+        } else {
+            $data['errorCode'] = 'er0001';
+        }
+        return compact('data');
+
     }
 }

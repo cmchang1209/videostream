@@ -14,5 +14,6 @@
 /*Route::get('/', function () {
     return view('welcome');
 });*/
+//Route::get('/view', 'SiteController@view');
 Route::get('/info', 'SiteController@info');
 Route::get('/{path}', 'SiteController@index')->where('path', '^((?!api).)*$');

@@ -3,19 +3,19 @@
         <Breadcrumb :iteams="br" />
         <br>
         <el-form :model="form" :rules="rules" ref="ruleForm" label-position="top">
-            <el-form-item :label="$store.state.langData.cont.pageFn.table.Distributor" prop="distributor">
+            <el-form-item v-if="$store.state.gobalData.me.roleCode === 1" :label="$store.state.langData.cont.pageFn.table.Distributor" prop="distributor">
                 <el-autocomplete ref="distributor" v-model="form.distributor" clearable :fetch-suggestions="querySearchAsync" :placeholder="$store.state.langData.cont.msg.placeholder.ph0002" @select="handleSelect" @blur="handleBlur" @clear="handleClear" style="width: 100%"></el-autocomplete>
             </el-form-item>
-            <el-form-item :label="$store.state.langData.cont.pageFn.table.Store" prop="store">
+            <el-form-item v-if="$store.state.gobalData.me.roleCode === 1" :label="$store.state.langData.cont.pageFn.table.Store" prop="store">
                 <el-autocomplete ref="store" v-model="form.store" clearable :fetch-suggestions="querySearchStoreAsync" :placeholder="$store.state.langData.cont.msg.placeholder.ph0002" @select="handleStoreSelect" @blur="handleStoreBlur" @clear="handleStoreClear" style="width: 100%"></el-autocomplete>
             </el-form-item>
-            <el-form-item :label="$store.state.langData.cont.pageFn.table.MAC" prop="mac">
+            <el-form-item v-if="$store.state.gobalData.me.roleCode === 1" :label="$store.state.langData.cont.pageFn.table.MAC" prop="mac">
                 <el-input v-model="form.mac"></el-input>
             </el-form-item>
             <el-form-item :label="$store.state.langData.cont.pageFn.table.Name" prop="name">
                 <el-input v-model="form.name"></el-input>
             </el-form-item>
-            <el-form-item :label="$store.state.langData.cont.pageFn.table.Description" prop="description">
+            <el-form-item v-if="$store.state.gobalData.me.roleCode === 1" :label="$store.state.langData.cont.pageFn.table.Description" prop="description">
                 <el-input type="textarea" :rows="6" v-model="form.description"></el-input>
             </el-form-item>
             <el-form-item>

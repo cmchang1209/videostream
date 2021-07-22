@@ -21,4 +21,11 @@ class SiteController extends Controller
     {
         //echo phpinfo();
     }
+
+    public function view(Request $request)
+    {
+        $texts = trans('view');
+        $texts = json_encode($texts);
+        return view('view', compact('texts'));
+    }
 }

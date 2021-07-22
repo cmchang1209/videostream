@@ -6,6 +6,7 @@ import Home from '../views/Home'
 import Login from '../views/Login'
 import Tournament from '../views/Tournament'
 import League from '../views/League'
+import View from '../views/View'
 
 import EquipmentList from '../views/components/equipment/List'
 import AddEquipment from '../views/components/equipment/Add'
@@ -20,7 +21,8 @@ import TournamentLive from '../views/components/tournament/Live'
 import LeagueLive from '../views/components/league/Live'
 
 
-import T3 from '../views/components/view/T3'
+import Tm from '../views/components/view/Tm'
+import Audio from '../views/components/view/Audio'
 
 //不允許導航到當前位置
 const originalPush = VueRouter.prototype.push
@@ -73,13 +75,14 @@ export default new VueRouter({
                     if (localStorage.getItem('id') === null) {
                         next('/')
                     } else {
-                        var id = Base64.decode(localStorage.getItem('id'))
+                        next()
+                        /*var id = Base64.decode(localStorage.getItem('id'))
                         var ids = id.split(',')
                         if (ids[2] * 1 === 1) {
                             next()
                         } else {
                             next('/')
-                        }
+                        }*/
                     }
                 }
             }, {
@@ -158,6 +161,19 @@ export default new VueRouter({
                 path: 'live',
                 name: 'LeagueLive',
                 component: LeagueLive
+            }]
+        },
+        {
+            path: '/view',
+            component: View,
+            children: [{
+                path: 'tm',
+                name: 'Tm',
+                component: Tm
+            }, {
+                path: 'audio',
+                name: 'Audio',
+                component: Audio
             }]
         },
         {

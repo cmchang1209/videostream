@@ -25,8 +25,10 @@ Vue.use(ElementUI)
 
 import VueSocketIOExt from 'vue-socket.io-extended'
 import { io } from 'socket.io-client'
-//const socket = io('http://videostream.fidodarts.com:8003')
-//Vue.use(VueSocketIOExt, socket)
+const socket = io('http://videostream.fidodarts.com:8010')
+Vue.use(VueSocketIOExt, socket)
+
+import JSMpeg from './jsmpeg'
 
 const isDebug_mode = process.env.NODE_ENV !== 'production';
 Vue.config.debug = isDebug_mode;

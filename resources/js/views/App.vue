@@ -1,6 +1,6 @@
 <template>
     <div>
-        <el-container v-if="!isGuest" v-loading="appLoading" element-loading-spinner="el-icon-loading">
+        <el-container v-if="!isGuest && !isView" v-loading="appLoading" element-loading-spinner="el-icon-loading">
             <!-- 側邊欄 -->
             <div class="hidden-sm-and-down">
                 <Aside />
@@ -30,6 +30,11 @@ export default {
     },
     created() {
         this.setLangCont(this.text)
+        var path = this.$route.path
+        var paths = path.split('/')
+        if(paths[1] === 'view') {
+            this.changePageStatus(true)
+        }
         if (localStorage.getItem('id') !== null) {
             var id = Base64.decode(localStorage.getItem('id'))
             var ids = id.split(',')
@@ -49,7 +54,7 @@ export default {
     }),
     mounted() {},
     methods: {
-        ...mapActions(['setLangCont', 'changeLoginStatus', 'changeDrawerStatus', 'setMe'])
+        ...mapActions(['setLangCont', 'changeLoginStatus', 'changeDrawerStatus', 'setMe', 'changePageStatus'])
     },
     watch: {}
 }

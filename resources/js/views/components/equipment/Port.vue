@@ -14,7 +14,7 @@
             </el-table-column>
             <el-table-column prop="port_no" :label="$store.state.langData.cont.pageFn.table.Port">
             </el-table-column>
-            <el-table-column :label="$store.state.langData.cont.pageFn.table.Operating" width="100">
+            <el-table-column fixed="right" :label="$store.state.langData.cont.pageFn.table.Operating" width="100">
                 <template slot-scope="scope">
                     <p v-if="scope.row.usb_id!==3" style="margin: 0;">
                         <!-- <el-button @click.native.prevent="handleView(scope.$index, scope.row)" type="text">

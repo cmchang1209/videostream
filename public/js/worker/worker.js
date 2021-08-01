@@ -19,8 +19,10 @@ self.addEventListener('message', (evt) => {
             })
             break
         case 'destroy':
-            this.player.destroy()
-            self.postMessage({ type: 'destroy' })
+            if (this.player) {
+                this.player.destroy()
+                self.postMessage({ type: 'destroy' })
+            }
             break
     }
 })

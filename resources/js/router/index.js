@@ -23,6 +23,7 @@ import LeagueLive from '../views/components/league/Live'
 
 import Tm from '../views/components/view/Tm'
 import Audio from '../views/components/view/Audio'
+import Eg from '../views/components/view/Eg'
 
 //不允許導航到當前位置
 const originalPush = VueRouter.prototype.push
@@ -174,6 +175,11 @@ export default new VueRouter({
                 path: 'audio',
                 name: 'Audio',
                 component: Audio
+            }, {
+                path: 'eg',
+                name: 'Eg',
+                component: Eg,
+                props: (route) => ({ id: route.query.id })
             }]
         },
         {

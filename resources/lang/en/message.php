@@ -1,6 +1,10 @@
 <?php
 
 return [
+    'golbal' => [
+        'g0001' => 'Url was copied successful',
+        'g0002' => 'Url was copied unsuccessful'
+    ],
     'validate' => [
     	'er0001' => 'Please enter your account',
     	'er0002' => 'Please enter your account',

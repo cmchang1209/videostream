@@ -25,7 +25,7 @@ Vue.use(ElementUI)
 
 import VueSocketIOExt from 'vue-socket.io-extended'
 import { io } from 'socket.io-client'
-const socket = io('http://videostream.fidodarts.com:8010')
+const socket = io('http://videostream.fidodarts.com:8007')
 Vue.use(VueSocketIOExt, socket)
 
 import JSMpeg from './jsmpeg'

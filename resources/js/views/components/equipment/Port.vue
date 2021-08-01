@@ -2,6 +2,16 @@
     <div class="equipment-port">
         <Breadcrumb :iteams="br" />
         <br>
+        <p style="text-align: center;">
+            <a :href="viewUrl" target="_blank">
+                {{ $store.state.langData.cont.pageFn.table.View }}
+            </a>
+            <span style="margin: 0 .75rem">|</span>
+            <el-button @click.native.prevent="handleCopyUrl" type="text">
+                {{ $store.state.langData.cont.pageFn.table.CopyUrl }}
+            </el-button>
+        </p>
+        <br>
         <el-table :data="tableData" border :empty-text="$store.state.langData.cont.msg.data.d0001" style="width: 100%">
             <el-table-column prop="usb_id" :label="$store.state.langData.cont.pageFn.table.USB">
             </el-table-column>
@@ -16,19 +26,6 @@
             </el-table-column>
             <el-table-column fixed="right" :label="$store.state.langData.cont.pageFn.table.Operating" width="100">
                 <template slot-scope="scope">
-                    <p v-if="scope.row.usb_id!==3" style="margin: 0;">
-                        <!-- <el-button @click.native.prevent="handleView(scope.$index, scope.row)" type="text">
-                            {{ $store.state.langData.cont.pageFn.table.View }}
-                        </el-button> -->
-                        <a :href="viewUrl(scope.row)" target="_blank">
-                        	{{ $store.state.langData.cont.pageFn.table.View }}
-                        </a>
-                    </p>
-                    <p v-if="scope.row.usb_id!==3" style="margin: 0;">
-                        <el-button @click.native.prevent="handleCopyUrl(scope.$index, scope.row)" type="text">
-                            {{ $store.state.langData.cont.pageFn.table.CopyUrl }}
-                        </el-button>
-                    </p>
                     <p v-if="scope.row.usb_id===1" style="margin: 0;">
                         <el-button @click.native.prevent="handleAudio(scope.$index, scope.row)" type="text">
                             {{ scope.row.audio? $store.state.langData.cont.pageFn.table.Mute : $store.state.langData.cont.pageFn.table.Audio }}
@@ -67,6 +64,11 @@ export default {
         this.changeAppLoadingStatus(true)
         this.fetchData()
     },
+    computed: {
+        viewUrl() {
+            return `http://${document.location.hostname}/view/eg?id=${this.id}`
+        }
+    },
     methods: {
         ...mapActions(['changeAppLoadingStatus']),
         fetchData() {
@@ -86,7 +88,7 @@ export default {
                 })
         },
         handleAudio(index, row) {
-        	this.changeAppLoadingStatus(true)
+            this.changeAppLoadingStatus(true)
             axios
                 .post('/api/setAudio', {
                     audio: row.audio,
@@ -118,10 +120,34 @@ export default {
                     this.changeAppLoadingStatus(false)
                 })
         },
-        viewUrl(row) {
-            //return `http://localhost:8080/work?id=${this.id}&usb=${row.usb_id}`
-            return `http://videostream.fidodarts.com:8005/work?id=${this.id}&usb=${row.usb_id}`
-        	//return `http://${document.location.hostname}/work?port=${port}&usb=${usb}`
+        handleCopyUrl() {
+            const el = document.createElement('textarea')
+            el.value = this.viewUrl
+            el.setAttribute('readonly', '')
+            el.style.position = 'absolute'
+            el.style.left = '-9999px'
+            document.body.appendChild(el)
+            const selected = document.getSelection().rangeCount > 0 ? document.getSelection().getRangeAt(0) : false
+            el.select()
+            try {
+                var successful = document.execCommand('copy')
+                this.$message({
+                    message: this.$store.state.langData.cont.msg.golbal.g0001,
+                    type: 'success',
+                    offset: 90
+                })
+                document.body.removeChild(el)
+            } catch (err) {
+                this.$message({
+                    message: this.$store.state.langData.cont.msg.golbal.g0002,
+                    type: 'error',
+                    offset: 90
+                })
+            }
+            if (selected) {
+                document.getSelection().removeAllRanges()
+                document.getSelection().addRange(selected)
+            }
         }
     }
 }
@@ -129,7 +155,8 @@ export default {
 </script>
 <style scoped lang="scss">
 a {
-	text-decoration: none;
-	color: #409EFF;
+    text-decoration: none;
+    color: #409EFF;
 }
+
 </style>

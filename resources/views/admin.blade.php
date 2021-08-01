@@ -6,6 +6,7 @@
         <meta name="csrf-token" content="{{ csrf_token() }}">
         <link rel="stylesheet" href="{{ mix('css/main.css') }}">
         <link rel="stylesheet" href="{{ mix('css/style.css') }}">
+        <link rel="stylesheet" href="{{ mix('css/view.css') }}">
         <title></title>
     </head>
     <body>

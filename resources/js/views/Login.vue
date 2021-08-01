@@ -1,7 +1,7 @@
 <template>
     <el-row type="flex" justify="center" align="middle" class="login">
         <el-col :xs="20" :sm="8" :md="7" :lg="5" :xl="4">
-            <img src="images/logo_hen.png" alt="" class="logo">
+            <!-- <img src="images/logo_hen.png" alt="" class="logo"> -->
             <h1>{{ $store.state.langData.cont.pageFn.login.label }}</h1>
             <el-form :model="ruleForm" status-icon :rules="rules" ref="ruleForm" label-position="top">
                 <el-form-item label="Account" prop="account">

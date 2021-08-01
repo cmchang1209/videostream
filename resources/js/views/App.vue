@@ -7,13 +7,13 @@
             </div>
             <!-- 右側內容主體 -->
             <Main />
+            <!-- left menu for phone -->
+            <el-drawer title="" :visible="drawer" :direction="direction" :size="'100%'" custom-class="hidden-md-and-up" @close="changeDrawerStatus(false)">
+                <!-- 側邊欄 -->
+                <Aside />
+            </el-drawer>
         </el-container>
         <router-view v-else></router-view>
-        <!-- left menu for phone -->
-        <el-drawer title="" :visible="drawer" :direction="direction" :size="'100%'" custom-class="hidden-md-and-up" @close="changeDrawerStatus(false)">
-            <!-- 側邊欄 -->
-            <Aside />
-        </el-drawer>
     </div>
 </template>
 <script>
@@ -32,7 +32,7 @@ export default {
         this.setLangCont(this.text)
         var path = this.$route.path
         var paths = path.split('/')
-        if(paths[1] === 'view') {
+        if (paths[1] === 'view') {
             this.changePageStatus(true)
         }
         if (localStorage.getItem('id') !== null) {

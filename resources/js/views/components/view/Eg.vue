@@ -169,6 +169,11 @@ export default {
                                 url: this.url
                             }
                         }, [this.oc])
+                    } else {
+                        let player = new JSMpeg.Player(url, {
+                            canvas: this.canvas,
+                            pauseWhenHidden: false
+                        })
                     }
                 }
                 this.$socket.client.emit('runFFmpeg', { id: this.id * 1, usb: this.radio })
@@ -182,9 +187,6 @@ export default {
         },
         play() {
             this.playstatus = true
-            /*if (this.radio === 2) {
-                this.$socket.client.emit('getV4l2', { id: this.id })
-            }*/
         },
         destroy() {
             this.playstatus = false

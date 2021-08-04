@@ -92,6 +92,7 @@ export default {
             radio: null,
             playstatus: false,
             wk: null,
+            player: null,
             url: '',
             video: null,
             canvas: null,
@@ -170,9 +171,12 @@ export default {
                             }
                         }, [this.oc])
                     } else {
-                        let player = new JSMpeg.Player(url, {
+                        this.player = new JSMpeg.Player(this.url, {
                             canvas: this.canvas,
-                            pauseWhenHidden: false
+                            pauseWhenHidden: false,
+                            onPlay: source => {
+                                this.playstatus = true
+                            }
                         })
                     }
                 }
@@ -181,7 +185,13 @@ export default {
         },
         handleStop() {
             if (this.playRadio !== null) {
-                this.wk.postMessage({ type: 'destroy' })
+                if (this.wk !== null) {
+                    this.wk.postMessage({ type: 'destroy' })
+                } else {
+                    this.player.destroy()
+                    this.player = null
+                    this.destroy()
+                }
                 this.$socket.client.emit('stopFFmpeg', { id: this.id * 1, usb: this.radio })
             }
         },

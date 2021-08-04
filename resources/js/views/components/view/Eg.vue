@@ -27,7 +27,7 @@
                     <el-switch v-model="form.exposure_auto" active-text="on" inactive-text="off" @change="changeexposureAuto">
                     </el-switch>
                 </el-form-item>
-                <el-form-item v-if="!form.disabled" label="設定曝光值">
+                <el-form-item v-if="!form.disabled" :label="'設定曝光值 ('+ exposure + ')'">
                     <el-slider v-model="form.exposure_absolute.k" :min="0" :max="2000" :step="100" show-stops :disabled="form.disabled">
                     </el-slider>
                     <el-slider v-model="form.exposure_absolute.b" :min="0" :max="b_max" :step="10" show-stops :disabled="form.disabled">
@@ -60,9 +60,10 @@ export default {
                 var auto = v[0].split(':')
                 this.form.exposure_auto = this.form.disabled = auto[1] * 1 === 3 ? true : false
                 var exposure = v[1].split(':')
-                this.form.exposure_absolute.k = Math.floor(exposure[1] * 1 / 100) * 100
-                this.form.exposure_absolute.b = Math.floor((exposure[1] * 1 - this.form.exposure_absolute.k) / 10) * 10
-                this.form.exposure_absolute.g = exposure[1] * 1 - this.form.exposure_absolute.k - this.form.exposure_absolute.b
+                this.exposure = exposure[1] * 1
+                this.form.exposure_absolute.k = Math.floor(this.exposure / 100) * 100
+                this.form.exposure_absolute.b = Math.floor((this.exposure - this.form.exposure_absolute.k) / 10) * 10
+                this.form.exposure_absolute.g = this.exposure - this.form.exposure_absolute.k - this.form.exposure_absolute.b
                 this.loading = false
             }
         },
@@ -105,7 +106,8 @@ export default {
                     g: 0
                 }
             },
-            loading: false
+            loading: false,
+            exposure: 0
         }
     },
     created() {
@@ -180,9 +182,9 @@ export default {
         },
         play() {
             this.playstatus = true
-            if (this.radio === 2) {
+            /*if (this.radio === 2) {
                 this.$socket.client.emit('getV4l2', { id: this.id })
-            }
+            }*/
         },
         destroy() {
             this.playstatus = false

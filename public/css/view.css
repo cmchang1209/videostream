@@ -1,10 +1,1 @@
-.player.eg {
-  text-align: center;
-}
-
-.player.eg img,
-.player.eg canvas {
-  max-width: 98% !important;
-  margin: 0 auto;
-}
-
+.player.eg{text-align:center}.player.eg canvas,.player.eg img{max-width:98%!important;margin:0 auto}

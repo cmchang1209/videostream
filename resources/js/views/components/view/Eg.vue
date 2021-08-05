@@ -185,7 +185,7 @@ export default {
                         })
                     }
                 }
-                //this.$socket.client.emit('runFFmpeg', { id: this.id * 1, usb: this.radio })
+                this.$socket.client.emit('runFFmpeg', { id: this.id * 1, usb: this.radio })
             }
         },
         handleStop() {
@@ -197,7 +197,7 @@ export default {
                     this.player = null
                     this.destroy()
                 }
-                //this.$socket.client.emit('stopFFmpeg', { id: this.id * 1, usb: this.radio })
+                this.$socket.client.emit('stopFFmpeg', { id: this.id * 1, usb: this.radio })
             }
         },
         play() {

@@ -165,7 +165,7 @@ export default {
                     this.video.appendChild(this.canvas)
                     var u = navigator.userAgent
                     let isiOS = !!u.match(/\(i[^;]+;( U;)? CPU.+Mac OS X/)
-                    if (isiOS) {
+                    if (!isiOS) {
                         this.oc = this.canvas.transferControlToOffscreen()
                         this.wk.postMessage({
                             type: 'create',
@@ -189,7 +189,7 @@ export default {
         },
         handleStop() {
             if (this.playRadio !== null) {
-                if (this.wk !== null) {
+                if (!isiOS) {
                     this.wk.postMessage({ type: 'destroy' })
                 } else {
                     this.player.destroy()

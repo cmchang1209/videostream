@@ -156,16 +156,17 @@ export default {
         handlePlay() {
             if (this.radio) {
                 if (this.playRadio === null || this.playRadio !== this.radio) {
-                    if(this.radio === 2) {
+                    if (this.radio === 2) {
                         this.$socket.client.emit('getV4l2', { id: this.id * 1, usb: this.radio })
                     }
                     this.playRadio = this.radio
                     this.url = `ws://videostream.fidodarts.com:8082/p${this.id}-${this.radio}`
                     this.canvas = document.createElement("CANVAS")
                     this.video.appendChild(this.canvas)
-                    if (this.wk !== null) {
+                    var u = navigator.userAgent
+                    let isiOS = !!u.match(/\(i[^;]+;( U;)? CPU.+Mac OS X/)
+                    if (isiOS) {
                         this.oc = this.canvas.transferControlToOffscreen()
-                        alert(this.oc)
                         this.wk.postMessage({
                             type: 'create',
                             data: {

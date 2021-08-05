@@ -88,6 +88,7 @@ export default {
     },
     data() {
         return {
+            isiOS: false,
             radio: null,
             playstatus: false,
             wk: null,
@@ -164,7 +165,7 @@ export default {
                     this.canvas = document.createElement("CANVAS")
                     this.video.appendChild(this.canvas)
                     var u = navigator.userAgent
-                    let isiOS = !!u.match(/\(i[^;]+;( U;)? CPU.+Mac OS X/)
+                    this.isiOS = !!u.match(/\(i[^;]+;( U;)? CPU.+Mac OS X/)
                     if (!isiOS) {
                         this.oc = this.canvas.transferControlToOffscreen()
                         this.wk.postMessage({

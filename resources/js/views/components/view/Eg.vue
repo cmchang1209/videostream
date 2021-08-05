@@ -163,9 +163,9 @@ export default {
                     this.url = `ws://videostream.fidodarts.com:8082/p${this.id}-${this.radio}`
                     this.canvas = document.createElement("CANVAS")
                     this.video.appendChild(this.canvas)
-                    alert(this.wk)
                     if (this.wk !== null) {
                         this.oc = this.canvas.transferControlToOffscreen()
+                        alert(this.oc)
                         this.wk.postMessage({
                             type: 'create',
                             data: {

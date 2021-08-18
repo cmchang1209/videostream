@@ -9,6 +9,10 @@ export default {
     getters: {
         isTouchDevice(state) {
             return ('ontouchstart' in window || navigator.msMaxTouchPoints) || false
+        },
+        isIosDevice(state) {
+            var u = navigator.userAgent
+            return !!u.match(/\(i[^;]+;( U;)? CPU.+Mac OS X/)
         }
     },
     mutations: {

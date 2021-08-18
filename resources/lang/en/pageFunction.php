@@ -36,7 +36,8 @@ return [
 		'View' => 'View',
 		'Mute' => 'Mute',
 		'Audio' => 'Audio',
-		'CopyUrl' => 'CopyUrl'
+		'CopyUrl' => 'CopyUrl',
+		'Tournament' => 'Tournament'
 	],
     'login' => [
     	'label'  => 'Sign in',

@@ -30,10 +30,11 @@ Route::post('/setAudio', 'ApiEquipmentController@setAudio')->name('setAudio');
 
 
 
-Route::get('/getTournamentListData', 'ApiController@getTournamentListData')->name('getTournamentListData');
-Route::post('/addTournament', 'ApiController@addTournament')->name('addTournament');
-Route::post('/updateTournament', 'ApiController@updateTournament')->name('updateTournament');
-Route::delete('/deleteTournament', 'ApiController@deleteTournament')->name('deleteTournament');
-Route::get('/getPlayersData', 'ApiController@getPlayersData')->name('getPlayersData');
-Route::get('/getEquipmentData', 'ApiController@getEquipmentData')->name('getEquipmentData');
-Route::get('/getTournamentData', 'ApiController@getTournamentData')->name('getTournamentData');
+Route::get('/getTournamentListData', 'ApiTournamentController@getTournamentListData')->name('getTournamentListData');
+Route::post('/addTournament', 'ApiTournamentController@addTournament')->name('addTournament');
+Route::post('/updateTournament', 'ApiTournamentController@updateTournament')->name('updateTournament');
+Route::delete('/deleteTournament', 'ApiTournamentController@deleteTournament')->name('deleteTournament');
+Route::get('/getPlayersData', 'ApiTournamentController@getPlayersData')->name('getPlayersData');
+Route::get('/getEquipmentData', 'ApiTournamentController@getEquipmentData')->name('getEquipmentData');
+Route::get('/getTournamentData', 'ApiTournamentController@getTournamentData')->name('getTournamentData');
+Route::get('/getTournamentBracketData', 'ApiTournamentController@getTournamentBracketData')->name('getTournamentBracketData');

@@ -1,36 +1,22 @@
 <template>
-    <div class="view-overflow">
-        <div class="view-tm">
+    <div class="view">
+        <div class="view-tm-bracket">
             <f-header :name="name" />
+            <div class="bracket">
+                <f-bracket :data="data" />
+            </div>
         </div>
-        <el-tabs tab-position="bottom">
-            <el-tab-pane label="1">
-                <div>
-                </div>
-            </el-tab-pane>
-            <el-tab-pane label="2">
-                <div>
-                    2
-                </div>
-            </el-tab-pane>
-            <el-tab-pane label="3">
-                <div>
-                    3
-                </div>
-            </el-tab-pane>
-        </el-tabs>
-        <!-- <Player />
-        <iframe allow="autoplay" :src="audioSrc" style="display: none;"></iframe> -->
     </div>
 </template>
 <script>
 import Header from './layout/Header.vue'
-import Player from './Player.vue'
+import Bracket from '../tournament/Bracket.vue'
 export default {
     components: {
-        'f-player': Player,
-        'f-header': Header
+        'f-header': Header,
+        'f-bracket': Bracket
     },
+    props: ['id'],
     data() {
         return {
             name: '',
@@ -40,11 +26,7 @@ export default {
     created() {
         this.fetchData()
     },
-    computed: {
-        audioSrc() {
-            return `http://${document.location.hostname}/view/audio`
-        }
-    },
+    computed: {},
     mounted() {},
     methods: {
         fetchData() {
@@ -61,7 +43,7 @@ export default {
                 }).catch(error => {
                     console.log(error)
                 })
-        }
+        },
     }
 }
 

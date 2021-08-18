@@ -26,7 +26,7 @@ body {
         border-left: solid 1px #e6e6e6;
 
         .el-main {
-            height: calc(100vh - 60px);
+            height: 100vh;
             overflow-y: auto;
 
             .el-breadcrumb * {
@@ -62,6 +62,49 @@ body {
     background-size: contain;
     background-repeat: no-repeat;
     position: relative;
+}
+
+.tournament-live {
+    .bracket {
+
+        margin-top: 1.75rem;
+
+        .title {
+            rect {
+                fill: #eee;
+            }
+        }
+
+        text {
+            font-size: 42px;
+        }
+
+        .player {
+            rect {
+                fill: #eee;
+            }
+
+            path {
+                stroke: #000;
+                stroke-opacity: .3;
+            }
+
+            .trace {
+                font-size: 36px;
+            }
+
+            .info {
+                font-weight: 500;
+                font-size: 18px;
+            }
+        }
+
+        .line {
+            path {
+                stroke: #000;
+            }
+        }
+    }
 }
 
 @media (min-width: 40px) and (max-width: 575.98px) {

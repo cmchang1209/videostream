@@ -7,3 +7,108 @@
         margin: 0 auto;
     }
 }
+
+
+.view,
+.view-overflow {
+    height: 100vh;
+    background-color: #252525;
+
+    .header {
+        width: calc(100% - 2vw);
+        margin-left: 1vw;
+        padding: .5vw 0;
+        height: 4vw;
+
+        .h_left,
+        .h_center,
+        .h_right {
+            height: 100%;
+            position: relative;
+        }
+
+        .h_left {
+            width: 30%;
+            float: left;
+        }
+
+        .h_center {
+            width: 40%;
+            float: left;
+        }
+
+        .h_right {
+            width: 30%;
+            float: right;
+        }
+    }
+
+    .view-tm-bracket,
+    .view-tm {
+        max-width: 1920px;
+        height: calc(100vw * 9/16);
+        background-image: url('./images/obs_bg.png');
+        background-size: cover;
+        background-position: center;
+        background-repeat: no-repeat;
+        font-weight: 700;
+        position: relative;
+
+        .bracket {
+            height: calc((100vw * 9/16) - 7vw);
+            padding: 0 1vw;
+            margin-top: 2vw;
+
+            .title {
+                rect {
+                    fill: #121416;
+                }
+
+                text {
+                    fill: #6b6b6c;
+                    font-size: 42px;
+                }
+            }
+
+            .player {
+                rect {
+                    fill: rgba(0, 0, 0, .6);
+                }
+
+                path {
+                    stroke: #fff;
+                    stroke-opacity: .3;
+                }
+
+                .trace {
+                    fill: #fff;
+                    font-size: 36px;
+                }
+
+                .info {
+                    font-weight: 500;
+                    fill: #fff;
+                    font-size: 18px;
+                }
+            }
+
+            .line {
+                path {
+                    stroke: #fff;
+                }
+            }
+        }
+    }
+}
+
+.view-overflow {
+    overflow: auto;
+
+    &::-webkit-scrollbar {
+        display: none
+    }
+
+    .el-tabs--bottom .el-tabs__header.is-bottom {
+        margin-top: 0;
+    }
+}

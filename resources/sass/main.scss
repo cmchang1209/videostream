@@ -31,9 +31,35 @@ div {
     -moz-osx-font-smoothing: grayscale;
 }
 
-.handle, .no-user-select {
+.handle,
+.no-user-select {
     -webkit-user-select: none;
     -moz-user-select: none;
     -o-user-select: none;
     user-select: none;
+}
+
+.cursor-pointer {
+    cursor: pointer;
+}
+
+/* disable text selected */
+.noselect {
+    -webkit-touch-callout: none;
+    /* iOS Safari */
+    -webkit-user-select: none;
+    /* Safari */
+    -khtml-user-select: none;
+    /* Konqueror HTML */
+    -moz-user-select: none;
+    /* Firefox */
+    -ms-user-select: none;
+    /* Internet Explorer/Edge */
+    user-select: none;
+    /* Non-prefixed version, currently */
+    /* supported by Chrome and Opera */
+}
+
+.no-scroll-bar::-webkit-scrollbar {
+    display: none
 }

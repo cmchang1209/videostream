@@ -42,6 +42,7 @@
     </div>
 </template>
 <script>
+import { mapGetters } from 'vuex'
 export default {
     components: {},
     props: ['id'],
@@ -88,7 +89,6 @@ export default {
     },
     data() {
         return {
-            isiOS: false,
             radio: null,
             playstatus: false,
             wk: null,
@@ -128,6 +128,7 @@ export default {
         }
     },
     computed: {
+        ...mapGetters(['isIosDevice']),
         b_max() {
             return this.form.exposure_absolute.k === 2000 ? 40 : 90
         },
@@ -157,16 +158,12 @@ export default {
         handlePlay() {
             if (this.radio) {
                 if (this.playRadio === null || this.playRadio !== this.radio) {
-                    if (this.radio === 2) {
-                        this.$socket.client.emit('getV4l2', { id: this.id * 1, usb: this.radio })
-                    }
                     this.playRadio = this.radio
                     this.url = `ws://videostream.fidodarts.com:8082/p${this.id}-${this.radio}`
                     this.canvas = document.createElement("CANVAS")
                     this.video.appendChild(this.canvas)
-                    var u = navigator.userAgent
-                    this.isiOS = !!u.match(/\(i[^;]+;( U;)? CPU.+Mac OS X/)
-                    if (!this.isiOS) {
+                    console.log(this.isIosDevice)
+                    if (!this.isIosDevice) {
                         this.oc = this.canvas.transferControlToOffscreen()
                         this.wk.postMessage({
                             type: 'create',
@@ -180,7 +177,7 @@ export default {
                             canvas: this.canvas,
                             pauseWhenHidden: false,
                             onPlay: source => {
-                                this.playstatus = true
+                                this.play()
                             }
                         })
                     }
@@ -190,7 +187,7 @@ export default {
         },
         handleStop() {
             if (this.playRadio !== null) {
-                if (!this.isiOS) {
+                if (!this.isIosDevice) {
                     this.wk.postMessage({ type: 'destroy' })
                 } else {
                     this.player.destroy()
@@ -201,6 +198,9 @@ export default {
             }
         },
         play() {
+            if (this.radio === 2) {
+                //this.$socket.client.emit('getV4l2', { id: this.id * 1, usb: this.radio })
+            }
             this.playstatus = true
         },
         destroy() {

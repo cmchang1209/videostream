@@ -135,10 +135,21 @@ export default {
                     })
                     if (name.length) {
                         name = name[0].p_name.split(" ")
-                        name = name[1] ? name[1] : name[0]
+                        if (name.length > 1) {
+                            var n = ''
+                            for (var i = 0; i <= name.length - 1; i++) {
+                                if (i > 0) {
+                                    n += name[i]
+                                }
+                            }
+                            name = n
+                        } else {
+                            name = name[0]
+                        }
                     } else {
                         name = ''
                     }
+                    //name = name[0].p_name
                     break;
             }
             return name;

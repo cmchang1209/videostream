@@ -186,7 +186,7 @@ class ApiTournamentController extends Controller
         $data['name'] = '';
         $data['id'] = '';
         $data['data'] = [];
-        $sql = 'SELECT t.id, t.name, p.track, p.u_id, p.u_name, p.p_id, p.p_name FROM iteam_tournament AS t LEFT JOIN iteam_tournament_players AS p ON p.tournament_id=t.id WHERE t.is_delete=0 AND t.id=:id';
+        $sql = 'SELECT t.id, t.name, p.track, p.u_id, p.u_name, p.p_id, p.p_name, pi.name FROM iteam_tournament AS t LEFT JOIN iteam_tournament_players AS p ON p.tournament_id=t.id LEFT JOIN iteam_pi AS pi ON pi.id=p.p_id WHERE t.is_delete=0 AND t.id=:id';
         $result = DB::connection('mysql_video')->select($sql, ['id' => $request->id]);
         foreach ($result as $key => $value) {
             $data['name'] = $value->name;
@@ -196,7 +196,7 @@ class ApiTournamentController extends Controller
                 'u_id' => $value->u_id,
                 'u_name' => $value->u_name,
                 'p_id' => $value->p_id,
-                'p_name' => $value->p_name
+                'p_name' => $value->name
             ];
         }
         return compact('data');

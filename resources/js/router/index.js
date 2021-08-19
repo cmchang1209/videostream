@@ -172,11 +172,13 @@ export default new VueRouter({
             children: [{
                 path: 'tm',
                 name: 'Tm',
-                component: Tm
+                component: Tm,
+                props: (route) => ({ id: route.query.id, match: route.query.match })
             }, {
                 path: 'audio',
                 name: 'Audio',
-                component: Audio
+                component: Audio,
+                props: (route) => ({ id: route.query.id })
             }, {
                 path: 'eg',
                 name: 'Eg',

@@ -98,6 +98,40 @@
                 }
             }
         }
+
+        .video-area {
+            width: calc(100% - 2vw);
+            height: calc((100vw * 9/16) - 15vw);
+            padding: 1vw;
+            position: absolute;
+
+            .video-2, .video-4 {
+                position: relative;
+                width: 50%;
+                height: 100%;
+                overflow: hidden;
+            }
+
+            .video-4 {
+                position: absolute;
+                top: 1vw;
+                right: 1vw;
+                height: calc(100% - 2vw);
+            }
+
+            .video-1 {
+                position: absolute;
+                height: 30%;
+                bottom: 1vw;
+                left: calc(75.2% + 1vw);
+            }
+
+            canvas {
+                position: absolute;
+                height: 100%;
+                left: -5%;
+            }
+        }
     }
 }
 
@@ -106,9 +140,5 @@
 
     &::-webkit-scrollbar {
         display: none
-    }
-
-    .el-tabs--bottom .el-tabs__header.is-bottom {
-        margin-top: 0;
     }
 }

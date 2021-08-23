@@ -9,25 +9,27 @@
                 <div class="video-4">
                     <div class="adr-name">
                         <svg xmlns="http://www.w3.org/2000/svg" viewBox="0,0,386,59">
-                            <text x="10" y="42" font-size="36" stroke="#666" stroke-width="5" fill="#666" letter-spacing="1" stroke-linecap="round" stroke-linejoin="round">
+                            <text x="10" y="38" font-size="24" stroke="#333" stroke-width="6" fill="#333" letter-spacing="3" stroke-linecap="round" stroke-linejoin="round">
                                 {{ iteam.p_name }}
                             </text>
-                            <text x="10" y="42" font-size="36" fill="#fff" letter-spacing="1">
+                            <text x="10" y="38" font-size="24" fill="#fff" letter-spacing="3">
                                 {{ iteam.p_name }}
                             </text>
                         </svg>
                     </div>
                     <f-player :id="iteam.id" :usb="4" />
                 </div>
-                <div class="video-1">
+                <div :class="['video-1', active[index] ? 'active' : '']" @click="changePcModel(index)">
                     <f-player :id="iteam.id" :usb="1" />
+                    }
                 </div>
             </div>
-            <f-footer />
+            <f-footer @changShow="changShowModel" />
         </div>
         <div v-else class="view-tm" style="display: flex; align-items: center; justify-content: center">
             <h1 style="color: white;" v-show="showErrorMsg">無相關賽事</h1>
         </div>
+        <div :class="['mask', mask ? 'active' : '']"></div>
         <!-- <Player />
         <iframe allow="autoplay" :src="audioSrc" style="display: none;"></iframe> -->
     </div>
@@ -49,7 +51,9 @@ export default {
             data: [],
             show: false,
             showErrorMsg: false,
-            pi: []
+            pi: [],
+            active: [false, false],
+            mask: false
         }
     },
     created() {
@@ -58,6 +62,9 @@ export default {
     computed: {
         audioSrc() {
             return `http://${document.location.hostname}/view/audio`
+        },
+        actived() {
+            return this.active
         }
     },
     mounted() {},
@@ -107,6 +114,24 @@ export default {
                 }).catch(error => {
                     console.log(error)
                 })
+        },
+        changePcModel(i) {
+            let d = [this.active[0], this.active[1]]
+            d[i] = !this.active[i]
+            this.mask = !this.mask
+            this.active = d
+        },
+        changShowModel(value) {
+            switch (value) {
+                case 'home':
+                    this.pi[0].status = true
+                    this.pi[1].status = false
+                    break
+                case 'away':
+                    this.pi[0].status = false
+                    this.pi[1].status = true
+                    break
+            }
         }
     }
 }

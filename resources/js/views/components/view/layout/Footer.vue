@@ -1,12 +1,12 @@
 <template>
     <div class="footer">
-        <div class="f_left">
+        <div class="f_left" @click="changShowModel('home')">
             
         </div>
-        <div class="f_center">
+        <div class="f_center" @click="changShowModel('tree')">
             
         </div>
-        <div class="f_right">
+        <div class="f_right" @click="changShowModel('away')">
             
         </div>
     </div>
@@ -21,7 +21,11 @@ export default {
     },
     created() {},
     computed: {},
-    methods: {}
+    methods: {
+        changShowModel(type) {
+            this.$emit('changShow', type);
+        }
+    }
 }
 
 </script>

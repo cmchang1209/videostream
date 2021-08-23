@@ -43,6 +43,18 @@
         }
     }
 
+    .mask {
+        background-color: rgba(0, 0, 0, .8);
+        position: absolute;
+        width: 100vw;
+        height: 100vh;
+        top: 0;
+        display: none;
+        &.active {
+            display: inherit;
+        }
+    }
+
     .view-tm-bracket,
     .view-tm {
         max-width: 1920px;
@@ -119,6 +131,7 @@
                 top: 1vw;
                 right: 1vw;
                 height: calc(100% - 2vw);
+
                 .adr-name {
                     position: absolute;
                     width: 54%;
@@ -135,6 +148,16 @@
                 bottom: 1vw;
                 left: 76%;
                 overflow: hidden;
+                cursor: pointer;
+                -webkit-transition: all ease 0.3s;
+
+                &.active {
+                    width: calc(100vw * .73);
+                    height: inherit;
+                    -webkit-transition: all ease 0.3s;
+                    left: 15%;
+                    z-index: 1500;
+                }
             }
 
             canvas {
@@ -179,7 +202,8 @@
             float: right;
         }
 
-        .f_left, .f_right {
+        .f_left,
+        .f_right {
             border: 2px solid #666;
         }
     }

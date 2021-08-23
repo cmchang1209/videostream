@@ -24,7 +24,12 @@
                     }
                 </div>
             </div>
-            <f-footer @changShow="changShowModel" />
+            <div v-show="tree" class="video-area">
+                <div class="bracket">
+                    <f-bracket :data="data" />
+                </div>
+            </div>
+            <f-footer :data="pi" @changShow="changShowModel" />
         </div>
         <div v-else class="view-tm" style="display: flex; align-items: center; justify-content: center">
             <h1 style="color: white;" v-show="showErrorMsg">無相關賽事</h1>
@@ -38,11 +43,13 @@
 import Header from './layout/Header.vue'
 import Footer from './layout/Footer.vue'
 import Player from './Player.vue'
+import Bracket from '../tournament/Bracket.vue'
 export default {
     components: {
         'f-player': Player,
         'f-header': Header,
-        'f-footer': Footer
+        'f-footer': Footer,
+        'f-bracket': Bracket
     },
     props: ['id', 'match'],
     data() {
@@ -53,11 +60,13 @@ export default {
             showErrorMsg: false,
             pi: [],
             active: [false, false],
-            mask: false
+            mask: false,
+            tree: false
         }
     },
     created() {
         this.fetchData()
+        this.test()
     },
     computed: {
         audioSrc() {
@@ -80,6 +89,7 @@ export default {
                 })
                 .then(response => {
                     let data = response.data.data
+                    console.log(data)
                     if (data.errorCode === 'er0000') {
                         this.show = true
                         this.name = data.name
@@ -106,6 +116,7 @@ export default {
                                 name = name[0]
                             }
                             d.p_name = name
+                            d.track = ds[0].track
 
                             this.pi.push(d)
                         }
@@ -126,11 +137,27 @@ export default {
                 case 'home':
                     this.pi[0].status = true
                     this.pi[1].status = false
+                    this.tree = false
                     break
                 case 'away':
                     this.pi[0].status = false
                     this.pi[1].status = true
+                    this.tree = false
                     break
+                case 'tree':
+                    this.pi[0].status = false
+                    this.pi[1].status = false
+                    this.tree = true
+                    break
+            }
+        },
+        test() {
+            let ws = new WebSocket('ws://52.199.5.88:4649/League?name=ethan2')
+            ws.onopen = () => {
+                console.log('open connection')
+            }
+            ws.onclose = () => {
+                console.log('close connection')
             }
         }
     }

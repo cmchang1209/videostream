@@ -50,6 +50,7 @@
         height: 100vh;
         top: 0;
         display: none;
+
         &.active {
             display: inherit;
         }
@@ -170,6 +171,12 @@
                     left: -5%;
                 }
             }
+
+            .bracket {
+                width: 78%;
+                margin-left: 10%;
+                height: calc((100vw * 9/16) - 17vw);
+            }
         }
     }
 
@@ -185,26 +192,51 @@
             height: 100%;
             position: relative;
             box-sizing: border-box;
+            cursor: pointer;
         }
 
         .f_left {
-            width: 35%;
+            width: 40%;
             float: left;
+
+            text {
+                fill: #666;
+            }
+
+            &.active {
+                text {
+                    fill: #fff;
+                }
+            }
         }
 
         .f_center {
-            width: 30%;
+            width: 20%;
             float: left;
         }
 
         .f_right {
-            width: 35%;
+            width: 40%;
             float: right;
+
+            text {
+                fill: #666;
+            }
+
+            &.active {
+                text {
+                    fill: #fff;
+                }
+            }
         }
 
         .f_left,
         .f_right {
             border: 2px solid #666;
+
+            &.active {
+                border-color: #fff;
+            }
         }
     }
 }

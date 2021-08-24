@@ -21,7 +21,6 @@
                 </div>
                 <div :class="['video-1', active[index] ? 'active' : '']" @click="changePcModel(index)">
                     <f-player :id="iteam.id" :usb="1" />
-                    }
                 </div>
             </div>
             <div :class="['bracket', tree ? 'active' : '']" @click="hindTree">
@@ -69,7 +68,7 @@ export default {
         audioSrc() {
             let pi = 0
             this.pi.map(iteam => {
-                if(iteam.status) {
+                if (iteam.status) {
                     pi = iteam.id
                 }
             })
@@ -127,6 +126,7 @@ export default {
                 })
         },
         changePcModel(i) {
+            console.log(i)
             let d = [this.active[0], this.active[1]]
             d[i] = !this.active[i]
             this.mask = !this.mask
@@ -154,7 +154,14 @@ export default {
         test() {
             let ws = new WebSocket('ws://52.199.5.88:4649/League?name=ethan2')
             ws.onopen = () => {
-                console.log('open connection')
+                var msg = {
+                    Type: "Test"
+                }
+                ws.send(JSON.stringify(msg))
+            }
+
+            ws.onmessage = function(e) {
+                console.log(e.data)
             }
             ws.onclose = () => {
                 console.log('close connection')

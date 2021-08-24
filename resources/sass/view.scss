@@ -49,10 +49,12 @@
         width: 100vw;
         height: 100vh;
         top: 0;
-        display: none;
+        opacity: 0;
+        -webkit-transition: all ease 1s;
 
         &.active {
-            display: inherit;
+            opacity: 1;
+            -webkit-transition: all ease 1s;
         }
     }
 
@@ -68,23 +70,19 @@
         position: relative;
 
         .bracket {
-            position: relative;
             opacity: 0;
-            width: 0;
-            height: 0;
-            padding: 0;
+            width: 98vw;
+            height: calc((100vw * 9/16) - 7vw);
+            padding: 0 1vw;
             margin-top: 2vw;
-            -webkit-transition: all ease .6s;
-            z-index: 100;
+            -webkit-transition: all ease 1s;
             cursor: pointer;
+            position: absolute;
 
             &.active {
                 opacity: 1;
-                width: inherit;
-                height: calc((100vw * 9/16) - 7vw);
-                padding: 0 1vw;
-                -webkit-transition: all ease .6s;
-                z-index: 500;
+                -webkit-transition: all ease 1s;
+                z-index: 700;
             }
 
             .title {
@@ -129,21 +127,16 @@
 
         .video-area {
             opacity: 0;
-            width: 0;
-            height: 0;
-            padding: 0;
-            position: absolute;
+            width: calc(100% - 2vw);
+            height: calc((100vw * 9/16) - 15vw);
+            padding: 1vw;
             overflow-x: hidden;
-            -webkit-transition: all ease .6s;
-            z-index: 100;
+            -webkit-transition: all ease 1s;
+            position: absolute;
 
             &.active {
                 opacity: 1;
-                width: calc(100% - 2vw);
-                height: calc((100vw * 9/16) - 15vw);
-                padding: 1vw;
-                -webkit-transition: all ease .6s;
-                z-index: 500;
+                -webkit-transition: all ease 1s;
             }
 
             .video-2,
@@ -178,13 +171,13 @@
                 overflow: hidden;
                 cursor: pointer;
                 -webkit-transition: all ease 0.3s;
+                z-index: 1500;
 
                 &.active {
                     width: calc(100vw * .73);
                     height: inherit;
                     -webkit-transition: all ease 0.3s;
                     left: 15%;
-                    z-index: 1500;
                 }
             }
 
@@ -198,12 +191,6 @@
                     left: -5%;
                 }
             }
-
-            /* .bracket {
-                width: 78%;
-                margin-left: 10%;
-                height: calc((100vw * 9/16) - 17vw);
-            } */
         }
     }
 
@@ -214,6 +201,7 @@
         height: 6.5vw;
         position: absolute;
         bottom: 0;
+        z-index: 600;
 
         .f_left,
         .f_center,

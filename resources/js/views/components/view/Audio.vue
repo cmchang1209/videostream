@@ -17,7 +17,7 @@ export default {
             autoplay: true,
             pauseWhenHidden: false,
             onAudioDecode(decoder, time) {
-                console.log(time)
+                //console.log(time)
             }
         })
     },

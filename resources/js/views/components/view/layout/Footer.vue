@@ -1,6 +1,6 @@
 <template>
     <div class="footer">
-        <div :class="['f_left', left ? 'active' : '']" @click="changShowModel('home')">
+        <div :class="['f_left', data[0].status ? 'active' : '']" @click="changShowModel('home')">
             <svg xmlns="http://www.w3.org/2000/svg" viewBox="0,0,382,84">
                 <text x="20" y="50" font-size="42" letter-spacing="3">{{ data[0].track }}</text>
                 <text x="10" y="70" font-size="16" letter-spacing="3">{{ uId(data[0].u_name) }}</text>
@@ -9,8 +9,11 @@
             </svg>
         </div>
         <div class="f_center" @click="changShowModel('tree')">
+            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0,0,193,85">
+                
+            </svg>
         </div>
-        <div :class="['f_right', right ? 'active' : '']" @click="changShowModel('away')">
+        <div :class="['f_right', data[1].status ? 'active' : '']" @click="changShowModel('away')">
             <svg xmlns="http://www.w3.org/2000/svg" viewBox="0,0,382,84">
                 <text x="20" y="50" font-size="42" letter-spacing="3">{{ data[1].track }}</text>
                 <text x="20" y="70" font-size="16" letter-spacing="3">{{ uId(data[1].u_name) }}</text>
@@ -26,28 +29,12 @@ export default {
     props: ['data'],
     sockets: {},
     data() {
-        return {
-            left: true,
-            right: false
-        }
+        return {}
     },
     created() {},
     computed: {},
     methods: {
         changShowModel(type) {
-            switch (type) {
-                case 'home':
-                    this.left = true
-                    this.right = false
-                    break
-                case 'away':
-                    this.left = false
-                    this.right = true
-                    break
-                default:
-                    this.left = false
-                    this.right = false
-            }
             this.$emit('changShow', type);
         },
         uId(name) {

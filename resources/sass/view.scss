@@ -68,9 +68,24 @@
         position: relative;
 
         .bracket {
-            height: calc((100vw * 9/16) - 7vw);
-            padding: 0 1vw;
+            position: relative;
+            opacity: 0;
+            width: 0;
+            height: 0;
+            padding: 0;
             margin-top: 2vw;
+            -webkit-transition: all ease .6s;
+            z-index: 100;
+            cursor: pointer;
+
+            &.active {
+                opacity: 1;
+                width: inherit;
+                height: calc((100vw * 9/16) - 7vw);
+                padding: 0 1vw;
+                -webkit-transition: all ease .6s;
+                z-index: 500;
+            }
 
             .title {
                 rect {
@@ -113,11 +128,23 @@
         }
 
         .video-area {
-            width: calc(100% - 2vw);
-            height: calc((100vw * 9/16) - 15vw);
-            padding: 1vw;
-            position: relative;
+            opacity: 0;
+            width: 0;
+            height: 0;
+            padding: 0;
+            position: absolute;
             overflow-x: hidden;
+            -webkit-transition: all ease .6s;
+            z-index: 100;
+
+            &.active {
+                opacity: 1;
+                width: calc(100% - 2vw);
+                height: calc((100vw * 9/16) - 15vw);
+                padding: 1vw;
+                -webkit-transition: all ease .6s;
+                z-index: 500;
+            }
 
             .video-2,
             .video-4 {
@@ -172,11 +199,11 @@
                 }
             }
 
-            .bracket {
+            /* .bracket {
                 width: 78%;
                 margin-left: 10%;
                 height: calc((100vw * 9/16) - 17vw);
-            }
+            } */
         }
     }
 
@@ -185,6 +212,8 @@
         margin-left: 1vw;
         padding: .5vw 12vw;
         height: 6.5vw;
+        position: absolute;
+        bottom: 0;
 
         .f_left,
         .f_center,

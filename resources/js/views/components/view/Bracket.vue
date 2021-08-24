@@ -2,7 +2,7 @@
     <div class="view">
         <div class="view-tm-bracket">
             <f-header :name="name" />
-            <div class="bracket">
+            <div class="bracket active">
                 <f-bracket :data="data" />
             </div>
         </div>

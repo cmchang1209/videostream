@@ -55,6 +55,7 @@
         &.active {
             opacity: 1;
             -webkit-transition: all ease 1s;
+            z-index: 800;
         }
     }
 

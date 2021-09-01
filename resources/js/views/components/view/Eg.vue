@@ -194,6 +194,14 @@ export default {
                     this.destroy()
                 }
                 this.$socket.client.emit('stopFFmpeg', { id: this.id * 1, usb: this.radio })
+            } else {
+                this.$socket.client.emit('stopFFmpeg', { id: this.id * 1, usb: 2 })
+                setTimeout(() => {
+                    this.$socket.client.emit('stopFFmpeg', { id: this.id * 1, usb: 4 })
+                    setTimeout(() => {
+                        this.$socket.client.emit('stopFFmpeg', { id: this.id * 1, usb: 1 })
+                    }, 1000)
+                }, 1000)
             }
         },
         play() {

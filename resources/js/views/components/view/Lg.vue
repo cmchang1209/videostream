@@ -48,6 +48,11 @@ export default {
         'f-footer': Footer,
     },
     props: ['id'],
+    sockets: {
+        connect() {
+            console.log('connect')
+        }
+    },
     data() {
         return {
             name: '',
@@ -102,6 +107,7 @@ export default {
                         this.sequence = data.data[0].sequence
                         this.date = data.data[0].matchDate
                         this.team = data.team
+                        this.runFFmpeg()
                         this.webSocket()
                     }
                 }).catch(error => {
@@ -126,6 +132,19 @@ export default {
                     break
             }
         },
+        runFFmpeg() {
+            this.team.map(iteam => {
+                if (iteam.pi !== 0) {
+                    this.$socket.client.emit('runFFmpeg', { id: iteam.pi, usb: 2 })
+                    setTimeout(() => {
+                        this.$socket.client.emit('runFFmpeg', { id: iteam.pi, usb: 4 })
+                        setTimeout(() => {
+                            this.$socket.client.emit('runFFmpeg', { id: iteam.pi, usb: 1 })
+                        }, 1000)
+                    }, 1000)
+                }
+            })
+        },
         webSocket() {
             let urlData = this.$store.state.gobalData.wsTest1
             let ws = new WebSocket(`ws://${urlData.ip}:${urlData.port}/League`)
@@ -135,9 +154,7 @@ export default {
             }
 
             ws.onmessage = (e) => {
-                console.log(e.data)
                 let data = JSON.parse(e.data)
-                console.log(data.errorCode)
                 if (data.errorCode === 'SUCCEED') {
                     switch (data.currentTeam) {
                         case 'HOME':
@@ -156,7 +173,7 @@ export default {
                         let l = data.leg.split(':')
                         this.leg = [l[0], l[1]]
                     }
-                    this.first = data.first === 'HOME'? 0 : 1
+                    this.first = data.first === 'HOME' ? 0 : 1
                 }
             }
             ws.onclose = () => {

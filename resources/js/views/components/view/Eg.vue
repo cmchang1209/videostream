@@ -180,6 +180,15 @@ export default {
                             }
                         })
                     }
+                    if (this.radio === 1) {
+                        new JSMpeg.Player(this.url, {
+                            autoplay: true,
+                            pauseWhenHidden: false,
+                            onAudioDecode(decoder, time) {
+                                console.log(time)
+                            }
+                        })
+                    }
                 }
                 this.$socket.client.emit('runFFmpeg', { id: this.id * 1, usb: this.radio })
             }

@@ -152,11 +152,9 @@ export default {
             }
         },
         test() {
-            let ws = new WebSocket('ws://52.199.5.88:4649/League?name=ethan2')
+            let ws = new WebSocket('ws://52.199.5.88:4649/League')
             ws.onopen = () => {
-                var msg = {
-                    Type: "Test"
-                }
+                var msg = {"cmd":"watch","battleId":"123"}
                 ws.send(JSON.stringify(msg))
             }
 

@@ -30,5 +30,6 @@ return [
         'ok0002' => 'Successfully updated',
         'ok0003' => 'Successfully deleted',
         'er0001' => 'Database storage error',
+        'er0002' => 'Database update error',
     ]
 ];

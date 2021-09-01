@@ -4,7 +4,15 @@ export default {
         me: {},
         appLoading: false,
         drawer: false,
-        isView: false
+        isView: false,
+        wsTest2: {
+            ip: '52.199.5.88',
+            port: 4649
+        },
+        wsTest1: {
+            ip: '52.199.5.88',
+            port: 4650
+        }
     },
     getters: {
         isTouchDevice(state) {

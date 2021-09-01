@@ -37,7 +37,9 @@ return [
 		'Mute' => 'Mute',
 		'Audio' => 'Audio',
 		'CopyUrl' => 'CopyUrl',
-		'Tournament' => 'Tournament'
+		'Tournament' => 'Tournament',
+		'League' => 'League',
+		'LeagueGroup' => 'Group'
 	],
     'login' => [
     	'label'  => 'Sign in',

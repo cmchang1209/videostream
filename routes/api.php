@@ -38,3 +38,10 @@ Route::get('/getPlayersData', 'ApiTournamentController@getPlayersData')->name('g
 Route::get('/getEquipmentData', 'ApiTournamentController@getEquipmentData')->name('getEquipmentData');
 Route::get('/getTournamentData', 'ApiTournamentController@getTournamentData')->name('getTournamentData');
 Route::get('/getTournamentBracketData', 'ApiTournamentController@getTournamentBracketData')->name('getTournamentBracketData');
+
+
+Route::get('/getLeagueListData', 'ApiLeagueController@getLeagueListData')->name('getLeagueListData');
+Route::get('/getLeagueGroupData', 'ApiLeagueController@getLeagueGroupData')->name('getLeagueGroupData');
+Route::get('/getLeagueBattleData', 'ApiLeagueController@getLeagueBattleData')->name('getLeagueBattleData');
+Route::post('/updateLeaguePiData', 'ApiLeagueController@updateLeaguePiData')->name('updateLeaguePiData');
+Route::get('/getLgViewData', 'ApiLeagueController@getLgViewData')->name('getLgViewData');

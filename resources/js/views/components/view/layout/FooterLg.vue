@@ -8,9 +8,9 @@
                     <rect class="c" width="59" height="1" transform="translate(464.187 1048.095)" />
                     <rect class="c" width="4.815" height="4.815" transform="translate(493.591 1045.19) rotate(45)" />
                 </g>
-                <text class="d" x="25" y="18" font-size="16" letter-spacing="3">{{ data[0].teamId }}</text>
+                <text class="d" x="25" y="18" font-size="16" letter-spacing="3">{{ data[0].teamName }}</text>
                 <text class="c" x="47.5" y="75" font-size="28" text-anchor="middle">主隊</text>
-                <text class="c" x="60%" y="65" font-size="24" text-anchor="middle">{{ data[0].teamName }}</text>
+                <text class="c" x="60%" y="65" font-size="24" text-anchor="middle">{{ data[0].player[data[0].index] }}</text>
                 <text class="c" x="60%" y="90" font-size="16" text-anchor="middle">{{ data[0].storeName }}</text>
                 <circle v-if="first===0" cx="12.5" cy="35" r="4" fill="#EBDA6B" />
             </svg>
@@ -19,12 +19,19 @@
             <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 284 173">
                 <text v-if="!gameStatus" class="c" x="50%" y="120" font-size="100" text-anchor="middle">VS</text>
                 <g v-else>
-                    <text x="30%" y="60" font-size="64" fill="#EBDA6B" text-anchor="end">{{ set[0] }}</text>
-                    <text x="30%" y="150" font-size="64" fill="#EBDA6B" text-anchor="end">{{ leg[0] }}</text>
-                    <text class="c" x="50%" y="60" font-size="54" text-anchor="middle">SET</text>
-                    <text class="c" x="50%" y="150" font-size="54" text-anchor="middle">LEG</text>
-                    <text x="70%" y="60" font-size="64" fill="#EBDA6B" text-anchor="start">{{ set[1] }}</text>
-                    <text x="70%" y="150" font-size="64" fill="#EBDA6B" text-anchor="start">{{ leg[1] }}</text>
+                    <template v-if="set.length > 0">
+                        <text x="30%" y="60" font-size="64" fill="#EBDA6B" text-anchor="end">{{ set[0] }}</text>
+                        <text x="30%" y="150" font-size="64" fill="#EBDA6B" text-anchor="end">{{ leg[0] }}</text>
+                        <text class="c" x="50%" y="60" font-size="54" text-anchor="middle">SET</text>
+                        <text class="c" x="50%" y="150" font-size="54" text-anchor="middle">LEG</text>
+                        <text x="70%" y="60" font-size="64" fill="#EBDA6B" text-anchor="start">{{ set[1] }}</text>
+                        <text x="70%" y="150" font-size="64" fill="#EBDA6B" text-anchor="start">{{ leg[1] }}</text>
+                    </template>
+                    <template v-else>
+                        <text x="30%" y="110" font-size="64" fill="#EBDA6B" text-anchor="end">{{ leg[0] }}</text>
+                        <text class="c" x="50%" y="110" font-size="54" text-anchor="middle">LEG</text>
+                        <text x="70%" y="110" font-size="64" fill="#EBDA6B" text-anchor="start">{{ leg[1] }}</text>
+                    </template>
                 </g>
             </svg>
         </div>
@@ -36,9 +43,9 @@
                     <rect class="c" width="59" height="1" transform="translate(464.187 1048.095)" />
                     <rect class="c" width="4.815" height="4.815" transform="translate(493.591 1045.19) rotate(45)" />
                 </g>
-                <text class="d" x="25" y="18" font-size="16" letter-spacing="3">{{ data[1].teamId }}</text>
+                <text class="d" x="25" y="18" font-size="16" letter-spacing="3">{{ data[1].teamName }}</text>
                 <text class="c" x="47.5" y="75" font-size="28" text-anchor="middle">客隊</text>
-                <text class="c" x="60%" y="65" font-size="24" text-anchor="middle">{{ data[1].teamName }}</text>
+                <text class="c" x="60%" y="65" font-size="24" text-anchor="middle">{{ data[1].player[data[1].index] }}</text>
                 <text class="c" x="60%" y="90" font-size="16" text-anchor="middle">{{ data[1].storeName }}</text>
                 <circle v-if="first===1" cx="12.5" cy="35" r="4" fill="#EBDA6B" />
             </svg>
@@ -53,8 +60,7 @@ export default {
     data() {
         return {}
     },
-    created() {
-    },
+    created() {},
     computed: {},
     methods: {
         changShowModel(type) {

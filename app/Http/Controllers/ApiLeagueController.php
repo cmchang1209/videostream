@@ -167,20 +167,23 @@ class ApiLeagueController extends Controller
         $data['errorCode'] = 'er0000';
         $sql = 'SELECT timezone FROM league_battle AS l LEFT JOIN league AS lg ON l.leagueId=lg.id WHERE l.id=:id';
         $t = DB::connection('mysql')->select($sql, ['id' => $request->id]);
-        $sql = 'SELECT lg.name AS leagueName, g.groupName, l.homeTeamId, l.awayTeamId, l.sequence, l.isNetworkGame, DATE_ADD(l.matchDate, INTERVAL :timezone hour) AS matchDate, hs.name AS homeStoreName, ws.name AS awayStoreName, ht.name AS homeTeamName, wt.name AS awayTeamName, ht.fidoTeamId AS homefidoTeamId, wt.fidoTeamId AS awayfidoTeamId FROM league_battle AS l LEFT JOIN league AS lg ON lg.id=l.leagueId LEFT JOIN league_group AS g ON g.id=l.groupId INNER JOIN ( SELECT id, name FROM store ) AS hs ON hs.id=l.homeStoreId INNER JOIN ( SELECT id, name FROM store ) AS ws ON ws.id=l.awayStoreId INNER JOIN ( SELECT id, name, fidoTeamId FROM league_team ) AS ht ON ht.id=l.homeTeamId INNER JOIN ( SELECT id, name, fidoTeamId FROM league_team ) AS wt ON wt.id=l.awayTeamId WHERE l.id=:id';
+        /*$sql = 'SELECT lg.name AS leagueName, g.groupName, l.homeTeamId, l.awayTeamId, l.sequence, l.isNetworkGame, DATE_ADD(l.matchDate, INTERVAL :timezone hour) AS matchDate, hs.name AS homeStoreName, ws.name AS awayStoreName, ht.name AS homeTeamName, wt.name AS awayTeamName, ht.fidoTeamId AS homefidoTeamId, wt.fidoTeamId AS awayfidoTeamId FROM league_battle AS l LEFT JOIN league AS lg ON lg.id=l.leagueId LEFT JOIN league_group AS g ON g.id=l.groupId INNER JOIN ( SELECT id, name FROM store ) AS hs ON hs.id=l.homeStoreId INNER JOIN ( SELECT id, name FROM store ) AS ws ON ws.id=l.awayStoreId INNER JOIN ( SELECT id, name, fidoTeamId FROM league_team ) AS ht ON ht.id=l.homeTeamId INNER JOIN ( SELECT id, name, fidoTeamId FROM league_team ) AS wt ON wt.id=l.awayTeamId WHERE l.id=:id';*/
+        $sql = 'SELECT lg.name AS leagueName, g.groupName, l.homeTeamId, l.awayTeamId, l.sequence, l.isNetworkGame, DATE_ADD(l.matchDate, INTERVAL :timezone hour) AS matchDate FROM league_battle AS l LEFT JOIN league AS lg ON lg.id=l.leagueId LEFT JOIN league_group AS g ON g.id=l.groupId WHERE l.id=:id';
         $data['data'] = DB::connection('mysql')->select($sql, ['id' => $request->id, 'timezone' => $t[0]->timezone]);
         $data['team'] = [];
         $data['team'][0] = [
-            'storeName' => $data['data'][0]->homeStoreName,
-            'teamName' => $data['data'][0]->homeTeamName,
-            'teamId' => $data['data'][0]->homefidoTeamId,
+            'storeName' => '',
+            'teamName' => '',
+            'player' => [],
+            'index' => '',
             'pi' => 0,
             'status' => true
         ];
         $data['team'][1] = [
-            'storeName' => $data['data'][0]->awayStoreName,
-            'teamName' => $data['data'][0]->awayTeamName,
-            'teamId' => $data['data'][0]->awayfidoTeamId,
+            'storeName' => '',
+            'teamName' => '',
+            'player' => [],
+            'index' => '',
             'pi' => 0,
             'status' => false
         ];

@@ -181,7 +181,8 @@ export default {
                         })
                     }
                     if (this.radio === 1) {
-                        new JSMpeg.Player(this.url, {
+                        let audioUrl = `ws://videostream.fidodarts.com:8084/p${this.id}-${this.radio}`
+                        new JSMpeg.Player(audioUrl, {
                             autoplay: true,
                             pauseWhenHidden: false,
                             onAudioDecode(decoder, time) {
@@ -204,13 +205,8 @@ export default {
                 }
                 this.$socket.client.emit('stopFFmpeg', { id: this.id * 1, usb: this.radio })
             } else {
-                this.$socket.client.emit('stopFFmpeg', { id: this.id * 1, usb: 2 })
-                setTimeout(() => {
-                    this.$socket.client.emit('stopFFmpeg', { id: this.id * 1, usb: 4 })
-                    setTimeout(() => {
-                        this.$socket.client.emit('stopFFmpeg', { id: this.id * 1, usb: 1 })
-                    }, 1000)
-                }, 1000)
+                /* stop all if usb = 0 */
+                this.$socket.client.emit('stopFFmpeg', { id: this.id * 1, usb: 0 })
             }
         },
         play() {

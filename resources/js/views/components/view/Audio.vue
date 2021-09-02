@@ -16,7 +16,7 @@ export default {
         if (typeof this.id === 'undefined' || this.id === 0) {
 
         } else {
-            let url = `ws://videostream.fidodarts.com:8082/p${this.id}-1`
+            let url = `ws://videostream.fidodarts.com:8084/p${this.id}-1`
             if (this.player !== null) {
                 this.player.destroy()
                 this.player = new JSMpeg.Player(url, {

@@ -19,21 +19,13 @@
             <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 284 173">
                 <text v-if="!gameStatus" class="c" x="50%" y="120" font-size="100" text-anchor="middle">VS</text>
                 <g v-else>
-                    <text x="10%" y="60" font-size="64" fill="#EBDA6B">{{ set[0] }}</text>
-                    <text x="10%" y="150" font-size="64" fill="#EBDA6B">{{ leg[0] }}</text>
+                    <text x="30%" y="60" font-size="64" fill="#EBDA6B" text-anchor="end">{{ set[0] }}</text>
+                    <text x="30%" y="150" font-size="64" fill="#EBDA6B" text-anchor="end">{{ leg[0] }}</text>
                     <text class="c" x="50%" y="60" font-size="54" text-anchor="middle">SET</text>
                     <text class="c" x="50%" y="150" font-size="54" text-anchor="middle">LEG</text>
-                    <text x="90%" y="60" font-size="64" fill="#EBDA6B" text-anchor="end">{{ set[1] }}</text>
-                    <text x="90%" y="150" font-size="64" fill="#EBDA6B" text-anchor="end">{{ leg[1] }}</text>
+                    <text x="70%" y="60" font-size="64" fill="#EBDA6B" text-anchor="start">{{ set[1] }}</text>
+                    <text x="70%" y="150" font-size="64" fill="#EBDA6B" text-anchor="start">{{ leg[1] }}</text>
                 </g>
-                <!-- <text v-else class="c">
-                    <tspan x="20%" y="70" font-size="64" fill="#EBDA6B">{{ set[0] }}</tspan>
-                    <tspan x="50%" y="70" font-size="64" letter-spacing="5" text-anchor="middle">SET</tspan>
-                    <tspan x="90%" y="70" font-size="64" fill="#EBDA6B" text-anchor="end">{{ set[1] }}</tspan>
-                    <tspan x="20%" y="160" font-size="64" fill="#EBDA6B">{{ leg[0] }}</tspan>
-                    <tspan x="50%" y="160" font-size="64" letter-spacing="5" text-anchor="middle">LEG</tspan>
-                    <tspan x="90%" y="160" font-size="64" fill="#EBDA6B" text-anchor="end">{{ leg[1] }}</tspan>
-                </text> -->
             </svg>
         </div>
         <div :class="['f_right', (data[1].status && gameStatus) ? 'active' : '']" @click="changShowModel(1)">

@@ -155,6 +155,7 @@ export default {
 
             ws.onmessage = (e) => {
                 let data = JSON.parse(e.data)
+                console.log(data)
                 if (data.errorCode === 'SUCCEED') {
                     switch (data.currentTeam) {
                         case 'HOME':

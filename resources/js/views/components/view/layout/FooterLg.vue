@@ -10,7 +10,8 @@
                 </g>
                 <text class="d" x="25" y="18" font-size="16" letter-spacing="3">{{ data[0].teamName }}</text>
                 <text class="c" x="47.5" y="75" font-size="28" text-anchor="middle">主隊</text>
-                <text class="c" x="60%" y="65" font-size="24" text-anchor="middle">{{ data[0].player[data[0].row] }}</text>
+                <text v-if="data[0].row !== -1" class="c" x="60%" y="65" font-size="24" text-anchor="middle">{{ data[0].player[data[0].row] }}</text>
+                <text v-else class="c" x="60%" y="65" font-size="24" text-anchor="middle">{{ data[0].teamName }}</text>
                 <text class="c" x="60%" y="90" font-size="16" text-anchor="middle">{{ data[0].storeName }}</text>
                 <circle v-if="first===0" cx="12.5" cy="35" r="4" fill="#EBDA6B" />
             </svg>
@@ -45,7 +46,8 @@
                 </g>
                 <text class="d" x="25" y="18" font-size="16" letter-spacing="3">{{ data[1].teamName }}</text>
                 <text class="c" x="47.5" y="75" font-size="28" text-anchor="middle">客隊</text>
-                <text class="c" x="60%" y="65" font-size="24" text-anchor="middle">{{ data[1].player[data[1].row] }}</text>
+                <text v-if="data[1].row !== -1" class="c" x="60%" y="65" font-size="24" text-anchor="middle">{{ data[1].player[data[1].row] }}</text>
+                <text v-else class="c" x="60%" y="65" font-size="24" text-anchor="middle">{{ data[1].teamName }}</text>
                 <text class="c" x="60%" y="90" font-size="16" text-anchor="middle">{{ data[1].storeName }}</text>
                 <circle v-if="first===1" cx="12.5" cy="35" r="4" fill="#EBDA6B" />
             </svg>

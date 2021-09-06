@@ -137,7 +137,7 @@
             width: calc(100% - 2vw);
             height: calc((100vw * 9/16) - 15vw);
             margin: 0 1vw;
-            overflow-x: hidden;
+            overflow: hidden;
             -webkit-transition: all ease 1s;
             position: absolute;
             box-sizing: border-box;

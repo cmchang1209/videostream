@@ -9,10 +9,15 @@
                 </el-select>
             </el-form-item>
             <el-form-item :label="$store.state.langData.cont.pageFn.table.LeagueGroup" prop="groupId">
-                <el-select v-model="form.groupId" :placeholder="$store.state.langData.cont.msg.placeholder.ph0002" :no-data-text="$store.state.langData.cont.msg.data.d0001" clearable style="width: 100%" @change="handleGroupSelect">
+                <el-select v-model="form.groupId" :placeholder="$store.state.langData.cont.msg.placeholder.ph0002" :no-data-text="$store.state.langData.cont.msg.data.d0001" clearable style="width: 100%">
                     <el-option v-for="item in form.groupData" :key="item.id" :label="item.groupName" :value="item.id">
                     </el-option>
                 </el-select>
+            </el-form-item>
+            <el-form-item>
+                <el-button type="primary" @click.native.prevent="search">
+                    {{ $store.state.langData.cont.pageFn.golbal.Search }}
+                </el-button>
             </el-form-item>
         </el-form>
         <br>
@@ -77,12 +82,6 @@ export default {
         }
     },
     created() {
-        /*if (typeof this.id !== 'undefined') {
-            this.form.id = this.id
-        }
-        if (typeof this.groupId !== 'undefined') {
-            this.form.groupId = this.groupId
-        }*/
         this.fetchData()
     },
     methods: {
@@ -98,7 +97,10 @@ export default {
                     if (data.errorCode === 'er0000') {
                         this.form.data = data.data
                         this.pi = data.pi
-                        this.changeAppLoadingStatus(false)
+                        if (typeof this.id !== 'undefined') {
+                            this.form.id = this.id
+                        }
+                        this.handleSelect()
                     }
                 }).catch(error => {
                     this.changeAppLoadingStatus(false)
@@ -106,10 +108,8 @@ export default {
                 })
         },
         handleSelect() {
-            //console.log('ok')
-            //this.$router.push({ name: 'LeagueLive', query: { id: this.form.id } })
+            this.changeAppLoadingStatus(true)
             if (this.form.id !== '') {
-                this.changeAppLoadingStatus(true)
                 axios
                     .get('/api/getLeagueGroupData', {
                         params: { id: this.form.id }
@@ -118,21 +118,24 @@ export default {
                         let data = response.data.data
                         if (data.errorCode === 'er0000') {
                             this.form.groupData = data.data
-                            this.changeAppLoadingStatus(false)
+                            if (typeof this.groupId !== 'undefined') {
+                                this.form.groupId = this.groupId
+                            }
+                            this.handleGroupSelect()
                         }
                     }).catch(error => {
                         this.changeAppLoadingStatus(false)
                         console.log(error)
                     })
             } else {
+                this.changeAppLoadingStatus(false)
                 this.form.groupId = ''
                 this.form.groupData = []
             }
         },
         handleGroupSelect() {
-            //this.$router.push({ name: 'LeagueLive', query: { id: this.form.id, groupId: this.form.groupId } })
+            this.changeAppLoadingStatus(true)
             if (this.form.id !== '' && this.form.groupId !== '') {
-                this.changeAppLoadingStatus(true)
                 let l = this.form.data.filter(iteam => {
                     return iteam.id === this.form.id
                 })
@@ -150,6 +153,14 @@ export default {
                         this.changeAppLoadingStatus(false)
                         console.log(error)
                     })
+            } else {
+                this.changeAppLoadingStatus(false)
+                this.battleData = []
+            }
+        },
+        search() {
+            if (this.form.id !== '' && this.form.groupId !== '') {
+                window.location.href = `/league/live?id=${this.form.id}&groupId=${this.form.groupId}`
             }
         },
         handleClick(d) {

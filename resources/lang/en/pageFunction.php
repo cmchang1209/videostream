@@ -6,7 +6,8 @@ return [
 		'Cancel' => 'Cancel',
 		'Edit' => 'Edit',
 		'Save' => 'Save',
-		'Port' => 'Port'
+		'Port' => 'Port',
+		'Search' => 'Search'
 	],
 	'breadcrumb' => [
 		'Back' => 'Back'

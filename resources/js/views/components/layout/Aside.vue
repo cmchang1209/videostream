@@ -44,7 +44,7 @@
                         {{ $store.state.langData.cont.slideMenu.League }}
                     </span>
                 </template>
-                <el-menu-item index="/league/live">
+                <el-menu-item @click.native.prevent="leagueLive">
                     <i class="el-icon-thirdlive"></i>
                     <span slot="title">
                         {{ $store.state.langData.cont.slideMenu.Live }}
@@ -71,6 +71,9 @@ export default {
     computed: {},
     methods: {
         ...mapActions(['changeDrawerStatus', 'setMe', 'changeLoginStatus']),
+        leagueLive() {
+            window.location.href = `/league/live`
+        },
         logout() {
             this.changeLoginStatus(true)
             localStorage.removeItem('id')

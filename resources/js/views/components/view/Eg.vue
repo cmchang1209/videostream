@@ -1,5 +1,5 @@
 <template>
-    <div class="view-eg">
+    <div class="view-eg" v-loading="video_loading">
         <el-row style="margin: 1.25rem 0;">
             <el-col :span="24" style="text-align: center;">
                 <span>頻道：</span>
@@ -21,7 +21,7 @@
                 請選擇頻道後，執行播放
             </h3>
         </div>
-        <div v-if="playstatus && radio === 2" class="block">
+        <div v-if="playstatus && !video_loading && radio === 2" class="block">
             <el-form :model="form" label-position="top">
                 <el-form-item label="自動曝光(自定義曝光值需要先關閉自動曝光)">
                     <el-switch v-model="form.exposure_auto" active-text="on" inactive-text="off" @change="changeexposureAuto">
@@ -108,7 +108,8 @@ export default {
                 }
             },
             loading: false,
-            exposure: 0
+            exposure: 0,
+            video_loading: false
         }
     },
     created() {
@@ -122,6 +123,9 @@ export default {
                         break
                     case 'destroy':
                         this.destroy()
+                        break
+                    case 'stalled':
+                        this.stalled()
                         break
                 }
             }
@@ -158,6 +162,8 @@ export default {
         handlePlay() {
             if (this.radio) {
                 if (this.playRadio === null || this.playRadio !== this.radio) {
+                    this.playstatus = true
+                    this.video_loading = true
                     this.playRadio = this.radio
                     this.url = `ws://videostream.fidodarts.com:8082/p${this.id}-${this.radio}`
                     this.canvas = document.createElement("CANVAS")
@@ -186,7 +192,7 @@ export default {
                             autoplay: true,
                             pauseWhenHidden: false,
                             onAudioDecode(decoder, time) {
-                                console.log(time)
+                                //console.log(time)
                             }
                         })
                     }
@@ -213,7 +219,10 @@ export default {
             if (this.radio === 2) {
                 //this.$socket.client.emit('getV4l2', { id: this.id * 1, usb: this.radio })
             }
-            this.playstatus = true
+            setTimeout(() => {
+                this.video_loading = false
+                this.playstatus = true
+            }, 5000)
         },
         destroy() {
             this.playstatus = false

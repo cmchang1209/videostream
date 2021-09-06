@@ -2,26 +2,26 @@
     <div class="view">
         <div v-if="show" class="view-lg">
             <f-header :name="name" :groupName="groupName" :sequence="sequence" :date="date" :type="'l'" :online="online" />
-            <div v-for="(iteam, index) in team" :key="index" :class="['video-area', iteam.status ? 'active' : '']" class="video-area">
+            <div v-for="(iteam, index) in team" :key="index" :class="['video-area', iteam.status ? 'active' : '', index === 0 ? 'home' : 'away', gameStatus ? 'game' : '' ]">
                 <template v-if="iteam.pi !== 0">
                     <div class="video-2">
                         <f-player :id="iteam.pi" :usb="2" />
                     </div>
                     <div class="video-4">
-                        <div class="adr-name">
-                            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0,0,386,59">
-                                <text x="10" y="38" font-size="24" stroke="#000" stroke-width="6" fill="#000" letter-spacing="3" stroke-linejoin="round">
-                                    {{ iteam.storeName }}
-                                </text>
-                                <text x="10" y="38" font-size="24" fill="#fff" letter-spacing="3">
-                                    {{ iteam.storeName }}
-                                </text>
-                            </svg>
-                        </div>
                         <f-player :id="iteam.pi" :usb="4" />
                     </div>
                     <div :class="['video-1', active[index] ? 'active' : '']" @click="changePcModel(index)">
                         <f-player :id="iteam.pi" :usb="1" />
+                    </div>
+                    <div class="adr-name">
+                        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0,0,940,79">
+                            <text x="50.15%" y="62" font-size="36" stroke="#000" stroke-width="6" fill="#000" text-anchor="middle" letter-spacing="10" stroke-linejoin="round">
+                                {{ iteam.storeName }}
+                            </text>
+                            <text x="50%" y="60" font-size="36" text-anchor="middle" fill="#fff" letter-spacing="10">
+                                {{ iteam.storeName }}
+                            </text>
+                        </svg>
                     </div>
                 </template>
                 <div v-else style="display: flex; align-items: center; justify-content: center; height: 100%;">

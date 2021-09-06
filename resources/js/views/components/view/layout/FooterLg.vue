@@ -23,8 +23,8 @@
                     <template v-if="set.length > 0">
                         <text x="30%" y="60" font-size="64" fill="#EBDA6B" text-anchor="end">{{ set[0] }}</text>
                         <text x="30%" y="150" font-size="64" fill="#EBDA6B" text-anchor="end">{{ leg[0] }}</text>
-                        <text class="c" x="50%" y="60" font-size="54" text-anchor="middle">SET</text>
-                        <text class="c" x="50%" y="150" font-size="54" text-anchor="middle">LEG</text>
+                        <text x="50%" y="60" font-size="54" text-anchor="middle" fill="#FFFFFF">SET</text>
+                        <text x="50%" y="150" font-size="54" text-anchor="middle" fill="#FFFFFF">LEG</text>
                         <text x="70%" y="60" font-size="64" fill="#EBDA6B" text-anchor="start">{{ set[1] }}</text>
                         <text x="70%" y="150" font-size="64" fill="#EBDA6B" text-anchor="start">{{ leg[1] }}</text>
                     </template>

@@ -158,6 +158,7 @@ export default {
                 if (data.errorCode === 'SUCCEED') {
                     if (typeof data.teamDetail !== 'undefined') {
                         if (data.finished.toLowerCase() === 'true') {
+                            this.changShowModel(data.currentTeam)
                             this.changePcModel(data.currentTeam)
                         } else {
                             this.changShowModel(data.currentTeam)

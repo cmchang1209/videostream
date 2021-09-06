@@ -164,7 +164,8 @@ export default new VueRouter({
             children: [{
                 path: 'live',
                 name: 'LeagueLive',
-                component: LeagueLive
+                component: LeagueLive,
+                props: (route) => ({ id: route.query.id, groupId: route.query.groupId })
             }]
         },
         {

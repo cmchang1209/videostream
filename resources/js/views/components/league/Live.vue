@@ -56,7 +56,7 @@ import { mapActions } from 'vuex'
 import Breadcrumb from '../layout/Breadcrumb.vue'
 export default {
     components: { Breadcrumb },
-    props: [],
+    props: ['id', 'groupId'],
     data() {
         return {
             br: [{
@@ -77,6 +77,12 @@ export default {
         }
     },
     created() {
+        /*if (typeof this.id !== 'undefined') {
+            this.form.id = this.id
+        }
+        if (typeof this.groupId !== 'undefined') {
+            this.form.groupId = this.groupId
+        }*/
         this.fetchData()
     },
     methods: {
@@ -100,6 +106,8 @@ export default {
                 })
         },
         handleSelect() {
+            //console.log('ok')
+            //this.$router.push({ name: 'LeagueLive', query: { id: this.form.id } })
             if (this.form.id !== '') {
                 this.changeAppLoadingStatus(true)
                 axios
@@ -122,6 +130,7 @@ export default {
             }
         },
         handleGroupSelect() {
+            //this.$router.push({ name: 'LeagueLive', query: { id: this.form.id, groupId: this.form.groupId } })
             if (this.form.id !== '' && this.form.groupId !== '') {
                 this.changeAppLoadingStatus(true)
                 let l = this.form.data.filter(iteam => {

@@ -155,40 +155,42 @@ export default {
 
             ws.onmessage = (e) => {
                 let data = JSON.parse(e.data)
-                //console.log(data)
+                console.log(data)
                 if (data.errorCode === 'SUCCEED') {
-                    this.changShowModel(data.currentTeam)
-                    /*switch (data.currentTeam) {
-                        case 'HOME':
-                            this.changShowModel(data.currentTeam)
-                            break
-                        case 'AWAY':
-                            this.changShowModel(1)
-                            break
-                    }*/
-                    this.gameStatus = true
-                    this.set = data.set
-                    this.leg = data.leg
-                    /*if (data.set != '') {
-                        let s = data.set.split(':')
-                        this.set = [s[0], s[1]]
+                    if (typeof data.teamDetail !== 'undefined') {
+                        this.changShowModel(data.currentTeam)
+                        /*switch (data.currentTeam) {
+                            case 'HOME':
+                                this.changShowModel(data.currentTeam)
+                                break
+                            case 'AWAY':
+                                this.changShowModel(1)
+                                break
+                        }*/
+                        this.gameStatus = true
+                        this.set = data.set
+                        this.leg = data.leg
+                        /*if (data.set != '') {
+                            let s = data.set.split(':')
+                            this.set = [s[0], s[1]]
+                        }
+                        if (data.leg != '') {
+                            let l = data.leg.split(':')
+                            this.leg = [l[0], l[1]]
+                        }*/
+                        this.first = data.first
+
+                        //this.team[0].storeName = data.teamDetail.homeTeamStore
+                        //this.team[0].teamName = data.teamDetail.homeTeamName
+                        this.team[0].player = data.teamDetail.homeTeamPlayer
+
+                        //this.team[1].storeName = data.teamDetail.awayTeamStore
+                        //this.team[1].teamName = data.teamDetail.awayTeamName
+                        this.team[1].player = data.teamDetail.awayTeamPlayer
+
+                        this.team[0].row = this.team[1].row = data.teamDetail.currentPlayerRow
+                        //console.log(this.team)
                     }
-                    if (data.leg != '') {
-                        let l = data.leg.split(':')
-                        this.leg = [l[0], l[1]]
-                    }*/
-                    this.first = data.first
-
-                    this.team[0].storeName = data.teamDetail.homeTeamStore
-                    this.team[0].teamName = data.teamDetail.homeTeamName
-                    this.team[0].player = data.teamDetail.homeTeamPlayer
-
-                    this.team[1].storeName = data.teamDetail.awayTeamStore
-                    this.team[1].teamName = data.teamDetail.awayTeamName
-                    this.team[1].player = data.teamDetail.awayTeamPlayer
-
-                    this.team[0].index = this.team[1].index = data.teamDetail.currentPlayerIndex
-                    //console.log(this.team)
                 }
             }
             ws.onclose = () => {

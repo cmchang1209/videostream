@@ -27,6 +27,7 @@
             <el-table-column :label="$store.state.langData.cont.pageFn.table.IP">
                 <template slot-scope="scope">
                     <el-link v-if="scope.row.status" type="success" @click.native.prevent="handlePort(scope.$index, scope.row)">{{ scope.row.ip }}</el-link>
+                    <p>version : {{ scope.row.version }}</p>
                 </template>
             </el-table-column>
             <el-table-column :label="$store.state.langData.cont.pageFn.table.Operating" width="100">

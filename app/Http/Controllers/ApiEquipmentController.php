@@ -95,16 +95,22 @@ class ApiEquipmentController extends Controller
     public function add(Request $request)
     {
     	$data = [];
-    	$no = 'v-'.date("yW");
+    	//$no = 'v-'.date("yW");
+        $no = 'v';
     	$sql = 'SELECT no FROM iteam_pi WHERE no LIKE :no ORDER BY id DESC LIMIT 1';
-    	$result = DB::connection('mysql_video')->select($sql, ['no' => $no.'%']);
+    	//$result = DB::connection('mysql_video')->select($sql, ['no' => $no.'%']);
+        $result = DB::connection('mysql_video')->select($sql, ['no' => $no.'0%']);
     	if($result) {
     		$s = collect($result)->first();
-    		$s = explode('-',$s->no);
-    		$s = $s[2] * 1 + 1;
-    		$no = $no.'-'.str_pad($s, 4, '0', STR_PAD_LEFT);
+    		//$s = explode('-',$s->no);
+            $s = explode('v',$s->no);
+    		//$s = $s[2] * 1 + 1;
+            $s = $s[1] * 1 + 1;
+    		//$no = $no.'-'.str_pad($s, 4, '0', STR_PAD_LEFT);
+            $no = $no.str_pad($s, 4, '0', STR_PAD_LEFT);
     	} else {
-    		$no = $no.'-0001';
+    		//$no = $no.'-0001';
+            $no = $no.'0001';
     	}
     	$sql = 'INSERT INTO iteam_pi (mac, no, name, distributor_id, store_id, description) VALUES (:mac, :no, :name, :distributo, :store, :description)';
     	$result = DB::connection('mysql_video')->insert($sql, [

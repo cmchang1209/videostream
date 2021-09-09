@@ -146,7 +146,7 @@ export default {
             })
         },
         webSocket() {
-            let urlData = this.$store.state.gobalData.wsTest1
+            let urlData = this.$store.state.gobalData.ws
             let ws = new WebSocket(`ws://${urlData.ip}:${urlData.port}/League`)
             ws.onopen = () => {
                 var msg = { "cmd": "watch", "battleId": this.id }

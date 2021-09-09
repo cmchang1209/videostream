@@ -12,6 +12,10 @@ export default {
         wsTest1: {
             ip: '52.199.5.88',
             port: 4650
+        },
+        ws: {
+            ip: '18.183.140.103',
+            port: 4649
         }
     },
     getters: {

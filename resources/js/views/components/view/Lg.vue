@@ -78,11 +78,12 @@ export default {
     computed: {
         audioSrc() {
             let pi = 0
-            this.team.map(iteam => {
+            /*this.team.map(iteam => {
                 if (iteam.status) {
                     pi = iteam.pi
                 }
-            })
+            })*/
+            pi = this.team[1].pi
             return `http://${document.location.hostname}/view/audio?id=${pi}`
         }
     },

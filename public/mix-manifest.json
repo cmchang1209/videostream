@@ -1,10 +1,10 @@
 {
-    "/js/app.js": "/js/app.js",
-    "/css/main.css": "/css/main.css",
-    "/css/style.css": "/css/style.css",
-    "/css/view.css": "/css/view.css",
-    "/js/manifest.js": "/js/manifest.js",
-    "/js/vendor.js": "/js/vendor.js",
-    "/js/worker/worker.js": "/js/worker/worker.js",
-    "/js/worker/jsmpeg.min.js": "/js/worker/jsmpeg.min.js"
+    "/js/app.js": "/js/app.js?id=5bbc85bd1ea34ece78ae",
+    "/css/main.css": "/css/main.css?id=79ac3fd5737bbcc15a9f",
+    "/css/style.css": "/css/style.css?id=fa9b611c5eda7a59efe8",
+    "/css/view.css": "/css/view.css?id=016fc4a45bd3c0170ef9",
+    "/js/manifest.js": "/js/manifest.js?id=3c768977c2574a34506e",
+    "/js/vendor.js": "/js/vendor.js?id=e0578a6462e3f52c9792",
+    "/js/worker/worker.js": "/js/worker/worker.js?id=c5b8692d5390fc283f79",
+    "/js/worker/jsmpeg.min.js": "/js/worker/jsmpeg.min.js?id=5cc78ffad89118918873"
 }

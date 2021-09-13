@@ -2,7 +2,8 @@
     <div class="view">
         <div v-if="show" class="view-lg">
             <f-header :name="name" :groupName="groupName" :sequence="sequence" :date="date" :type="'l'" :online="online" />
-            <div v-for="(iteam, index) in team" :key="index" :class="['video-area', iteam.status ? 'active' : '', index === 0 ? 'home' : 'away', gameStatus ? 'game' : '' ]">
+            <!-- <div v-for="(iteam, index) in team" :key="index" :class="['video-area', iteam.status[0] ? 'active' : '', index === 0 ? 'home' : 'away', 'game' ]"> -->
+            <div v-for="(iteam, index) in team" :key="index" :class="['video-area', iteam.status[0] ? 'active' : '', boredrColor, 'game' ]">
                 <template v-if="iteam.pi !== 0">
                     <div class="video-2">
                         <f-player :id="iteam.pi" :usb="2" />
@@ -69,7 +70,9 @@ export default {
             gameStatus: false,
             set: [],
             leg: [],
-            first: ''
+            first: '',
+            autoRun: null,
+            audio: 0
         }
     },
     created() {
@@ -78,13 +81,28 @@ export default {
     computed: {
         audioSrc() {
             let pi = 0
+            if (this.team.length > 0 && this.team[0].pi !== 0 && this.team[1].pi !== 0) {
+                pi = this.team[this.audio].pi
+            } else {
+                this.team.map(iteam => {
+                    if (iteam.pi !== 0) {
+                        pi = iteam.pi
+                    }
+                })
+            }
             /*this.team.map(iteam => {
                 if (iteam.status) {
                     pi = iteam.pi
                 }
             })*/
-            pi = this.team[1].pi
             return `http://${document.location.hostname}/view/audio?id=${pi}`
+        },
+        boredrColor() {
+            let str = ''
+            if (this.team[0].pi !== 0 && this.team[1].pi !== 0) {
+                str = this.team[0].status[1] ? 'home' : 'away'
+            }
+            return str
         }
     },
     mounted() {},
@@ -107,9 +125,18 @@ export default {
                         this.groupName = data.data[0].groupName
                         this.sequence = data.data[0].sequence
                         this.date = data.data[0].matchDate
+                        this.audio = data.audio
                         this.team = data.team
                         this.runFFmpeg()
                         this.webSocket()
+                        if (this.gameStatus) {
+                            let ct = 1
+                            this.autoRun = setInterval(() => {
+                                console.log(ct)
+                                this.changShowModel(ct, 0)
+                                ct = ct === 0 ? 1 : 0
+                            }, 6000)
+                        }
                     }
                 }).catch(error => {
                     console.log(error)
@@ -121,17 +148,31 @@ export default {
             this.mask = d[i]
             this.active = d
         },
-        changShowModel(value) {
-            switch (value) {
-                case 0:
-                    this.team[0].status = true
-                    this.team[1].status = false
-                    break
-                case 1:
-                    this.team[0].status = false
-                    this.team[1].status = true
-                    break
+        changShowModel(value, mode) {
+            if (mode === 0) {
+                switch (value) {
+                    case 0:
+                        this.team[0].status = [true, true]
+                        this.team[1].status = [false, false]
+                        break
+                    case 1:
+                        this.team[0].status = [false, false]
+                        this.team[1].status = [true, true]
+                        break
+                }
+            } else {
+                switch (value) {
+                    case 0:
+                        this.team[0].status[1] = true
+                        this.team[1].status[1] = false
+                        break
+                    case 1:
+                        this.team[0].status[1] = false
+                        this.team[1].status[1] = true
+                        break
+                }
             }
+
         },
         runFFmpeg() {
             this.team.map(iteam => {
@@ -147,7 +188,9 @@ export default {
             })
         },
         webSocket() {
-            let urlData = this.$store.state.gobalData.ws
+            //let urlData = this.$store.state.gobalData.ws
+            //let urlData = this.$store.state.gobalData.wsTest1
+            let urlData = this.$store.state.gobalData.wsTest2
             let ws = new WebSocket(`ws://${urlData.ip}:${urlData.port}/League`)
             ws.onopen = () => {
                 var msg = { "cmd": "watch", "battleId": this.id }
@@ -158,20 +201,46 @@ export default {
                 let data = JSON.parse(e.data)
                 if (data.errorCode === 'SUCCEED') {
                     if (typeof data.teamDetail !== 'undefined') {
-                        if (data.finished.toLowerCase() === 'true') {
-                            this.changShowModel(data.currentTeam)
-                            this.changePcModel(data.currentTeam)
+                        if (typeof data.finished !== 'undefined' && data.finished.toLowerCase() === 'true') {
+                            if (this.team[data.currentTeam].pi !== 0) {
+                                this.changShowModel(data.currentTeam, 0)
+                                this.changePcModel(data.currentTeam)
+                            } else {
+                                let i = data.currentTeam === 0 ? 1 : 0
+                                this.changShowModel(i, 0)
+                                this.changePcModel(i)
+                            }
                         } else {
-                            this.changShowModel(data.currentTeam)
-                            this.gameStatus = true
-                            this.set = data.set
-                            this.leg = data.leg
-                            this.first = data.first
+                            setTimeout(() => {
+                                if (this.autoRun !== null) {
+                                    clearInterval(this.autoRun)
+                                    this.autoRun = null
+                                }
+                                this.gameStatus = true
+                                this.set = data.set
+                                this.leg = data.leg
+                                this.first = data.first
 
-                            this.team[0].player = data.teamDetail.homeTeamPlayer
-                            this.team[1].player = data.teamDetail.awayTeamPlayer
+                                this.team[0].player = data.teamDetail.homeTeamPlayer
+                                this.team[1].player = data.teamDetail.awayTeamPlayer
 
-                            this.team[0].row = this.team[1].row = data.teamDetail.currentPlayerRow
+                                this.team[0].row = this.team[1].row = data.teamDetail.currentPlayerRow
+                                if (this.team[0].pi !== 0 && this.team[1].pi !== 0) {
+                                    if (this.team[0].pi !== this.team[1].pi) {
+                                        this.changShowModel(data.currentTeam, 0)
+                                    } else {
+                                        this.team[0].status[0] = true
+                                        this.changShowModel(data.currentTeam, 1)
+                                    }
+                                } else {
+                                    this.team.map((iteam, index) => {
+                                        if (iteam.pi !== 0) {
+                                            this.team[index].status[0] = true
+                                        }
+                                    })
+                                    this.changShowModel(data.currentTeam, 1)
+                                }
+                            }, 1000)
                         }
                     }
                 }

@@ -45,6 +45,8 @@ class ApiLeagueController extends Controller
         $tTeam = DB::connection('mysql')->select($sql, ['id' => $request->id, 'groupId' => $request->groupId]);
         $sql = 'SELECT team_id, pi_id FROM iteam_league_pi';
         $tPi = DB::connection('mysql_video')->select($sql);
+        $sql = 'SELECT b_id, audio FROM iteam_league_audio';
+        $audio = DB::connection('mysql_video')->select($sql);
         foreach ($data['data'] as $key => $value) {
             $d = collect($tStore)->where('id', $value->homeStoreId)->first();
             $value->homeStoreName = '';
@@ -78,6 +80,11 @@ class ApiLeagueController extends Controller
             if($d) {
                 $value->awayPi = $d->pi_id;
             }
+            $value->audio = 0;
+            $d = collect($audio)->where('b_id', $value->id)->first();
+            if($d) {
+                $value->audio = $d->audio;
+            }
         }
         return compact('data');
     }
@@ -85,6 +92,23 @@ class ApiLeagueController extends Controller
     public function updateLeaguePiData(Request $request)
     {
         $data = [];
+        if(!($request->homePi === null || $request->homePi === '') && !($request->homePi === null || $request->homePi === '')) {
+            $sql = 'SELECT id FROM iteam_league_audio WHERE b_id=:id';
+            $d = DB::connection('mysql_video')->select($sql, ['id' => $request->id]);
+            if($d) {
+                $sql = 'UPDATE iteam_league_audio SET audio=:audio WHERE id=:id';
+                DB::connection('mysql_video')->update($sql, [
+                    'id' => $d[0]->id,
+                    'audio' => $request->audio
+                ]);
+            } else {
+                $sql = 'INSERT INTO iteam_league_audio (b_id, audio) VALUES (:id, :audio)';
+                DB::connection('mysql_video')->insert($sql, [
+                    'id' => $request->id,
+                    'audio' => $request->audio
+                ]);
+            }
+        }
         $sql = 'SELECT id, pi_id FROM iteam_league_pi WHERE team_id=:homeTeamId';
         $d = DB::connection('mysql_video')->select($sql, ['homeTeamId' => $request->homeTeamId]);
         if($d) {
@@ -177,7 +201,7 @@ class ApiLeagueController extends Controller
             'player' => [],
             'row' => -1,
             'pi' => 0,
-            'status' => true
+            'status' => [true, true]
         ];
         $data['team'][1] = [
             'storeName' => $data['data'][0]->awayStoreName,
@@ -185,7 +209,7 @@ class ApiLeagueController extends Controller
             'player' => [],
             'row' => -1,
             'pi' => 0,
-            'status' => false
+            'status' => [false, false]
         ];
         $sql = 'SELECT pi_id FROM iteam_league_pi WHERE team_id=:homeTeamId';
         $homePi = DB::connection('mysql_video')->select($sql, ['homeTeamId' => $data['data'][0]->homeTeamId]);
@@ -196,6 +220,11 @@ class ApiLeagueController extends Controller
         $awayPi = DB::connection('mysql_video')->select($sql, ['awayTeamId' => $data['data'][0]->awayTeamId]);
         if($awayPi) {
             $data['team'][1]['pi'] = $awayPi[0]->pi_id;
+        }
+        $sql = 'SELECT audio FROM iteam_league_audio WHERE b_id=:id';
+        $audio = DB::connection('mysql_video')->select($sql, ['id' => $request->id]);
+        if($audio) {
+            $data['audio'] = $audio[0]->audio;
         }
         return compact('data');
     }

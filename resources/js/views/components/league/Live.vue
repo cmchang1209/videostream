@@ -46,6 +46,12 @@
                     </el-select>
                 </template>
             </el-table-column>
+            <el-table-column label="audio" align="center" width="160">
+                <template slot-scope="scope" v-if="(scope.row.homePi!=='' && scope.row.awayPi!=='') && scope.row.homePi !== scope.row.awayPi">
+                    <el-radio v-model="scope.row.audio" :label="0" style="margin-right: 0;">主隊</el-radio><br>
+                    <el-radio v-model="scope.row.audio" :label="1" style="margin-right: 0;">客隊</el-radio>
+                </template>
+            </el-table-column>
             <el-table-column fixed="right" label="操作" align="right" width="160">
                 <template slot-scope="scope">
                     <el-button @click="handleClick(scope.row)" type="text" size="small">綁定直播設備</el-button>
@@ -145,6 +151,7 @@ export default {
                     })
                     .then(response => {
                         let data = response.data.data
+                        console.log(data)
                         if (data.errorCode === 'er0000') {
                             this.battleData = data.data
                             this.changeAppLoadingStatus(false)

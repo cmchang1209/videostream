@@ -1,6 +1,6 @@
 <template>
     <div class="footer">
-        <div :class="['f_left', (data[0].status && gameStatus) ? 'active' : '']" @click="changShowModel(0)">
+        <div :class="['f_left', data[0].status[1] ? 'active' : '']" @click="changShowModel(0)">
             <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 407.355 111.5">
                 <g transform="translate(-448.243 -952.25)">
                     <rect class="a" width="405.855" height="110" rx="5" transform="translate(448.993 953)" />
@@ -36,7 +36,7 @@
                 </g>
             </svg>
         </div>
-        <div :class="['f_right', (data[1].status && gameStatus) ? 'active' : '']" @click="changShowModel(1)">
+        <div :class="['f_right', data[1].status[1] ? 'active' : '']" @click="changShowModel(1)">
             <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 407.355 111.5">
                 <g transform="translate(-448.243 -952.25)">
                     <rect class="a" width="405.855" height="110" rx="5" transform="translate(448.993 953)" />
@@ -66,7 +66,7 @@ export default {
     computed: {},
     methods: {
         changShowModel(type) {
-            this.$emit('changShow', type);
+            this.$emit('changShow', type, 0);
         }
     }
 }

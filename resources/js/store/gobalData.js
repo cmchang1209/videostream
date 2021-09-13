@@ -23,19 +23,10 @@ export default {
             return ('ontouchstart' in window || navigator.msMaxTouchPoints) || false
         },
         isIosDevice(state) {
+            console.log(navigator.userAgent)
             /*var u = navigator.userAgent
             return !!u.match(/\(i[^;]+;( U;)? CPU.+Mac OS X/)*/
-            return [
-                    'iPad Simulator',
-                    'iPhone Simulator',
-                    'iPod Simulator',
-                    'iPad',
-                    'iPhone',
-                    'iPod'
-                ].includes(navigator.platform)
-                // iPad on iOS 13 detection
-                ||
-                (navigator.userAgent.includes("Mac") && "ontouchend" in document)
+            return /iPad|iPhone|iPod/.test(navigator.userAgent) && !window.MSStream
         }
     },
     mutations: {

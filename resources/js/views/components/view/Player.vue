@@ -42,6 +42,7 @@ export default {
         this.url = `ws://videostream.fidodarts.com:8082/p${this.id}-${this.usb}`
         this.canvas = document.createElement("CANVAS")
         this.video.appendChild(this.canvas)
+        console.log(this.isIosDevice)
         if (!this.isIosDevice) {
             this.oc = this.canvas.transferControlToOffscreen()
             this.wk.postMessage({

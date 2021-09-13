@@ -26,7 +26,7 @@ export default {
             console.log(navigator.userAgent)
             /*var u = navigator.userAgent
             return !!u.match(/\(i[^;]+;( U;)? CPU.+Mac OS X/)*/
-            return /iPad|iPhone|iPod/.test(navigator.userAgent) && !window.MSStream
+            return /(Mac|iPhone|iPod|iPad)/i.test(navigator.platform) && !window.MSStream
         }
     },
     mutations: {

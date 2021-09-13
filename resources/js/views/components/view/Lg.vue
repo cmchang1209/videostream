@@ -129,7 +129,7 @@ export default {
                         this.team = data.team
                         this.runFFmpeg()
                         this.webSocket()
-                        if (this.gameStatus) {
+                        if (!this.gameStatus) {
                             let ct = 1
                             this.autoRun = setInterval(() => {
                                 console.log(ct)

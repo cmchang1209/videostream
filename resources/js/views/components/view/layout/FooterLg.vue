@@ -66,7 +66,7 @@ export default {
     computed: {},
     methods: {
         changShowModel(type) {
-            this.$emit('changShow', type, 0);
+            this.$emit('changShow', type);
         }
     }
 }

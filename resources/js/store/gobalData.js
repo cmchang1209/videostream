@@ -23,7 +23,7 @@ export default {
             return ('ontouchstart' in window || navigator.msMaxTouchPoints) || false
         },
         isIosDevice(state) {
-            console.log(navigator.userAgent)
+            //console.log(navigator.userAgent)
             /*var u = navigator.userAgent
             return !!u.match(/\(i[^;]+;( U;)? CPU.+Mac OS X/)*/
             return /(Mac|iPhone|iPod|iPad)/i.test(navigator.platform) && !window.MSStream

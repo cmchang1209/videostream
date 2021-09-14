@@ -48,7 +48,7 @@
     }
 
     .mask {
-        background-color: rgba(0, 0, 0, .8);
+        background-color: rgba(0, 0, 0, .9);
         position: absolute;
         width: 100vw;
         height: 100vh;
@@ -145,7 +145,7 @@
 
             &.active {
                 opacity: 1;
-                -webkit-transition: all ease 1s;
+                -webkit-transition: all ease .5s;
 
                 &.game {
                     &.home {

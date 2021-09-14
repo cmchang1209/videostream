@@ -225,6 +225,8 @@ class ApiLeagueController extends Controller
         $audio = DB::connection('mysql_video')->select($sql, ['id' => $request->id]);
         if($audio) {
             $data['audio'] = $audio[0]->audio;
+        } else {
+            $data['audio'] = 0;
         }
         return compact('data');
     }

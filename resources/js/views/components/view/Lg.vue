@@ -68,10 +68,14 @@ export default {
             online: 0,
             date: new Date(),
             gameStatus: false,
+            gameFinished: false,
+            pcMode: false,
             set: [],
             leg: [],
             first: '',
             autoRun: null,
+            autoRunCt: 1,
+            gameCt: 0,
             audio: 0
         }
     },
@@ -81,20 +85,17 @@ export default {
     computed: {
         audioSrc() {
             let pi = 0
-            if (this.team.length > 0 && this.team[0].pi !== 0 && this.team[1].pi !== 0) {
-                pi = this.team[this.audio].pi
-            } else {
-                this.team.map(iteam => {
-                    if (iteam.pi !== 0) {
-                        pi = iteam.pi
-                    }
-                })
-            }
-            /*this.team.map(iteam => {
-                if (iteam.status) {
-                    pi = iteam.pi
+            if (this.team.length > 0) {
+                if (this.team[0].pi !== 0 && this.team[1].pi !== 0) {
+                    pi = this.team[this.audio].pi
+                } else {
+                    this.team.map(iteam => {
+                        if (iteam.pi !== 0) {
+                            pi = iteam.pi
+                        }
+                    })
                 }
-            })*/
+            }
             return `http://${document.location.hostname}/view/audio?id=${pi}`
         },
         boredrColor() {
@@ -130,11 +131,9 @@ export default {
                         this.runFFmpeg()
                         this.webSocket()
                         if (!this.gameStatus) {
-                            let ct = 1
                             this.autoRun = setInterval(() => {
-                                console.log(ct)
-                                this.changShowModel(ct, 0)
-                                ct = ct === 0 ? 1 : 0
+                                this.changShowModel(this.autoRunCt)
+                                this.autoRunCt = this.autoRunCt === 0 ? 1 : 0
                             }, 6000)
                         }
                     }
@@ -146,29 +145,89 @@ export default {
             let d = [this.active[0], this.active[1]]
             d[i] = !this.active[i]
             this.mask = d[i]
+            this.pcMode = d[i]
+            if (!this.pcMode) {
+                if (!this.gameStatus) {
+                    this.changShowModel(this.autoRunCt)
+                } else {
+                    this.changShowModel(this.gameCt)
+                }
+            } else {
+                this.autoRunCt = i
+            }
             this.active = d
         },
-        changShowModel(value, mode) {
-            if (mode === 0) {
-                switch (value) {
-                    case 0:
-                        this.team[0].status = [true, true]
-                        this.team[1].status = [false, false]
-                        break
-                    case 1:
-                        this.team[0].status = [false, false]
-                        this.team[1].status = [true, true]
-                        break
+        changShowModel(value) {
+            /* 不是 pc 放大模式 */
+            if (!this.pcMode) {
+                /* 綁定2個PI */
+                if (this.team[0].pi !== 0 && this.team[1].pi !== 0) {
+                    /* 2個PI不相等 */
+                    if (this.team[0].pi !== this.team[1].pi) {
+                        switch (value) {
+                            case 0:
+                                this.team[0].status = [true, true]
+                                this.team[1].status = [false, false]
+                                break
+                            case 1:
+                                this.team[0].status = [false, false]
+                                this.team[1].status = [true, true]
+                                break
+                        }
+                        /* 2個PI相等 */
+                    } else {
+                        switch (value) {
+                            case 0:
+                                this.team[0].status = [true, true]
+                                this.team[1].status = [false, false]
+                                break
+                            case 1:
+                                this.team[0].status = [true, false]
+                                this.team[1].status = [false, true]
+                                break
+                        }
+                    }
+                    /* 綁定<1個PI */
+                } else {
+                    let i = ''
+                    this.team.map((iteam, index) => {
+                        if (iteam.pi !== 0) {
+                            i = index
+                        }
+                    })
+                    if (i === 0) {
+                        switch (value) {
+                            case 0:
+                                this.team[0].status = [true, true]
+                                this.team[1].status = [false, false]
+                                break
+                            case 1:
+                                this.team[0].status = [true, false]
+                                this.team[1].status = [false, true]
+                                break
+                        }
+                    } else if (i === 1) {
+                        switch (value) {
+                            case 0:
+                                this.team[0].status = [false, true]
+                                this.team[1].status = [true, false]
+                                break
+                            case 1:
+                                this.team[0].status = [false, false]
+                                this.team[1].status = [true, true]
+                                break
+                        }
+                    }
                 }
             } else {
                 switch (value) {
                     case 0:
-                        this.team[0].status[1] = true
-                        this.team[1].status[1] = false
+                        this.team[0].status = [this.team[0].status[0], true]
+                        this.team[1].status = [this.team[1].status[0], false]
                         break
                     case 1:
-                        this.team[0].status[1] = false
-                        this.team[1].status[1] = true
+                        this.team[0].status = [this.team[0].status[0], false]
+                        this.team[1].status = [this.team[1].status[0], true]
                         break
                 }
             }
@@ -203,45 +262,47 @@ export default {
                     if (typeof data.teamDetail !== 'undefined') {
                         if (typeof data.finished !== 'undefined' && data.finished.toLowerCase() === 'true') {
                             if (this.team[data.currentTeam].pi !== 0) {
-                                this.changShowModel(data.currentTeam, 0)
+                                this.changShowModel(data.currentTeam)
                                 this.changePcModel(data.currentTeam)
                             } else {
                                 let i = data.currentTeam === 0 ? 1 : 0
-                                this.changShowModel(i, 0)
+                                this.changShowModel(i)
                                 this.changePcModel(i)
                             }
-                        } else {
-                            setTimeout(() => {
-                                if (this.autoRun !== null) {
-                                    clearInterval(this.autoRun)
-                                    this.autoRun = null
-                                }
-                                this.gameStatus = true
-                                this.set = data.set
-                                this.leg = data.leg
-                                this.first = data.first
+                        }
+                        setTimeout(() => {
+                            if (this.autoRun !== null) {
+                                clearInterval(this.autoRun)
+                                this.autoRun = null
+                            }
+                            this.gameStatus = true
+                            this.set = data.set
+                            this.leg = data.leg
+                            this.first = data.first
+                            this.gameCt = data.currentTeam
 
-                                this.team[0].player = data.teamDetail.homeTeamPlayer
-                                this.team[1].player = data.teamDetail.awayTeamPlayer
+                            this.team[0].player = data.teamDetail.homeTeamPlayer
+                            this.team[1].player = data.teamDetail.awayTeamPlayer
 
-                                this.team[0].row = this.team[1].row = data.teamDetail.currentPlayerRow
-                                if (this.team[0].pi !== 0 && this.team[1].pi !== 0) {
-                                    if (this.team[0].pi !== this.team[1].pi) {
-                                        this.changShowModel(data.currentTeam, 0)
-                                    } else {
-                                        this.team[0].status[0] = true
-                                        this.changShowModel(data.currentTeam, 1)
-                                    }
+                            this.team[0].row = this.team[1].row = data.teamDetail.currentPlayerRow
+
+                            this.changShowModel(this.gameCt)
+                            /*if (this.team[0].pi !== 0 && this.team[1].pi !== 0) {
+                                if (this.team[0].pi !== this.team[1].pi) {
+                                    this.changShowModel(data.currentTeam, 0)
                                 } else {
-                                    this.team.map((iteam, index) => {
-                                        if (iteam.pi !== 0) {
-                                            this.team[index].status[0] = true
-                                        }
-                                    })
+                                    this.team[0].status[0] = true
                                     this.changShowModel(data.currentTeam, 1)
                                 }
-                            }, 1000)
-                        }
+                            } else {
+                                this.team.map((iteam, index) => {
+                                    if (iteam.pi !== 0) {
+                                        this.team[index].status[0] = true
+                                    }
+                                })
+                                this.changShowModel(data.currentTeam, 1)
+                            }*/
+                        }, 1000)
                     }
                 }
             }

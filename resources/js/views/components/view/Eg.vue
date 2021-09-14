@@ -39,7 +39,6 @@
                 </el-form-item>
             </el-form>
         </div>
-        <canvas v-if="radio === 1" id="audio" width="640" height="266"></canvas>
     </div>
 </template>
 <script>
@@ -110,8 +109,7 @@ export default {
             },
             loading: false,
             exposure: 0,
-            video_loading: false,
-            audioPlayer: null
+            video_loading: false
         }
     },
     created() {
@@ -191,7 +189,6 @@ export default {
                     if (this.radio === 1) {
                         let audioUrl = `ws://videostream.fidodarts.com:8084/p${this.id}-${this.radio}`
                         let playre = new JSMpeg.Player(audioUrl, {
-                            canvas: document.getElementById('audio'),
                             decodeFirstFrame: true,
                             disableWebAssembly: false,
                             chunkSize: 4 * 1024 * 1024,
@@ -203,7 +200,6 @@ export default {
                                 //console.log(time)
                             }
                         })
-                        player.audioOut.unlock(this.onUnlocked)
                     }
                 }
                 this.$socket.client.emit('runFFmpeg', { id: this.id * 1, usb: this.radio })
@@ -250,9 +246,6 @@ export default {
             let value = this.form.exposure_absolute.k + this.form.exposure_absolute.b + this.form.exposure_absolute.g
             this.$socket.client.emit('setV4l2ExposureAbsolute', { id: this.id, value: value })
             this.loading = true
-        },
-        onUnlocked() {
-            player.volume = 1
         }
     }
 }

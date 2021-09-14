@@ -39,6 +39,7 @@
                 </el-form-item>
             </el-form>
         </div>
+        <iframe v-if="radio === 1" allow="autoplay" :src="audioSrc" style="display: none;"></iframe>
     </div>
 </template>
 <script>
@@ -109,7 +110,8 @@ export default {
             },
             loading: false,
             exposure: 0,
-            video_loading: false
+            video_loading: false,
+            audioSrc: `http://${document.location.hostname}/view/audio?id=0`
         }
     },
     created() {
@@ -188,14 +190,16 @@ export default {
                         })
                     }
                     if (this.radio === 1) {
-                        let audioUrl = `ws://videostream.fidodarts.com:8084/p${this.id}-${this.radio}`
-                        new JSMpeg.Player(audioUrl, {
+                        this.audioUrl = `http://${document.location.hostname}/view/audio?id=${this.id}`
+                        /*new JSMpeg.Player(audioUrl, {
                             autoplay: true,
                             pauseWhenHidden: false,
                             onAudioDecode(decoder, time) {
                                 //console.log(time)
                             }
-                        })
+                        })*/
+                    } else {
+                        this.audioUrl = `http://${document.location.hostname}/view/audio?id=0`
                     }
                 }
                 this.$socket.client.emit('runFFmpeg', { id: this.id * 1, usb: this.radio })

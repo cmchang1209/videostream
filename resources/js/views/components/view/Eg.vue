@@ -109,7 +109,8 @@ export default {
             },
             loading: false,
             exposure: 0,
-            video_loading: false
+            video_loading: false,
+            audioPlayer: null
         }
     },
     created() {
@@ -178,6 +179,7 @@ export default {
                             }
                         }, [this.oc])
                     } else {
+                        document.addEventListener('touchstart', onTouchStart, false)
                         this.player = new JSMpeg.Player(this.url, {
                             canvas: this.canvas,
                             pauseWhenHidden: false,
@@ -188,7 +190,7 @@ export default {
                     }
                     if (this.radio === 1) {
                         let audioUrl = `ws://videostream.fidodarts.com:8084/p${this.id}-${this.radio}`
-                        new JSMpeg.Player(audioUrl, {
+                        this.audioPlayer = new JSMpeg.Player(audioUrl, {
                             autoplay: true,
                             pauseWhenHidden: false,
                             onAudioDecode(decoder, time) {
@@ -202,6 +204,10 @@ export default {
         },
         handleStop() {
             if (this.playRadio !== null) {
+                if(this.audioPlayer !== null) {
+                    this.audioPlayer.destroy()
+                    this.audioPlayer = null
+                }
                 if (!this.isIosDevice) {
                     this.wk.postMessage({ type: 'destroy' })
                 } else {
@@ -241,6 +247,11 @@ export default {
             let value = this.form.exposure_absolute.k + this.form.exposure_absolute.b + this.form.exposure_absolute.g
             this.$socket.client.emit('setV4l2ExposureAbsolute', { id: this.id, value: value })
             this.loading = true
+        },
+        onTouchStart() {
+            if (this.isIosDevice) {
+                alert('ok')
+            }
         }
     }
 }

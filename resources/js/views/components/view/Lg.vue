@@ -14,7 +14,7 @@
                     <div :class="['video-1', active[index] ? 'active' : '']" @click="changePcModel(index)">
                         <f-player :id="iteam.pi" :usb="1" />
                     </div>
-                    <div class="adr-name">
+                    <div class="adr-name no-user-select">
                         <svg xmlns="http://www.w3.org/2000/svg" viewBox="0,0,940,79">
                             <text x="50.15%" y="62" font-size="36" stroke="#000" stroke-width="6" fill="#000" text-anchor="middle" letter-spacing="10" stroke-linejoin="round">
                                 {{ iteam.storeName }}

@@ -39,7 +39,6 @@
                 </el-form-item>
             </el-form>
         </div>
-        <iframe v-if="radio === 1" allow="autoplay" :src="audioSrc" style="display: none;"></iframe>
     </div>
 </template>
 <script>
@@ -110,8 +109,7 @@ export default {
             },
             loading: false,
             exposure: 0,
-            video_loading: false,
-            audioSrc: `http://${document.location.hostname}/view/audio?id=0`
+            video_loading: false
         }
     },
     created() {
@@ -170,7 +168,6 @@ export default {
                     this.url = `ws://videostream.fidodarts.com:8082/p${this.id}-${this.radio}`
                     this.canvas = document.createElement("CANVAS")
                     this.video.appendChild(this.canvas)
-                    console.log(this.isIosDevice)
                     if (!this.isIosDevice) {
                         this.oc = this.canvas.transferControlToOffscreen()
                         this.wk.postMessage({
@@ -190,16 +187,15 @@ export default {
                         })
                     }
                     if (this.radio === 1) {
-                        this.audioUrl = `http://${document.location.hostname}/view/audio?id=${this.id}`
-                        /*new JSMpeg.Player(audioUrl, {
+                        let audioUrl = `ws://videostream.fidodarts.com:8084/p${this.id}-${this.radio}`
+                        let playre = new JSMpeg.Player(audioUrl, {
                             autoplay: true,
                             pauseWhenHidden: false,
                             onAudioDecode(decoder, time) {
                                 //console.log(time)
                             }
-                        })*/
-                    } else {
-                        this.audioUrl = `http://${document.location.hostname}/view/audio?id=0`
+                        })
+                        player.audioOut.unlock(onUnlocked)
                     }
                 }
                 this.$socket.client.emit('runFFmpeg', { id: this.id * 1, usb: this.radio })

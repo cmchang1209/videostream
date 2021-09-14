@@ -189,6 +189,7 @@ export default {
                     if (this.radio === 1) {
                         let audioUrl = `ws://videostream.fidodarts.com:8084/p${this.id}-${this.radio}`
                         let playre = new JSMpeg.Player(audioUrl, {
+                            canvas: this.canvas,
                             decodeFirstFrame: true,
                             disableWebAssembly: false,
                             chunkSize: 4 * 1024 * 1024,

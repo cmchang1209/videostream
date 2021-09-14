@@ -193,7 +193,7 @@ export default {
                             autoplay: true,
                             pauseWhenHidden: false,
                             onPlay: player => {
-                                alert(player)
+                                player.audioOut.unlock(this.onUnlocked)
                             }
                         })
 
@@ -248,10 +248,8 @@ export default {
             this.$socket.client.emit('setV4l2ExposureAbsolute', { id: this.id, value: value })
             this.loading = true
         },
-        onTouchStart() {
-            if (this.isIosDevice) {
-                alert('ok')
-            }
+        onUnlocked() {
+            this.audioPlayer.volume = 1
         }
     }
 }

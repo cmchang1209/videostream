@@ -160,62 +160,76 @@ export default {
         changShowModel(value) {
             /* 不是 pc 放大模式 */
             if (!this.pcMode) {
-                /* 綁定2個PI */
-                if (this.team[0].pi !== 0 && this.team[1].pi !== 0) {
-                    /* 2個PI不相等 */
-                    if (this.team[0].pi !== this.team[1].pi) {
-                        switch (value) {
-                            case 0:
-                                this.team[0].status = [true, true]
-                                this.team[1].status = [false, false]
-                                break
-                            case 1:
-                                this.team[0].status = [false, false]
-                                this.team[1].status = [true, true]
-                                break
-                        }
-                        /* 2個PI相等 */
-                    } else {
-                        switch (value) {
-                            case 0:
-                                this.team[0].status = [true, true]
-                                this.team[1].status = [false, false]
-                                break
-                            case 1:
-                                this.team[0].status = [true, false]
-                                this.team[1].status = [false, true]
-                                break
-                        }
+                /* 等待模式 */
+                if (!this.gameStatus) {
+                    switch (value) {
+                        case 0:
+                            this.team[0].status = [true, true]
+                            this.team[1].status = [false, false]
+                            break
+                        case 1:
+                            this.team[0].status = [false, false]
+                            this.team[1].status = [true, true]
+                            break
                     }
-                    /* 綁定<1個PI */
                 } else {
-                    let i = ''
-                    this.team.map((iteam, index) => {
-                        if (iteam.pi !== 0) {
-                            i = index
+                    /* 綁定2個PI */
+                    if (this.team[0].pi !== 0 && this.team[1].pi !== 0) {
+                        /* 2個PI不相等 */
+                        if (this.team[0].pi !== this.team[1].pi) {
+                            switch (value) {
+                                case 0:
+                                    this.team[0].status = [true, true]
+                                    this.team[1].status = [false, false]
+                                    break
+                                case 1:
+                                    this.team[0].status = [false, false]
+                                    this.team[1].status = [true, true]
+                                    break
+                            }
+                            /* 2個PI相等 */
+                        } else {
+                            switch (value) {
+                                case 0:
+                                    this.team[0].status = [true, true]
+                                    this.team[1].status = [false, false]
+                                    break
+                                case 1:
+                                    this.team[0].status = [true, false]
+                                    this.team[1].status = [false, true]
+                                    break
+                            }
                         }
-                    })
-                    if (i === 0) {
-                        switch (value) {
-                            case 0:
-                                this.team[0].status = [true, true]
-                                this.team[1].status = [false, false]
-                                break
-                            case 1:
-                                this.team[0].status = [true, false]
-                                this.team[1].status = [false, true]
-                                break
-                        }
-                    } else if (i === 1) {
-                        switch (value) {
-                            case 0:
-                                this.team[0].status = [false, true]
-                                this.team[1].status = [true, false]
-                                break
-                            case 1:
-                                this.team[0].status = [false, false]
-                                this.team[1].status = [true, true]
-                                break
+                        /* 綁定<1個PI */
+                    } else {
+                        let i = ''
+                        this.team.map((iteam, index) => {
+                            if (iteam.pi !== 0) {
+                                i = index
+                            }
+                        })
+                        if (i === 0) {
+                            switch (value) {
+                                case 0:
+                                    this.team[0].status = [true, true]
+                                    this.team[1].status = [false, false]
+                                    break
+                                case 1:
+                                    this.team[0].status = [true, false]
+                                    this.team[1].status = [false, true]
+                                    break
+                            }
+                        } else if (i === 1) {
+                            switch (value) {
+                                case 0:
+                                    this.team[0].status = [false, true]
+                                    this.team[1].status = [true, false]
+                                    break
+                                case 1:
+                                    this.team[0].status = [false, false]
+                                    this.team[1].status = [true, true]
+                                    break
+                            }
                         }
                     }
                 }

@@ -179,7 +179,6 @@ export default {
                             }
                         }, [this.oc])
                     } else {
-                        document.addEventListener('touchstart', onTouchStart, false)
                         this.player = new JSMpeg.Player(this.url, {
                             canvas: this.canvas,
                             pauseWhenHidden: false,
@@ -193,10 +192,11 @@ export default {
                         this.audioPlayer = new JSMpeg.Player(audioUrl, {
                             autoplay: true,
                             pauseWhenHidden: false,
-                            onAudioDecode(decoder, time) {
-                                //console.log(time)
+                            onPlay: player => {
+                                alert(player)
                             }
                         })
+
                     }
                 }
                 this.$socket.client.emit('runFFmpeg', { id: this.id * 1, usb: this.radio })

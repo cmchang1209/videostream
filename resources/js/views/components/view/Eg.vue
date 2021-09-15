@@ -181,7 +181,9 @@ export default {
                     } else {
                         this.player = new JSMpeg.Player(this.url, {
                             canvas: this.canvas,
-                            pauseWhenHidden: false,
+                            disableWebAssembly: false,
+                            disableGl: false,
+                            //pauseWhenHidden: false,
                             onPlay: source => {
                                 this.play()
                             }

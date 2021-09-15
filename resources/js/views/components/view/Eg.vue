@@ -179,6 +179,7 @@ export default {
                             }
                         }, [this.oc])
                     } else {
+                        alert(this.canvas)
                         this.player = new JSMpeg.Player(this.url, {
                             canvas: this.canvas,
                             disableWebAssembly: false,

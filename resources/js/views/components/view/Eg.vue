@@ -196,9 +196,6 @@ export default {
                             pauseWhenHidden: false,
                             onPlay: source => {
                                 this.play()
-                            },
-                            onSourceEstablished(source) {
-                                console.log(source)
                             }
                         })
                     }

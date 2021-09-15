@@ -38,8 +38,9 @@ export default {
         ...mapGetters(['isIosDevice'])
     },
     mounted() {
+        let urlData = this.$store.state.gobalData.server
         this.video = document.getElementById(`video-player-${this.id}-${this.usb}`)
-        this.url = `ws://videostream.fidodarts.com:8082/p${this.id}-${this.usb}`
+        this.url = `ws://${urlData}:8082/p${this.id}-${this.usb}`
         this.canvas = document.createElement("CANVAS")
         this.video.appendChild(this.canvas)
         if (!this.isIosDevice) {

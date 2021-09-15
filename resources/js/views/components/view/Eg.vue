@@ -161,10 +161,11 @@ export default {
     },
     methods: {
         handlePlay() {
+            let urlData = this.$store.state.gobalData.server
             if (this.radio) {
                 if (this.playRadio === null || this.playRadio !== this.radio) {
                     if (this.radio === 1) {
-                        let audioUrl = `ws://videostream.fidodarts.com:8084/p${this.id}-${this.radio}`
+                        let audioUrl = `ws://${urlData}:8084/p${this.id}-${this.radio}`
                         this.audioPlayer = new JSMpeg.Player(audioUrl, {
                             autoplay: true,
                             pauseWhenHidden: false,
@@ -177,7 +178,7 @@ export default {
                     this.playstatus = true
                     this.video_loading = true
                     this.playRadio = this.radio
-                    this.url = `ws://videostream.fidodarts.com:8082/p${this.id}-${this.radio}`
+                    this.url = `ws://${urlData}:8082/p${this.id}-${this.radio}`
                     this.canvas = document.createElement("CANVAS")
                     this.video.appendChild(this.canvas)
                     if (!this.isIosDevice) {

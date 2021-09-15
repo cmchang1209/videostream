@@ -16,7 +16,8 @@ export default {
         ws: {
             ip: '18.183.140.103',
             port: 4649
-        }
+        },
+        server: '52.196.115.119'
     },
     getters: {
         isTouchDevice(state) {

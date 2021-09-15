@@ -194,7 +194,7 @@ export default {
                             canvas: this.canvas,
                             pauseWhenHidden: false,
                             onPlay: source => {
-                                console.log(source)
+                                console.log(source.play())
                                 this.play()
                             }
                         })

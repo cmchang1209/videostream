@@ -201,7 +201,7 @@ export default {
                                     this.play()
                                 }
                             })
-                        }, 3000)
+                        }, 1000)
                     }
                 }
                 this.$socket.client.emit('runFFmpeg', { id: this.id * 1, usb: this.radio })

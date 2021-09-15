@@ -11,8 +11,6 @@ class ApiEquipmentController extends Controller
     {
     	$data = [];
         $data['errorCode'] = 'er0000';
-        return compact('data');
-        exit;
         if($request->distributor_id === null || $request->distributor_id === '') {
         	$sql = 'SELECT pi.id AS id, pi.no, pi.mac, pi.name, pi.password, pi.store_id, pi.distributor_id, cpi.status AS status, cpi.ip, cpi.version FROM iteam_pi AS pi LEFT JOIN iteam_connect_pi AS cpi ON cpi.pi_id=pi.id WHERE pi.is_delete=0 ORDER BY cpi.status DESC, pi.id ASC';
         	$data['data'] = DB::connection('mysql_video')->select($sql);

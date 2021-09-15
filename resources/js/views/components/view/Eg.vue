@@ -178,7 +178,6 @@ export default {
                     this.playstatus = true
                     this.video_loading = true
                     this.playRadio = this.radio
-                    console.log(this.video, this.url, this.canvas)
                     this.url = `ws://videostream.fidodarts.com:8082/p${this.id}-${this.radio}`
                     this.canvas = document.createElement("CANVAS")
                     this.video.appendChild(this.canvas)
@@ -202,6 +201,7 @@ export default {
                             }
                         })
                     }
+                    console.log(this.video, this.url, this.canvas)
                 }
                 this.$socket.client.emit('runFFmpeg', { id: this.id * 1, usb: this.radio })
             }

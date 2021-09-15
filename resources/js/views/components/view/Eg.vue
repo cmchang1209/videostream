@@ -163,6 +163,18 @@ export default {
         handlePlay() {
             if (this.radio) {
                 if (this.playRadio === null || this.playRadio !== this.radio) {
+                    if (this.radio === 1) {
+                        let audioUrl = `ws://videostream.fidodarts.com:8084/p${this.id}-${this.radio}`
+                        this.audioPlayer = new JSMpeg.Player(audioUrl, {
+                            video: false,
+                            autoplay: true,
+                            pauseWhenHidden: false,
+                            onPlay: player => {
+                                player.audioOut.unlock(this.onUnlocked)
+                            }
+                        })
+
+                    }
                     this.playstatus = true
                     this.video_loading = true
                     this.playRadio = this.radio
@@ -179,7 +191,6 @@ export default {
                             }
                         }, [this.oc])
                     } else {
-                        alert(this.canvas)
                         this.player = new JSMpeg.Player(this.url, {
                             canvas: this.canvas,
                             disableWebAssembly: false,
@@ -190,25 +201,13 @@ export default {
                             }
                         })
                     }
-                    if (this.radio === 1) {
-                        let audioUrl = `ws://videostream.fidodarts.com:8084/p${this.id}-${this.radio}`
-                        this.audioPlayer = new JSMpeg.Player(audioUrl, {
-                            video: false,
-                            autoplay: true,
-                            pauseWhenHidden: false,
-                            onPlay: player => {
-                                player.audioOut.unlock(this.onUnlocked)
-                            }
-                        })
-
-                    }
                 }
                 this.$socket.client.emit('runFFmpeg', { id: this.id * 1, usb: this.radio })
             }
         },
         handleStop() {
             if (this.playRadio !== null) {
-                if(this.audioPlayer !== null) {
+                if (this.audioPlayer !== null) {
                     this.audioPlayer.destroy()
                     this.audioPlayer = null
                 }

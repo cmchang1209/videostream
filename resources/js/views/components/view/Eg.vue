@@ -166,7 +166,6 @@ export default {
                     if (this.radio === 1) {
                         let audioUrl = `ws://videostream.fidodarts.com:8084/p${this.id}-${this.radio}`
                         this.audioPlayer = new JSMpeg.Player(audioUrl, {
-                            video: false,
                             autoplay: true,
                             pauseWhenHidden: false,
                             onPlay: player => {
@@ -193,15 +192,13 @@ export default {
                     } else {
                         this.player = new JSMpeg.Player(this.url, {
                             canvas: this.canvas,
-                            disableWebAssembly: false,
-                            disableGl: false,
-                            //pauseWhenHidden: false,
+                            pauseWhenHidden: false,
                             onPlay: source => {
+                                console.log(source)
                                 this.play()
                             }
                         })
                     }
-                    console.log(this.video, this.url, this.canvas)
                 }
                 this.$socket.client.emit('runFFmpeg', { id: this.id * 1, usb: this.radio })
             }

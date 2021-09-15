@@ -170,7 +170,9 @@ export default {
                             autoplay: true,
                             pauseWhenHidden: false,
                             onPlay: player => {
-                                player.audioOut.unlock(this.onUnlocked)
+                                setTimeout(() => {
+                                    player.audioOut.unlock(this.onUnlocked)
+                                }, 1000)
                             }
                         })
 

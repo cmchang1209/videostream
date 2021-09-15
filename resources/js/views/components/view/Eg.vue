@@ -191,10 +191,14 @@ export default {
                         }, [this.oc])
                     } else {
                         this.player = new JSMpeg.Player(this.url, {
-                            //canvas: this.canvas,
+                            canvas: this.canvas,
+                            audio: false,
                             pauseWhenHidden: false,
                             onPlay: source => {
                                 this.play()
+                            },
+                            onSourceEstablished(source) {
+                                console.log(source)
                             }
                         })
                     }

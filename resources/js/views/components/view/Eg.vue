@@ -20,6 +20,7 @@
             <h3 v-if="!playstatus" style="text-align: center;">
                 請選擇頻道後，執行播放
             </h3>
+            <div class="jsmpeg" :data-url="url"></div>
         </div>
         <div v-if="playstatus && !video_loading && radio === 2" class="block">
             <el-form :model="form" label-position="top">

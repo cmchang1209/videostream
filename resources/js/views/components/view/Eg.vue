@@ -20,6 +20,7 @@
             <h3 v-if="!playstatus" style="text-align: center;">
                 請選擇頻道後，執行播放
             </h3>
+            <el-button v-if="!playstatus && showAudioBt === 1" type="success" round @click.native.prevent="handleAudio">播音</el-button>
         </div>
         <div v-if="playstatus && !video_loading && radio === 2" class="block">
             <el-form :model="form" label-position="top">
@@ -110,7 +111,8 @@ export default {
             loading: false,
             exposure: 0,
             video_loading: false,
-            audioPlayer: null
+            audioPlayer: null,
+            showAudioBt: false
         }
     },
     created() {
@@ -171,6 +173,7 @@ export default {
                             pauseWhenHidden: false,
                             onPlay: player => {
                                 setTimeout(() => {
+                                    this.showAudioBt = true
                                     player.audioOut.unlock(this.onUnlocked)
                                 }, 1000)
                             }
@@ -199,7 +202,6 @@ export default {
                                 audio: false,
                                 pauseWhenHidden: false,
                                 onPlay: source => {
-                                    console.log(this.canvas)
                                     this.play()
                                 }
                             })
@@ -257,6 +259,9 @@ export default {
         },
         onUnlocked() {
             this.audioPlayer.volume = 1
+        },
+        handleAudio() {
+            this.audioPlayer.audioOut.unlock(this.onUnlocked)
         }
     }
 }

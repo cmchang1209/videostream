@@ -20,7 +20,6 @@
             <h3 v-if="!playstatus" style="text-align: center;">
                 請選擇頻道後，執行播放
             </h3>
-            <div class="jsmpeg" data-url="ws://videostream.fidodarts.com:8082/p20-1"></div>
         </div>
         <div v-if="playstatus && !video_loading && radio === 2" class="block">
             <el-form :model="form" label-position="top">
@@ -191,14 +190,17 @@ export default {
                             }
                         }, [this.oc])
                     } else {
-                        this.player = new JSMpeg.Player(this.url, {
-                            canvas: this.canvas,
-                            audio: false,
-                            pauseWhenHidden: false,
-                            onPlay: source => {
-                                this.play()
-                            }
-                        })
+                        setTimeout(() => {
+                            this.player = new JSMpeg.Player(this.url, {
+                                canvas: this.canvas,
+                                audio: false,
+                                pauseWhenHidden: false,
+                                onPlay: source => {
+                                    console.log(this.canvas)
+                                    this.play()
+                                }
+                            })
+                        }, 3000)
                     }
                 }
                 this.$socket.client.emit('runFFmpeg', { id: this.id * 1, usb: this.radio })

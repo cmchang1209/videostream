@@ -20,7 +20,7 @@
             <h3 v-if="!playstatus" style="text-align: center;">
                 請選擇頻道後，執行播放
             </h3>
-            <el-button v-if="playstatus && showAudioBt" type="success" round @click.native.prevent="handleAudio">播音</el-button>
+            <div v-if="playstatus && showAudioBt" class="jsmpeg" data-url="ws://52.196.115.119:8084/p20-1"></div>
         </div>
         <div v-if="playstatus && !video_loading && radio === 2" class="block">
             <el-form :model="form" label-position="top">

@@ -10,6 +10,10 @@
             <el-button @click.native.prevent="handleCopyUrl" type="text">
                 {{ $store.state.langData.cont.pageFn.table.CopyUrl }}
             </el-button>
+            <span style="margin: 0 .75rem">|</span>
+            <el-button @click.native.prevent="handleSearchWebcam" type="text">
+                {{ $store.state.langData.cont.pageFn.table['Search Webcam'] }}
+            </el-button>
         </p>
         <br>
         <el-table :data="tableData" border :empty-text="$store.state.langData.cont.msg.data.d0001" style="width: 100%">
@@ -42,6 +46,7 @@ import Breadcrumb from '../layout/Breadcrumb.vue'
 export default {
     components: { Breadcrumb },
     props: ['id'],
+    sockets: {},
     data() {
         return {
             br: [{
@@ -148,6 +153,9 @@ export default {
                 document.getSelection().removeAllRanges()
                 document.getSelection().addRange(selected)
             }
+        },
+        handleSearchWebcam() {
+            this.$socket.client.emit('uvcvideoSearch', { id: this.id })
         }
     }
 }

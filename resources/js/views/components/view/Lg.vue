@@ -261,9 +261,9 @@ export default {
             })
         },
         webSocket() {
-            let urlData = this.$store.state.gobalData.ws
+            //let urlData = this.$store.state.gobalData.ws
             //let urlData = this.$store.state.gobalData.wsTest1
-            //let urlData = this.$store.state.gobalData.wsTest2
+            let urlData = this.$store.state.gobalData.wsTest2
             let ws = new WebSocket(`ws://${urlData.ip}:${urlData.port}/League`)
             ws.onopen = () => {
                 var msg = { "cmd": "watch", "battleId": this.id }
@@ -272,6 +272,7 @@ export default {
 
             ws.onmessage = (e) => {
                 let data = JSON.parse(e.data)
+                console.log(data)
                 if (data.errorCode === 'SUCCEED') {
                     if (typeof data.teamDetail !== 'undefined') {
                         if (typeof data.finished !== 'undefined' && data.finished.toLowerCase() === 'true') {

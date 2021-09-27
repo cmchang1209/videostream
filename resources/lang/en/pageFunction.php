@@ -38,7 +38,7 @@ return [
 		'Mute' => 'Mute',
 		'Audio' => 'Audio',
 		'CopyUrl' => 'CopyUrl',
-		'Search Webcam' => 'Search Webcam',
+		'Search Webcam' => 'Refresh Webcam',
 		'Tournament' => 'Tournament',
 		'League' => 'League',
 		'LeagueGroup' => 'Group'

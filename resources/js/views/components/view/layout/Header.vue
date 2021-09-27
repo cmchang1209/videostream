@@ -1,5 +1,5 @@
 <template>
-    <div class="header">
+    <div class="header no-user-select">
         <div class="h_left">
             <svg xmlns="http://www.w3.org/2000/svg" viewBox="0,0,376,77">
                 <image xlink:href="../../../../../sass/images/stream_logo.png" height="100%" />

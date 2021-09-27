@@ -1,5 +1,5 @@
 <template>
-    <div class="view">
+    <div class="view no-user-select">
         <div v-if="show" class="view-lg">
             <f-header :name="name" :groupName="groupName" :sequence="sequence" :date="date" :type="'l'" :online="online" />
             <!-- <div v-for="(iteam, index) in team" :key="index" :class="['video-area', iteam.status[0] ? 'active' : '', index === 0 ? 'home' : 'away', 'game' ]"> -->
@@ -14,7 +14,7 @@
                     <div :class="['video-1', active[index] ? 'active' : '']" @click="changePcModel(index)">
                         <f-player :id="iteam.pi" :usb="1" />
                     </div>
-                    <div class="adr-name no-user-select">
+                    <div class="adr-name">
                         <svg xmlns="http://www.w3.org/2000/svg" viewBox="0,0,940,79">
                             <text x="50.15%" y="62" font-size="36" stroke="#000" stroke-width="6" fill="#000" text-anchor="middle" letter-spacing="10" stroke-linejoin="round">
                                 {{ iteam.storeName }}
@@ -322,6 +322,7 @@ export default {
             }
             ws.onclose = () => {
                 console.log('close connection')
+                //this.webSocket()
             }
         }
     }

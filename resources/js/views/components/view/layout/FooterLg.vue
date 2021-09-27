@@ -1,5 +1,5 @@
 <template>
-    <div class="footer">
+    <div class="footer no-user-select">
         <div :class="['f_left', data[0].status[1] ? 'active' : '']" @click="changShowModel(0)">
             <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 407.355 111.5">
                 <g transform="translate(-448.243 -952.25)">
@@ -10,7 +10,23 @@
                 </g>
                 <text class="d" x="25" y="18" font-size="16" letter-spacing="3">{{ data[0].teamName }}</text>
                 <text class="c" x="47.5" y="75" font-size="28" text-anchor="middle">主隊</text>
-                <text v-if="data[0].row !== -1" class="c" x="60%" y="65" font-size="24" text-anchor="middle">{{ data[0].player[data[0].row] }}</text>
+                <text v-if="data[0].row !== -1" class="c" x="60%" y="65" text-anchor="middle">
+                    <tspan v-if="data[0].player.length > 2" font-size="24">
+                        {{ data[0].player[data[0].row] }}
+                    </tspan>
+                    <tspan v-else :font-size="data[0].row === 0 ? 24 : 16">
+                        {{ data[0].player[0] }}
+                    </tspan>
+                    <tspan v-if="data[0].player.length > 1" font-size="24" letter-spacing="3">
+                        /
+                    </tspan>
+                    <tspan v-if="data[0].player.length > 2" font-size="16">
+                        {{ data[0].player.length }} 人賽
+                    </tspan>
+                    <tspan v-else-if="data[0].player.length > 1" :font-size="data[0].row === 1 ? 24 : 16">
+                        {{ data[0].player[1] }}
+                    </tspan>
+                </text>
                 <text v-else class="c" x="60%" y="65" font-size="24" text-anchor="middle">{{ data[0].teamName }}</text>
                 <text class="c" x="60%" y="90" font-size="16" text-anchor="middle">{{ data[0].storeName }}</text>
                 <circle v-if="first===0" cx="12.5" cy="35" r="4" fill="#EBDA6B" />
@@ -46,7 +62,23 @@
                 </g>
                 <text class="d" x="25" y="18" font-size="16" letter-spacing="3">{{ data[1].teamName }}</text>
                 <text class="c" x="47.5" y="75" font-size="28" text-anchor="middle">客隊</text>
-                <text v-if="data[1].row !== -1" class="c" x="60%" y="65" font-size="24" text-anchor="middle">{{ data[1].player[data[1].row] }}</text>
+                <text v-if="data[1].row !== -1" class="c" x="60%" y="65" text-anchor="middle">
+                    <tspan v-if="data[1].player.length > 2" font-size="24">
+                        {{ data[1].player[data[1].row] }}
+                    </tspan>
+                    <tspan v-else :font-size="data[1].row === 0 ? 24 : 16">
+                        {{ data[1].player[0] }}
+                    </tspan>
+                    <tspan v-if="data[1].player.length > 1" font-size="24" letter-spacing="3">
+                        /
+                    </tspan>
+                    <tspan v-if="data[1].player.length > 2" font-size="16">
+                        {{ data[1].player.length }} 人賽
+                    </tspan>
+                    <tspan v-else-if="data[1].player.length > 1" :font-size="data[1].row === 1 ? 24 : 16">
+                        {{ data[1].player[1] }}
+                    </tspan>
+                </text>
                 <text v-else class="c" x="60%" y="65" font-size="24" text-anchor="middle">{{ data[1].teamName }}</text>
                 <text class="c" x="60%" y="90" font-size="16" text-anchor="middle">{{ data[1].storeName }}</text>
                 <circle v-if="first===1" cx="12.5" cy="35" r="4" fill="#EBDA6B" />

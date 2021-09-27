@@ -323,7 +323,7 @@ export default {
             }
             ws.onclose = () => {
                 console.log('close connection')
-                //this.webSocket()
+                this.webSocket()
             }
         }
     }

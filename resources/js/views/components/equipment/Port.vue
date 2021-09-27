@@ -46,7 +46,11 @@ import Breadcrumb from '../layout/Breadcrumb.vue'
 export default {
     components: { Breadcrumb },
     props: ['id'],
-    sockets: {},
+    sockets: {
+        uvcvideoDone() {
+            window.location.reload()
+        }
+    },
     data() {
         return {
             br: [{
@@ -155,6 +159,7 @@ export default {
             }
         },
         handleSearchWebcam() {
+            this.changeAppLoadingStatus(true)
             this.$socket.client.emit('uvcvideoSearch', { id: this.id })
         }
     }

@@ -49,11 +49,6 @@ export default {
         'f-footer': Footer,
     },
     props: ['id'],
-    sockets: {
-        connect() {
-            console.log('connect')
-        }
-    },
     data() {
         return {
             name: '',
@@ -76,7 +71,8 @@ export default {
             autoRun: null,
             autoRunCt: 1,
             gameCt: 0,
-            audio: 0
+            audio: 0,
+            ws: null
         }
     },
     created() {
@@ -261,16 +257,23 @@ export default {
             })
         },
         webSocket() {
-            let urlData = this.$store.state.gobalData.ws
-            //let urlData = this.$store.state.gobalData.wsTest1
-            //let urlData = this.$store.state.gobalData.wsTest2
-            let ws = new WebSocket(`ws://${urlData.ip}:${urlData.port}/League`)
-            ws.onopen = () => {
-                var msg = { "cmd": "watch", "battleId": this.id }
-                ws.send(JSON.stringify(msg))
+            if (this.ws === null) {
+                let urlData = this.$store.state.gobalData.ws
+                //let urlData = this.$store.state.gobalData.wsTest1
+                //let urlData = this.$store.state.gobalData.wsTest2
+                this.ws = new WebSocket(`ws://${urlData.ip}:${urlData.port}/League`)
             }
 
-            ws.onmessage = (e) => {
+            this.ws.onerror = (e) => {
+                console.log(e)
+            }
+
+            this.ws.onopen = (e) => {
+                var msg = { "cmd": "watch", "battleId": this.id }
+                this.ws.send(JSON.stringify(msg))
+            }
+
+            this.ws.onmessage = (e) => {
                 let data = JSON.parse(e.data)
                 console.log(data)
                 if (data.errorCode === 'SUCCEED') {
@@ -321,9 +324,12 @@ export default {
                     }
                 }
             }
-            ws.onclose = () => {
+            this.ws.onclose = () => {
                 console.log('close connection')
-                this.webSocket()
+                this.ws = null
+                setTimeout(() => {
+                    this.webSocket()
+                }, 1000)
             }
         }
     }

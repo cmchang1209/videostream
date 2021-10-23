@@ -48,7 +48,9 @@ export default {
     props: ['id'],
     sockets: {
         uvcvideoDone() {
-            window.location.reload()
+            setTimeout(() => {
+                window.location.reload()
+            }, 3000)
         }
     },
     data() {

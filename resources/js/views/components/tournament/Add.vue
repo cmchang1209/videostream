@@ -46,6 +46,21 @@
                     </el-table>
                 </el-table-draggable>
             </el-form-item>
+            <!-- <el-form-item :label="$store.state.langData.cont.pageFn.table.LeagueGroup">
+                <el-row>
+                    <el-col :span="22" :offset="2">
+                        <el-form-item :label="$store.state.langData.cont.pageFn.table.Name">
+                            <el-input v-model="group.name" clearable></el-input>
+                        </el-form-item>
+                        <el-form-item :label="$store.state.langData.cont.pageFn.table.TournamentGroupType" prop="id">
+                            <el-select v-model="group.type" :placeholder="$store.state.langData.cont.msg.placeholder.ph0002" :no-data-text="$store.state.langData.cont.msg.data.d0001" clearable style="width: 100%">
+                                <el-option v-for="item in $store.state.langData.cont.pageFn.tournament.type" :key="item.id" :label="item.name" :value="item.id">
+                                </el-option>
+                            </el-select>
+                        </el-form-item>
+                    </el-col>
+                </el-row>
+            </el-form-item> -->
             <el-form-item>
                 <el-button type="primary" @click.native.prevent="add" :loading="loading">
                     {{ $store.state.langData.cont.pageFn.golbal.Add }}
@@ -95,9 +110,14 @@ export default {
                     p_name: ''
                 }
             },
+            group: {
+                name: '',
+                type: ''
+            },
             form: {
                 name: '',
-                players: []
+                players: [],
+                group: []
             },
             loading: false,
             rules: {
@@ -249,6 +269,9 @@ export default {
     },
     handleDelete(index, row) {
         this.form.players.splice(index, 1)
+    },
+    test() {
+        console.log(this.group.name)
     }
 }
 

@@ -41,14 +41,29 @@ return [
 		'Search Webcam' => 'Refresh Webcam',
 		'Tournament' => 'Tournament',
 		'League' => 'League',
-		'LeagueGroup' => 'Group'
+		'LeagueGroup' => 'Group',
+		'TournamentGroupType' => '賽制'
 	],
     'login' => [
     	'label'  => 'Sign in',
     	'submit' => 'Submit'
     ],
     'tournament' => [
-    	'addBtn' => 'Add New tournament'
+    	'addBtn' => 'Add New tournament',
+    	'type' => [
+    		[ 
+    			'id' => 0,
+    		    'name' => '8人賽'
+    		],
+    		[ 
+    			'id' => 1,
+    		    'name' => '16人賽'
+    		],
+    		[
+    			'id' => 2,
+    		    'name' => '32人賽'
+    		]
+    	]
     ],
     'equipment' => [
     	'addBtn' => 'Add New equipment',

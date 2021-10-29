@@ -100,10 +100,246 @@ class ApiTournamentController extends Controller
     }
 
     public function getTournamentListData(Request $request) {
-        $data = [];
+        /*$data = [];
         $data['errorCode'] = 'er0000';
         $sql = 'SELECT t.id, t.name, t.createTime, count(p.id) AS count FROM iteam_tournament AS t LEFT JOIN iteam_tournament_players AS p ON p.tournament_id=t.id WHERE is_delete=0 GROUP BY t.id';
         $data['data'] = DB::connection('mysql_video')->select($sql);
+        return compact('data');*/
+        $data = [];
+        $data['errorCode'] = 'er0000';
+        $sql = 'SELECT id, name, timezone FROM tournament';
+        $data['data'] = DB::connection('mysql')->select($sql);
+        if($request->distributor_id === null || $request->distributor_id === '') {
+            $sql = 'SELECT id, name FROM iteam_pi WHERE is_delete=0 ORDER BY id ASC';
+            $data['pi'] = DB::connection('mysql_video')->select($sql);
+        } else {
+            $sql = 'SELECT id, name FROM iteam_pi WHERE is_delete=0 AND distributor_id=:distributor_id ORDER BY id ASC';
+            $data['pi'] = DB::connection('mysql_video')->select($sql, ['distributor_id' => $request->distributor_id]);
+        }
+        return compact('data');
+    }
+
+    public function getTournamentGroupData(Request $request)
+    {
+        $data = [];
+        $data['errorCode'] = 'er0000';
+        $sql = 'SELECT id, groupName FROM tournament_group WHERE tournamentId=:id';
+        $data['data'] = DB::connection('mysql')->select($sql, ['id' => $request->id]);
+        return compact('data');
+    }
+
+    public function getTournamentBattleData(Request $request)
+    {
+        $data = [];
+        $data['errorCode'] = 'er0000';
+        $sql = 'SELECT id, tournamentId, sequence, isNetworkGame, homeStoreId, awayStoreId, homeTeamId, awayTeamId FROM tournament_battle WHERE tournamentId=:id AND groupId=:groupId ORDER BY sequence ASC';
+        $data['data'] = DB::connection('mysql')->select($sql, ['id' => $request->id, 'groupId' => $request->groupId]);
+        $sql = 'SELECT id, name FROM store';
+        $tStore = DB::connection('mysql')->select($sql);
+        $sql = 'SELECT m.teamId, u.name, u.nickName FROM tournament_teammember AS m LEFT JOIN users AS u ON u.id=m.userId WHERE tournamentId=:id AND groupId=:groupId';
+        $tTeam = DB::connection('mysql')->select($sql, ['id' => $request->id, 'groupId' => $request->groupId]);
+        $sql = 'SELECT team_id, pi_id FROM iteam_tournament_pi';
+        $tPi = DB::connection('mysql_video')->select($sql);
+        $sql = 'SELECT b_id, audio FROM iteam_tournament_audio';
+        $audio = DB::connection('mysql_video')->select($sql);
+        foreach ($data['data'] as $key => $value) {
+            $d = collect($tStore)->where('id', $value->homeStoreId)->first();
+            $value->homeStoreName = '';
+            if($d) {
+                $value->homeStoreName = $d->name;
+            }
+            $d = collect($tStore)->where('id', $value->awayStoreId)->first();
+            $value->awayStoreName = '';
+            if($d) {
+                $value->awayStoreName = $d->name;
+            }
+
+            $value->homeTeamName = '';
+            $value->awayTeamName = '';
+            foreach ($tTeam as $h_key => $h_value) {
+                if($h_value->teamId === $value->homeTeamId) {
+                    if($value->homeTeamName !== '') {
+                        $value->homeTeamName .= '/';
+                    }
+                    $value->homeTeamName .= base64_decode($h_value->name);
+                }
+
+                if($h_value->teamId === $value->awayTeamId) {
+                    if($value->awayTeamName !== '') {
+                        $value->awayTeamName .= '/';
+                    }
+                    $value->awayTeamName .= base64_decode($h_value->name);
+                }
+            }
+
+            $d = collect($tPi)->where('team_id', $value->homeTeamId)->first();
+            $value->homePi = '';
+            if($d) {
+                $value->homePi = $d->pi_id;
+            }
+            $d = collect($tPi)->where('team_id', $value->awayTeamId)->first();
+            $value->awayPi = '';
+            if($d) {
+                $value->awayPi = $d->pi_id;
+            }
+            $value->audio = 0;
+            $d = collect($audio)->where('b_id', $value->id)->first();
+            if($d) {
+                $value->audio = $d->audio;
+            }
+        }
+        return compact('data');
+    }
+
+    public function updateTournamentPiData(Request $request)
+    {
+        $data = [];
+        if(!($request->homePi === null || $request->homePi === '') && !($request->homePi === null || $request->homePi === '')) {
+            $sql = 'SELECT id FROM iteam_tournament_audio WHERE b_id=:id';
+            $d = DB::connection('mysql_video')->select($sql, ['id' => $request->id]);
+            if($d) {
+                $sql = 'UPDATE iteam_tournament_audio SET audio=:audio WHERE id=:id';
+                DB::connection('mysql_video')->update($sql, [
+                    'id' => $d[0]->id,
+                    'audio' => $request->audio
+                ]);
+            } else {
+                $sql = 'INSERT INTO iteam_tournament_audio (b_id, audio) VALUES (:id, :audio)';
+                DB::connection('mysql_video')->insert($sql, [
+                    'id' => $request->id,
+                    'audio' => $request->audio
+                ]);
+            }
+        }
+        $sql = 'SELECT id, pi_id FROM iteam_tournament_pi WHERE team_id=:homeTeamId';
+        $d = DB::connection('mysql_video')->select($sql, ['homeTeamId' => $request->homeTeamId]);
+        if($d) {
+            if(!($request->homePi === null || $request->homePi === '')) {
+                if($d[0]->pi_id === $request->homePi) {
+                    $result = 1;
+                } else {
+                    $sql = 'UPDATE iteam_tournament_pi SET pi_id=:homePi WHERE id=:id';
+                    $result = DB::connection('mysql_video')->update($sql, [
+                        'id' => $d[0]->id,
+                        'homePi' => $request->homePi
+                    ]);
+                }
+            } else {
+                $sql = 'DELETE FROM iteam_tournament_pi WHERE id=:id';
+                $result = DB::connection('mysql_video')->delete($sql, [
+                    'id' => $d[0]->id
+                ]);
+            }
+        } else {
+            if(!($request->homePi === null || $request->homePi === '')) {
+                $sql = 'INSERT INTO iteam_tournament_pi (team_id, pi_id) VALUES (:homeTeamId, :homePi)';
+                $result = DB::connection('mysql_video')->insert($sql, [
+                    'homeTeamId' => $request->homeTeamId,
+                    'homePi' => $request->homePi
+                ]);
+            } else {
+                $result = 1;
+            }
+        }
+        if($result) {
+            if($request->homeTeamId !== $request->awayTeamId) {
+                $sql = 'SELECT id, pi_id FROM iteam_tournament_pi WHERE team_id=:awayTeamId';
+                $d = DB::connection('mysql_video')->select($sql, ['awayTeamId' => $request->awayTeamId]);
+                if($d) {
+                    if(!($request->awayPi === null || $request->awayPi === '')) {
+                        if($d[0]->pi_id === $request->awayPi) {
+                            $result = 1;
+                        } else {
+                            $sql = 'UPDATE iteam_tournament_pi SET pi_id=:awayPi WHERE id=:id';
+                            $result = DB::connection('mysql_video')->update($sql, [
+                                'id' => $d[0]->id,
+                                'awayPi' => $request->awayPi
+                            ]);
+                        }
+                    } else {
+                        $sql = 'DELETE FROM iteam_tournament_pi WHERE id=:id';
+                        $result = DB::connection('mysql_video')->delete($sql, [
+                            'id' => $d[0]->id
+                        ]);
+                    }
+                } else {
+                    if(!($request->awayPi === null || $request->awayPi === '')) {
+                        $sql = 'INSERT INTO iteam_tournament_pi (team_id, pi_id) VALUES (:awayTeamId, :awayPi)';
+                        $result = DB::connection('mysql_video')->insert($sql, [
+                            'awayTeamId' => $request->awayTeamId,
+                            'awayPi' => $request->awayPi
+                        ]);
+                    } else {
+                        $result = 1;
+                    }
+                }
+                if($result) {
+                    $data['errorCode'] = 'er0000';
+                } else {
+                    $data['errorCode'] = 'er0001';
+                }
+            } else {
+                $data['errorCode'] = 'er0000';
+            }
+        } else {
+            $data['errorCode'] = 'er0001';
+        }
+        return compact('data');
+    }
+
+    public function getTmViewData(Request $request)
+    {
+        $data = [];
+        $data['errorCode'] = 'er0000';
+        $sql = 'SELECT timezone FROM tournament_battle AS t LEFT JOIN tournament AS tm ON t.tournamentId=tm.id WHERE t.id=:id';
+        $t = DB::connection('mysql')->select($sql, ['id' => $request->id]);
+        $sql = 'SELECT tm.name AS tournamentName, t.tournamentId, t.groupId, g.groupName, t.homeTeamId, t.awayTeamId, t.sequence, t.isNetworkGame, hs.name AS homeStoreName, ws.name AS awayStoreName FROM tournament_battle AS t LEFT JOIN tournament AS tm ON tm.id=t.tournamentId LEFT JOIN tournament_group AS g ON g.id=t.groupId INNER JOIN ( SELECT id, name FROM store ) AS hs ON hs.id=t.homeStoreId INNER JOIN ( SELECT id, name FROM store ) AS ws ON ws.id=t.awayStoreId WHERE t.id=:id';
+        /*$sql = 'SELECT lg.name AS leagueName, g.groupName, l.homeTeamId, l.awayTeamId, l.sequence, l.isNetworkGame, DATE_ADD(l.matchDate, INTERVAL :timezone hour) AS matchDate FROM league_battle AS l LEFT JOIN league AS lg ON lg.id=l.leagueId LEFT JOIN league_group AS g ON g.id=l.groupId WHERE l.id=:id';*/
+        $data['data'] = DB::connection('mysql')->select($sql, ['id' => $request->id]);
+        $sql = 'SELECT m.teamId, u.name, u.nickName FROM tournament_teammember AS m LEFT JOIN users AS u ON u.id=m.userId WHERE tournamentId=:id AND groupId=:groupId';
+        $tTeam = DB::connection('mysql')->select($sql, ['id' => $data['data'][0]->tournamentId, 'groupId' => $data['data'][0]->groupId]);
+        $h_player = [];
+        $w_player = [];
+        foreach ($tTeam as $key => $value) {
+            if($value->teamId === $data['data'][0]->homeTeamId) {
+                array_push($h_player, base64_decode($value->name));
+            }
+            if($value->teamId === $data['data'][0]->awayTeamId) {
+                array_push($w_player, base64_decode($value->name));
+            }
+        }
+        $data['team'] = [];
+        $data['team'][0] = [
+            'storeName' => $data['data'][0]->homeStoreName,
+            'player' => $h_player,
+            'row' => 0,
+            'pi' => 0,
+            'status' => [true, true]
+        ];
+        $data['team'][1] = [
+            'storeName' => $data['data'][0]->awayStoreName,
+            'player' => $w_player,
+            'row' => 0,
+            'pi' => 0,
+            'status' => [false, false]
+        ];
+        $sql = 'SELECT pi_id FROM iteam_tournament_pi WHERE team_id=:homeTeamId';
+        $homePi = DB::connection('mysql_video')->select($sql, ['homeTeamId' => $data['data'][0]->homeTeamId]);
+        if($homePi) {
+            $data['team'][0]['pi'] = $homePi[0]->pi_id;
+        }
+        $sql = 'SELECT pi_id FROM iteam_tournament_pi WHERE team_id=:awayTeamId';
+        $awayPi = DB::connection('mysql_video')->select($sql, ['awayTeamId' => $data['data'][0]->awayTeamId]);
+        if($awayPi) {
+            $data['team'][1]['pi'] = $awayPi[0]->pi_id;
+        }
+        $sql = 'SELECT audio FROM iteam_tournament_audio WHERE b_id=:id';
+        $audio = DB::connection('mysql_video')->select($sql, ['id' => $request->id]);
+        if($audio) {
+            $data['audio'] = $audio[0]->audio;
+        } else {
+            $data['audio'] = 0;
+        }
         return compact('data');
     }
 

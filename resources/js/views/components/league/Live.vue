@@ -151,7 +151,7 @@ export default {
                     })
                     .then(response => {
                         let data = response.data.data
-                        console.log(data)
+                        //console.log(data)
                         if (data.errorCode === 'er0000') {
                             this.battleData = data.data
                             this.changeAppLoadingStatus(false)

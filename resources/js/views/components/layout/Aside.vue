@@ -24,13 +24,13 @@
                         {{ $store.state.langData.cont.slideMenu.Tournament }}
                     </span>
                 </template>
-                <el-menu-item index="/tournament/list">
+                <!-- <el-menu-item index="/tournament/list">
                     <i class="el-icon-thirdlist"></i>
                     <span slot="title">
                         {{ $store.state.langData.cont.slideMenu.List }}
                     </span>
-                </el-menu-item>
-                <el-menu-item index="/tournament/live">
+                </el-menu-item> -->
+                <el-menu-item @click.native.prevent="tournamentLive">
                     <i class="el-icon-thirdlive"></i>
                     <span slot="title">
                         {{ $store.state.langData.cont.slideMenu.Live }}
@@ -73,6 +73,9 @@ export default {
         ...mapActions(['changeDrawerStatus', 'setMe', 'changeLoginStatus']),
         leagueLive() {
             window.location.href = `/league/live`
+        },
+        tournamentLive() {
+            window.location.href = `/tournament/live`
         },
         logout() {
             this.changeLoginStatus(true)

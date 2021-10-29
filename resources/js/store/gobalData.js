@@ -7,7 +7,8 @@ export default {
         isView: false,
         wsTest2: {
             ip: '52.199.5.88',
-            port: 4649
+            port: 4649,
+            tmPort: 2410
         },
         wsTest1: {
             ip: '52.199.5.88',
@@ -15,7 +16,8 @@ export default {
         },
         ws: {
             ip: '54.250.135.124',
-            port: 4649
+            port: 4649,
+            tmPort: 2410
         },
         server: '52.196.115.119'
     },

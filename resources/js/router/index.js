@@ -21,6 +21,7 @@ import TournamentLive from '../views/components/tournament/Live'
 import LeagueLive from '../views/components/league/Live'
 
 
+import Tm1 from '../views/components/view/Tm1'
 import Tm from '../views/components/view/Tm'
 import Audio from '../views/components/view/Audio'
 import Eg from '../views/components/view/Eg'
@@ -154,7 +155,7 @@ export default new VueRouter({
                     path: 'live',
                     name: 'TournamentLive',
                     component: TournamentLive,
-                    props: (route) => ({ id: route.query.id })
+                    props: (route) => ({ id: route.query.id, groupId: route.query.groupId })
                 }
             ]
         },
@@ -172,9 +173,9 @@ export default new VueRouter({
             path: '/view',
             component: View,
             children: [{
-                path: 'tm',
-                name: 'Tm',
-                component: Tm,
+                path: 'tm1',
+                name: 'Tm1',
+                component: Tm1,
                 props: (route) => ({ id: route.query.id, match: route.query.match })
             }, {
                 path: 'audio',
@@ -195,6 +196,11 @@ export default new VueRouter({
                 path: 'lg',
                 name: 'Lg',
                 component: Lg,
+                props: (route) => ({ id: route.query.id })
+            }, {
+                path: 'tm',
+                name: 'Tm',
+                component: Tm,
                 props: (route) => ({ id: route.query.id })
             }]
         },

@@ -31,6 +31,11 @@ Route::post('/setAudio', 'ApiEquipmentController@setAudio')->name('setAudio');
 
 
 Route::get('/getTournamentListData', 'ApiTournamentController@getTournamentListData')->name('getTournamentListData');
+Route::get('/getTournamentGroupData', 'ApiTournamentController@getTournamentGroupData')->name('getTournamentGroupData');
+Route::get('/getTournamentBattleData', 'ApiTournamentController@getTournamentBattleData')->name('getTournamentBattleData');
+Route::post('/updateTournamentPiData', 'ApiTournamentController@updateTournamentPiData')->name('updateTournamentPiData');
+Route::get('/getTmViewData', 'ApiTournamentController@getTmViewData')->name('getTmViewData');
+
 Route::post('/addTournament', 'ApiTournamentController@addTournament')->name('addTournament');
 Route::post('/updateTournament', 'ApiTournamentController@updateTournament')->name('updateTournament');
 Route::delete('/deleteTournament', 'ApiTournamentController@deleteTournament')->name('deleteTournament');

@@ -2,13 +2,14 @@
     <div class="header no-user-select">
         <div class="h_left">
             <svg xmlns="http://www.w3.org/2000/svg" viewBox="0,0,376,77">
-                <image xlink:href="../../../../../sass/images/stream_logo.png" height="100%" />
+                <image v-if="type === 'l'" xlink:href="../../../../../sass/images/stream_logo.png" height="100%" />
+                <image v-else xlink:href="../../../../../sass/images/tournament_logo_hori.png" height="100%" />
                 <!-- <text x="100" y="60" font-size="48" fill="#fff" letter-spacing="3">{{ fidoType }}{{ onlineMark }}</text> -->
             </svg>
         </div>
         <div class="h_center">
             <svg xmlns="http://www.w3.org/2000/svg" viewBox="0,0,1153,77">
-                <text v-if="type !== 'l'" x="50%" y="60" text-anchor="middle" font-size="42" fill="#fff" letter-spacing="3">
+                <text v-if="!(type === 'l' || type === 'tm')" x="50%" y="60" text-anchor="middle" font-size="42" fill="#fff" letter-spacing="3">
                     {{ name }}
                 </text>
                 <text v-else letter-spacing="3">

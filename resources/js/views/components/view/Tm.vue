@@ -1,7 +1,7 @@
 <template>
     <div class="view no-user-select">
         <div v-if="show" class="view-lg view-tm">
-        	<f-header :name="name" :groupName="groupName" :sequence="sequence" :date="date" :type="'l'" :online="online" />
+        	<f-header :name="name" :groupName="groupName" :sequence="sequence" :date="date" :type="'tm'" :online="online" />
         	<div v-for="(iteam, index) in team" :key="index" :class="['video-area', iteam.status[0] ? 'active' : '', boredrColor, 'game' ]">
                 <template v-if="iteam.pi !== 0">
                     <div class="video-2">

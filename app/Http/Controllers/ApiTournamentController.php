@@ -293,32 +293,40 @@ class ApiTournamentController extends Controller
         $data['errorCode'] = 'er0000';
         $sql = 'SELECT timezone FROM tournament_battle AS t LEFT JOIN tournament AS tm ON t.tournamentId=tm.id WHERE t.id=:id';
         $t = DB::connection('mysql')->select($sql, ['id' => $request->id]);
-        $sql = 'SELECT tm.name AS tournamentName, t.tournamentId, t.groupId, g.groupName, t.homeTeamId, t.awayTeamId, t.sequence, t.isNetworkGame, hs.name AS homeStoreName, ws.name AS awayStoreName FROM tournament_battle AS t LEFT JOIN tournament AS tm ON tm.id=t.tournamentId LEFT JOIN tournament_group AS g ON g.id=t.groupId INNER JOIN ( SELECT id, name FROM store ) AS hs ON hs.id=t.homeStoreId INNER JOIN ( SELECT id, name FROM store ) AS ws ON ws.id=t.awayStoreId WHERE t.id=:id';
+        $sql = 'SELECT tm.name AS tournamentName, t.tournamentId, t.groupId, g.groupName, t.homeTeamId, t.awayTeamId, t.sequence, t.isNetworkGame, hs.name AS homeStoreName, ws.name AS awayStoreName, hs.city AS homeStoreCity, ws.city AS awayStoreCity FROM tournament_battle AS t LEFT JOIN tournament AS tm ON tm.id=t.tournamentId LEFT JOIN tournament_group AS g ON g.id=t.groupId INNER JOIN ( SELECT id, name, city FROM store ) AS hs ON hs.id=t.homeStoreId INNER JOIN ( SELECT id, name, city FROM store ) AS ws ON ws.id=t.awayStoreId WHERE t.id=:id';
         /*$sql = 'SELECT lg.name AS leagueName, g.groupName, l.homeTeamId, l.awayTeamId, l.sequence, l.isNetworkGame, DATE_ADD(l.matchDate, INTERVAL :timezone hour) AS matchDate FROM league_battle AS l LEFT JOIN league AS lg ON lg.id=l.leagueId LEFT JOIN league_group AS g ON g.id=l.groupId WHERE l.id=:id';*/
         $data['data'] = DB::connection('mysql')->select($sql, ['id' => $request->id]);
-        $sql = 'SELECT m.teamId, u.name, u.nickName FROM tournament_teammember AS m LEFT JOIN users AS u ON u.id=m.userId WHERE tournamentId=:id AND groupId=:groupId';
+        $sql = 'SELECT m.teamId, u.name, u.nickName, m.info1 FROM tournament_teammember AS m LEFT JOIN users AS u ON u.id=m.userId WHERE tournamentId=:id AND groupId=:groupId';
         $tTeam = DB::connection('mysql')->select($sql, ['id' => $data['data'][0]->tournamentId, 'groupId' => $data['data'][0]->groupId]);
         $h_player = [];
+        $h_info = [];
         $w_player = [];
+        $w_info = [];
         foreach ($tTeam as $key => $value) {
             if($value->teamId === $data['data'][0]->homeTeamId) {
                 array_push($h_player, base64_decode($value->name));
+                array_push($h_info, $value->info1);
             }
             if($value->teamId === $data['data'][0]->awayTeamId) {
                 array_push($w_player, base64_decode($value->name));
+                array_push($w_info, $value->info1);
             }
         }
         $data['team'] = [];
         $data['team'][0] = [
             'storeName' => $data['data'][0]->homeStoreName,
+            'city' => $data['data'][0]->homeStoreCity,
             'player' => $h_player,
+            'info' => $h_info,
             'row' => 0,
             'pi' => 0,
             'status' => [true, true]
         ];
         $data['team'][1] = [
             'storeName' => $data['data'][0]->awayStoreName,
+            'city' => $data['data'][0]->awayStoreCity,
             'player' => $w_player,
+            'info' => $w_info,
             'row' => 0,
             'pi' => 0,
             'status' => [false, false]

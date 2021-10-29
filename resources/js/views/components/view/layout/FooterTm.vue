@@ -9,7 +9,10 @@
                     <rect class="c" width="4.815" height="4.815" transform="translate(493.591 1045.19) rotate(45)" />
                 </g>
                 <text class="d" x="25" y="18" font-size="16" letter-spacing="3">{{ data[0].teamName }}</text>
-                <text class="c" x="47.5" y="75" font-size="28" text-anchor="middle">主隊</text>
+                <text class="c" x="47.5" y="65"  text-anchor="middle">
+                    <tspan font-size="32">{{ data[0].info[0] }}</tspan>
+                    <tspan x="47.5" y="85" font-size="16">{{ data[0].city }}</tspan>
+                </text>
                 <text class="c" x="60%" y="65" text-anchor="middle">
                     <tspan v-if="data[0].player.length > 2" font-size="24">
                         {{ data[0].player[data[0].row] }}
@@ -60,7 +63,10 @@
                     <rect class="c" width="4.815" height="4.815" transform="translate(493.591 1045.19) rotate(45)" />
                 </g>
                 <text class="d" x="25" y="18" font-size="16" letter-spacing="3">{{ data[1].teamName }}</text>
-                <text class="c" x="47.5" y="75" font-size="28" text-anchor="middle">客隊</text>
+                <text class="c" x="47.5" y="65"  text-anchor="middle">
+                    <tspan font-size="32">{{ data[1].info[0] }}</tspan>
+                    <tspan x="47.5" y="85" font-size="16">{{ data[1].city }}</tspan>
+                </text>
                 <text class="c" x="60%" y="65" text-anchor="middle">
                     <tspan v-if="data[1].player.length > 2" font-size="24">
                         {{ data[1].player[data[1].row] }}

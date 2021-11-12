@@ -38,13 +38,15 @@ class ApiEquipmentController extends Controller
         		$value->d_name = $d->name;
         		if($value->store_id) {
         			$s = collect($store)->where('id', $value->store_id)->first();
-        			$value->s_name = $s->name.'('.$s->fidoStoreId.')';
+                    if($s) {
+                        $value->s_name = $s->name.'('.$s->fidoStoreId.')';
+                    }
         		} else {
         			$value->s_name = '';
         		}
         	}
         }
-
+        
         return compact('data');
     }
 

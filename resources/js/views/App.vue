@@ -22,7 +22,7 @@ import Aside from './components/layout/Aside.vue'
 import Main from './components/layout/Main.vue'
 export default {
     components: { Aside, Main },
-    props: ['text'],
+    props: ['text', 'ev'],
     data() {
         return {
             direction: 'ltr'
@@ -30,6 +30,8 @@ export default {
     },
     created() {
         this.setLangCont(this.text)
+        this.setEV(this.ev)
+        console.log(this.$store.state.gobalData.ev)
         var path = this.$route.path
         var paths = path.split('/')
         if (paths[1] === 'view') {
@@ -54,7 +56,7 @@ export default {
     }),
     mounted() {},
     methods: {
-        ...mapActions(['setLangCont', 'changeLoginStatus', 'changeDrawerStatus', 'setMe', 'changePageStatus'])
+        ...mapActions(['setLangCont', 'changeLoginStatus', 'changeDrawerStatus', 'setMe', 'changePageStatus', 'setEV'])
     },
     watch: {}
 }

@@ -255,10 +255,17 @@ export default {
             })
         },
         webSocket() {
+            let ev = this.$store.state.gobalData.ev
         	if (this.ws === null) {
+                let urlData = this.$store.state.gobalData.ws
+                if(ev === 'test1') {
+                    urlData = this.$store.state.gobalData.wsTest1
+                } else if(ev === 'test2') {
+                    urlData = this.$store.state.gobalData.wsTest2
+                }
                 //let urlData = this.$store.state.gobalData.ws
                 //let urlData = this.$store.state.gobalData.wsTest1
-                let urlData = this.$store.state.gobalData.wsTest2
+                //let urlData = this.$store.state.gobalData.wsTest2
                 this.ws = new WebSocket(`ws://${urlData.ip}:${urlData.tmPort}/Tournament`)
             }
 

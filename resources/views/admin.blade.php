@@ -11,7 +11,7 @@
     </head>
     <body>
         <div id="app">
-            <app text="{{ $texts }}"></app>
+            <app text="{{ $texts }}" ev="{{ $ev }}"></app>
         </div>
         <script src="/js/manifest.js"></script>
         <script src="/js/vendor.js"></script>

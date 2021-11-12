@@ -12,14 +12,16 @@ export default {
         },
         wsTest1: {
             ip: '52.199.5.88',
-            port: 4650
+            port: 4650,
+            tmPort: 2410
         },
         ws: {
             ip: '54.250.135.124',
             port: 4649,
             tmPort: 2410
         },
-        server: '52.196.115.119'
+        server: '52.196.115.119',
+        ev: 'official'
     },
     getters: {
         isTouchDevice(state) {
@@ -47,6 +49,9 @@ export default {
         },
         changePageStatus(state, val) {
             state.isView = val
+        },
+        setEV(state, val) {
+            state.ev = val
         }
     },
     actions: {
@@ -67,6 +72,9 @@ export default {
         },
         changePageStatus: ({ commit }, val) => {
             commit('changePageStatus', val)
+        },
+        setEV: ({ commit }, val) => {
+            commit('setEV', val)
         }
     }
 }

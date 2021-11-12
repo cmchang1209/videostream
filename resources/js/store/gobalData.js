@@ -13,7 +13,7 @@ export default {
         wsTest1: {
             ip: '52.199.5.88',
             port: 4650,
-            tmPort: 2410
+            tmPort: 2411
         },
         ws: {
             ip: '54.250.135.124',

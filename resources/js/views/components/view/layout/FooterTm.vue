@@ -47,9 +47,10 @@
                         <text x="70%" y="150" font-size="64" fill="#EBDA6B" text-anchor="start">{{ leg[1] }}</text>
                     </template>
                     <template v-else>
-                        <text x="30%" y="110" font-size="64" fill="#EBDA6B" text-anchor="end">{{ leg[0] }}</text>
-                        <text class="c" x="50%" y="110" font-size="54" text-anchor="middle">LEG</text>
-                        <text x="70%" y="110" font-size="64" fill="#EBDA6B" text-anchor="start">{{ leg[1] }}</text>
+                        <text class="c" x="50%" y="50" font-size="32" text-anchor="middle">{{ ruleName }}</text>
+                        <text x="30%" y="130" font-size="64" fill="#EBDA6B" text-anchor="end">{{ leg[0] }}</text>
+                        <text class="c" x="50%" y="130" font-size="54" text-anchor="middle">LEG</text>
+                        <text x="70%" y="130" font-size="64" fill="#EBDA6B" text-anchor="start">{{ leg[1] }}</text>
                     </template>
                 </g>
             </svg>
@@ -93,7 +94,7 @@
 <script>
 export default {
     components: {},
-    props: ['data', 'gameStatus', 'first', 'set', 'leg'],
+    props: ['data', 'gameStatus', 'first', 'set', 'leg', 'ruleName'],
     sockets: {},
     data() {
         return {}

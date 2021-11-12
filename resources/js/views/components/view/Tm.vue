@@ -28,7 +28,7 @@
                     <h1 style="color: white;">尚未設定直播設備</h1>
                 </div>
             </div>
-        	<f-footer :data="team" :gameStatus="gameStatus" :first="first" :set="set" :leg="leg" @changShow="changShowModel" />
+        	<f-footer :data="team" :gameStatus="gameStatus" :first="first" :set="set" :leg="leg" :ruleName="ruleName" @changShow="changShowModel" />
         </div>
         <div v-else class="view-lg" style="display: flex; align-items: center; justify-content: center">
             <h1 style="color: white;" v-show="showErrorMsg">無相關賽事</h1>
@@ -71,7 +71,8 @@ export default {
             autoRunCt: 1,
             gameCt: 0,
             audio: 0,
-            ws: null
+            ws: null,
+            ruleName: ''
         }
     },
     created() {
@@ -114,12 +115,14 @@ export default {
                 })
                 .then(response => {
                     let data = response.data.data
+                    console.log(data)
                     if (data.errorCode === 'er0000') {
                         this.show = true
                         this.online = data.data[0].isNetworkGame
                         this.name = data.data[0].tournamentName
                         this.groupName = data.data[0].groupName
                         this.sequence = data.data[0].sequence
+                        this.ruleName = data.data[0].ruleName
                         //this.date = data.data[0].matchDate
                         this.audio = data.audio
                         this.team = data.team

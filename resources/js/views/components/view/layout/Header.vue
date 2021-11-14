@@ -13,7 +13,8 @@
                     {{ name }}
                 </text>
                 <text v-else letter-spacing="3">
-                    <tspan x="50%" y="60" text-anchor="middle" font-size="42" fill="#fff">{{ name }} {{ groupName }} 第 {{ sequence }} 場</tspan>
+                    <tspan v-if="type === 'l'" x="50%" y="60" text-anchor="middle" font-size="42" fill="#fff">{{ name }} {{ groupName }} 第 {{ sequence }} 場</tspan>
+                    <tspan v-else x="50%" y="60" text-anchor="middle" font-size="42" fill="#fff">{{ name }} {{ groupName }}〔 {{ roundName }} 〕</tspan>
                     <!-- <tspan x="50%" y="70" text-anchor="middle" font-size="24" fill="#16d9ff">{{ groupName }} ( 第 {{ sequence }} 場 )</tspan> -->
                 </text>
             </svg>
@@ -31,7 +32,7 @@
 <script>
 export default {
     components: {},
-    props: ['name', 'groupName', 'sequence', 'type', 'online', 'date'],
+    props: ['name', 'groupName', 'sequence', 'roundName', 'type', 'online', 'date'],
     sockets: {},
     data() {
         return {}

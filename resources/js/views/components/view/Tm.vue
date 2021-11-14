@@ -1,7 +1,7 @@
 <template>
     <div class="view no-user-select">
         <div v-if="show" class="view-lg view-tm">
-        	<f-header :name="name" :groupName="groupName" :sequence="sequence" :date="date" :type="'tm'" :online="online" />
+        	<f-header :name="name" :groupName="groupName" :sequence="sequence" :roundName="roundName" :date="date" :type="'tm'" :online="online" />
         	<div v-for="(iteam, index) in team" :key="index" :class="['video-area', iteam.status[0] ? 'active' : '', boredrColor, 'game' ]">
                 <template v-if="iteam.pi !== 0">
                     <div class="video-2">
@@ -72,7 +72,8 @@ export default {
             gameCt: 0,
             audio: 0,
             ws: null,
-            ruleName: ''
+            ruleName: '',
+            roundName: ''
         }
     },
     created() {
@@ -115,7 +116,7 @@ export default {
                 })
                 .then(response => {
                     let data = response.data.data
-                    console.log(data)
+                    //console.log(data)
                     if (data.errorCode === 'er0000') {
                         this.show = true
                         this.online = data.data[0].isNetworkGame
@@ -123,6 +124,7 @@ export default {
                         this.groupName = data.data[0].groupName
                         this.sequence = data.data[0].sequence
                         this.ruleName = data.data[0].ruleName
+                        this.roundName = data.data[0].roundName
                         //this.date = data.data[0].matchDate
                         this.audio = data.audio
                         this.team = data.team

@@ -82,6 +82,7 @@ export default {
     computed: {
     	audioSrc() {
             let pi = 0
+            //console.log(this.team)
             if (this.team.length > 0) {
                 if (this.team[0].pi !== 0 && this.team[1].pi !== 0) {
                     pi = this.team[this.audio].pi
@@ -92,6 +93,8 @@ export default {
                         }
                     })
                 }
+                //console.log(`http://${document.location.hostname}/view/audio?id=${pi}`)
+                //return `http://${document.location.hostname}/view/audio?id=${pi}`
             }
             return `http://${document.location.hostname}/view/audio?id=${pi}`
         },

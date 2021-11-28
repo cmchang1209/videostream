@@ -22,7 +22,7 @@
         </div>
         <div class="h_right">
             <svg xmlns="http://www.w3.org/2000/svg" viewBox="0,0,376,77">
-                <text x="376" y="60" text-anchor="end" font-size="42" fill="#fff" letter-spacing="3">
+                <text x="376" y="60" text-anchor="end" font-size="34" fill="#fff" letter-spacing="3">
                     {{ today }}
                 </text>
             </svg>
@@ -35,20 +35,26 @@ export default {
     props: ['name', 'groupName', 'sequence', 'roundName', 'type', 'online', 'date'],
     sockets: {},
     data() {
-        return {}
+        return {
+            now: new Date()
+        }
     },
     created() {
+        setInterval(() => {
+            this.now = new Date()
+        }, 1000)
     },
     computed: {
         today() {
-            switch (this.type) {
+            /*switch (this.type) {
                 case 'l':
                     return (new Date(this.date)).toString().split(' ').splice(1, 3).join(' ')
                     break
                 default:
-                    return (new Date()).toString().split(' ').splice(1, 3).join(' ')
+                    return this.now.toString().split(' ').splice(1, 4).join(' ')
                     break
-            }
+            }*/
+            return this.now.toString().split(' ').splice(1, 4).join(' ')
         },
         fidoType() {
             switch (this.type) {

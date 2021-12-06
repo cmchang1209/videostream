@@ -125,6 +125,7 @@ export default {
                 })
                 .then(response => {
                     let data = response.data.data
+                    console.log(data)
                     if (data.errorCode === 'er0000') {
                         this.form = data.data
                         this.selected.distributor.value = this.form.distributor

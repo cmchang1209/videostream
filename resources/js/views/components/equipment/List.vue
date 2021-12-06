@@ -22,6 +22,8 @@
             </el-table-column>
             <el-table-column prop="d_name" :label="$store.state.langData.cont.pageFn.table.Distributor" v-if="$store.state.gobalData.me.roleCode === 1">
             </el-table-column>
+            <el-table-column prop="machine_id" :label="$store.state.langData.cont.pageFn.table.Machine" v-if="$store.state.gobalData.me.roleCode === 1">
+            </el-table-column>
             <el-table-column prop="mac" :label="$store.state.langData.cont.pageFn.table.MAC" v-if="$store.state.gobalData.me.roleCode === 1">
             </el-table-column>
             <el-table-column :label="$store.state.langData.cont.pageFn.table.IP">

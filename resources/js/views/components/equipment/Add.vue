@@ -9,6 +9,9 @@
             <el-form-item :label="$store.state.langData.cont.pageFn.table.Store" prop="store">
                 <el-autocomplete ref="store" v-model="form.store" clearable :fetch-suggestions="querySearchStoreAsync" :placeholder="$store.state.langData.cont.msg.placeholder.ph0002" @select="handleStoreSelect" @blur="handleStoreBlur" @clear="handleStoreClear" style="width: 100%"></el-autocomplete>
             </el-form-item>
+            <el-form-item :label="$store.state.langData.cont.pageFn.table.Machine" prop="machineId">
+                <el-autocomplete ref="machine" v-model="form.machineId" clearable :fetch-suggestions="querySearchMachineAsync" :placeholder="$store.state.langData.cont.msg.placeholder.ph0002" @select="handleMachineSelect" @blur="handleMachineBlur" @clear="handleMachineClear" style="width: 100%"></el-autocomplete>
+            </el-form-item>
             <el-form-item :label="$store.state.langData.cont.pageFn.table.MAC" prop="mac">
                 <el-input v-model="form.mac"></el-input>
             </el-form-item>
@@ -90,6 +93,7 @@ export default {
                 distributorId: '',
                 store: '',
                 storeId: '',
+                machineId: '',
                 description: `Raspberry Pi 4 Model B 8G\nSD:32G\nUbuntu 20.04.2 LTS (GNU/Linux 5.4.0-1034-raspi aarch64)`
             },
             selected: {
@@ -99,6 +103,11 @@ export default {
                 },
                 store: {
                     distributorId: '',
+                    value: '',
+                    clear: false
+                },
+                machine: {
+                    storeId: '',
                     value: '',
                     clear: false
                 }
@@ -213,6 +222,56 @@ export default {
             setTimeout(() => {
                 this.selected.store.clear = false
             }, 500)
+        },
+        querySearchMachineAsync(queryString, cb) {
+            var restaurants = []
+            if (this.selected.machine.clear) return
+            if (this.form.storeId !== '') {
+                axios
+                    .get('/api/getMachineData', {
+                        params: { storeId: this.form.storeId, name: queryString }
+                    })
+                    .then(response => {
+                        let data = response.data.data
+                        if (data.errorCode === 'er0000') {
+                            data.data.map(iteam => {
+                                var opt = {}
+                                opt.value = iteam.id
+                                opt.id = iteam.id
+                                opt.storeId = iteam.storeId
+                                opt.distributorId = iteam.distributorId
+                                restaurants.push(opt)
+                            })
+                            cb(restaurants)
+                        }
+                    }).catch(error => {
+                        cb(restaurants)
+                        console.log(error)
+                    })
+            } else {
+                cb(restaurants)
+            }
+        },
+        handleMachineSelect(item) {
+            this.form.machineId = this.selected.machine.value = item.id
+            this.selected.machine.storeId = item.storeId
+        },
+        handleMachineBlur() {
+            this.form.machineId  = this.selected.machine.value
+        },
+        handleMachineClear() {
+            this.$refs.machine.$el.getElementsByTagName('input')[0].blur()
+            this.form.machineId = this.selected.machine.value = ''
+            this.selected.machine.storeId = ''
+            this.selected.machine.clear = true
+            setTimeout(() => {
+                this.selected.machine.clear = false
+            }, 500)
+        },
+        checkMachine() {
+            if (this.selected.machine.storeId !== this.form.storeId) {
+                this.handleMachineClear()
+            }
         },
         add() {
             this.$refs['ruleForm'].validate((valid) => {

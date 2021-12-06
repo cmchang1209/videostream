@@ -12,7 +12,7 @@ class ApiEquipmentController extends Controller
     	$data = [];
         $data['errorCode'] = 'er0000';
         if($request->distributor_id === null || $request->distributor_id === '') {
-        	$sql = 'SELECT pi.id AS id, pi.no, pi.mac, pi.name, pi.password, pi.store_id, pi.distributor_id, cpi.status AS status, cpi.ip, cpi.version FROM iteam_pi AS pi LEFT JOIN iteam_connect_pi AS cpi ON cpi.pi_id=pi.id WHERE pi.is_delete=0 ORDER BY cpi.status DESC, pi.id ASC';
+        	$sql = 'SELECT pi.id AS id, pi.no, pi.mac, pi.name, pi.password, pi.store_id, pi.distributor_id, pi.machine_id, cpi.status AS status, cpi.ip, cpi.version FROM iteam_pi AS pi LEFT JOIN iteam_connect_pi AS cpi ON cpi.pi_id=pi.id WHERE pi.is_delete=0 ORDER BY cpi.status DESC, pi.id ASC';
         	$data['data'] = DB::connection('mysql')->select($sql);
 
         	if($data['data']) {
@@ -20,7 +20,7 @@ class ApiEquipmentController extends Controller
         		$store = DB::connection('mysql')->select($sql);
         	}
         } else {
-        	$sql = 'SELECT pi.id AS id, pi.no, pi.mac, pi.name, pi.password, pi.store_id, pi.distributor_id, cpi.status AS status, cpi.ip, cpi.version FROM iteam_pi AS pi LEFT JOIN iteam_connect_pi AS cpi ON cpi.pi_id=pi.id WHERE pi.distributor_id=:distributor_id AND pi.is_delete=0 ORDER BY cpi.status DESC, pi.id ASC';
+        	$sql = 'SELECT pi.id AS id, pi.no, pi.mac, pi.name, pi.password, pi.store_id, pi.distributor_id, pi.machine_id, cpi.status AS status, cpi.ip, cpi.version FROM iteam_pi AS pi LEFT JOIN iteam_connect_pi AS cpi ON cpi.pi_id=pi.id WHERE pi.distributor_id=:distributor_id AND pi.is_delete=0 ORDER BY cpi.status DESC, pi.id ASC';
         	$data['data'] = DB::connection('mysql')->select($sql, ['distributor_id' => $request->distributor_id]);
 
         	if($data['data']) {
@@ -94,6 +94,28 @@ class ApiEquipmentController extends Controller
         return compact('data');
     }
 
+    public function getMachineData(Request $request)
+    {
+        $data = [];
+        $data['errorCode'] = 'er0000';
+        $data['data'] = [];
+        $sql = 'SELECT id, storeId, distributorId  FROM machine WHERE storeId=:storeId';
+        $machine = DB::connection('mysql')->select($sql, ['storeId' => $request->storeId]);
+        if($machine) {
+            foreach ($machine as $key => $value) {
+                if($request->name) {
+                    if(strpos(strtolower($value->id), strtolower($request->name)) !== false) {
+                        array_push($data['data'], ['id' => $value->id, 'value' => $value->id, 'storeId' => $value->storeId, 'distributorId' => $value->distributorId]);
+                    }
+                } else {
+                    array_push($data['data'], ['id' => $value->id, 'value' => $value->id, 'storeId' => $value->storeId, 'distributorId' => $value->distributorId]);
+                }
+            }
+        }
+
+        return compact('data');
+    }
+
     public function add(Request $request)
     {
     	$data = [];
@@ -114,13 +136,14 @@ class ApiEquipmentController extends Controller
     		//$no = $no.'-0001';
             $no = $no.'0001';
     	}
-    	$sql = 'INSERT INTO iteam_pi (mac, no, name, distributor_id, store_id, description) VALUES (:mac, :no, :name, :distributo, :store, :description)';
+    	$sql = 'INSERT INTO iteam_pi (mac, no, name, distributor_id, store_id, machine_id, description) VALUES (:mac, :no, :name, :distributo, :store, :machine, :description)';
     	$result = DB::connection('mysql')->insert($sql, [
     		'mac' => $request->mac,
     		'no' => $no,
     		'name' => $request->name,
     		'distributo' => $request->distributorId,
     		'store' => $request->storeId,
+            'machine' => $request->machineId,
     		'description' => $request->description
     	]);
     	if($result) {
@@ -161,13 +184,14 @@ class ApiEquipmentController extends Controller
     public function update(Request $request)
     {
         $data = [];
-        $sql = 'UPDATE iteam_pi SET mac=:mac, name=:name, password=:password, distributor_id=:distributor_id, store_id=:store_id, description=:description WHERE id=:id';
+        $sql = 'UPDATE iteam_pi SET mac=:mac, name=:name, password=:password, distributor_id=:distributor_id, store_id=:store_id, machine_id=:machine_id, description=:description WHERE id=:id';
         $result = DB::connection('mysql')->update($sql, [
             'mac' => $request->mac,
             'name' => $request->name,
             'password' => $request->password,
             'distributor_id' => $request->distributorId,
             'store_id' => $request->storeId,
+            'machine_id' => $request->machineId,
             'description' => $request->description,
             'id' => $request->id
         ]);

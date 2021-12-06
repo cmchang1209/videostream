@@ -25,6 +25,7 @@ return [
 		'Edit' => 'Edit',
 		'SN' => 'S/N',
 		'Store' => 'Store',
+		'Machine' => 'Machine',
 		'Distributor' => 'Distributor',
 		'MAC' => 'MAC',
 		'Status' => 'Status',

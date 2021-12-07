@@ -310,7 +310,7 @@ class ApiTournamentController extends Controller
         $data['errorCode'] = 'er0000';
         $sql = 'SELECT timezone FROM tournament_battle AS t LEFT JOIN tournament AS tm ON t.tournamentId=tm.id WHERE t.id=:id';
         $t = DB::connection('mysql')->select($sql, ['id' => $request->id]);
-        $sql = 'SELECT tm.name AS tournamentName, t.tournamentId, t.groupId, g.groupName, t.homeTeamId, t.awayTeamId, t.sequence, t.isNetworkGame, hs.name AS homeStoreName, ws.name AS awayStoreName, hs.city AS homeStoreCity, ws.city AS awayStoreCity, tr.name AS ruleName, t.roundName FROM tournament_battle AS t LEFT JOIN tournament AS tm ON tm.id=t.tournamentId LEFT JOIN tournament_group AS g ON g.id=t.groupId INNER JOIN ( SELECT id, name, city FROM store ) AS hs ON hs.id=t.homeStoreId INNER JOIN ( SELECT id, name, city FROM store ) AS ws ON ws.id=t.awayStoreId INNER JOIN tournament_rule AS tr ON tr.id=t.ruleId WHERE t.id=:id';
+        $sql = 'SELECT tm.name AS tournamentName, t.tournamentId, t.groupId, g.groupName, t.homeTeamId, t.awayTeamId, t.homeMachineId, t.awayMachineId, t.sequence, t.isNetworkGame, hs.name AS homeStoreName, ws.name AS awayStoreName, hs.city AS homeStoreCity, ws.city AS awayStoreCity, tr.name AS ruleName, t.roundName FROM tournament_battle AS t LEFT JOIN tournament AS tm ON tm.id=t.tournamentId LEFT JOIN tournament_group AS g ON g.id=t.groupId INNER JOIN ( SELECT id, name, city FROM store ) AS hs ON hs.id=t.homeStoreId INNER JOIN ( SELECT id, name, city FROM store ) AS ws ON ws.id=t.awayStoreId INNER JOIN tournament_rule AS tr ON tr.id=t.ruleId WHERE t.id=:id';
         /*$sql = 'SELECT lg.name AS leagueName, g.groupName, l.homeTeamId, l.awayTeamId, l.sequence, l.isNetworkGame, DATE_ADD(l.matchDate, INTERVAL :timezone hour) AS matchDate FROM league_battle AS l LEFT JOIN league AS lg ON lg.id=l.leagueId LEFT JOIN league_group AS g ON g.id=l.groupId WHERE l.id=:id';*/
         $data['data'] = DB::connection('mysql')->select($sql, ['id' => $request->id]);
         $sql = 'SELECT m.teamId, u.name, u.nickName, m.info1 FROM tournament_teammember AS m LEFT JOIN users AS u ON u.id=m.userId WHERE tournamentId=:id AND groupId=:groupId';
@@ -336,7 +336,7 @@ class ApiTournamentController extends Controller
             'player' => $h_player,
             'info' => $h_info,
             'row' => 0,
-            'pi' => 0,
+            'pi' => -1,
             'status' => [true, true]
         ];
         $data['team'][1] = [
@@ -345,18 +345,34 @@ class ApiTournamentController extends Controller
             'player' => $w_player,
             'info' => $w_info,
             'row' => 0,
-            'pi' => 0,
+            'pi' => -1,
             'status' => [false, false]
         ];
         $sql = 'SELECT pi_id FROM iteam_tournament_pi WHERE team_id=:homeTeamId';
         $homePi = DB::connection('mysql')->select($sql, ['homeTeamId' => $data['data'][0]->homeTeamId]);
         if($homePi) {
             $data['team'][0]['pi'] = $homePi[0]->pi_id;
+        } else {
+            if($data['data'][0]->homeMachineId !== '') {
+                $sql = 'SELECT id FROM iteam_pi WHERE machine_id=:homeMachineId';
+                $homePi = DB::connection('mysql')->select($sql, ['homeMachineId' => $data['data'][0]->homeMachineId]);
+                if($homePi) {
+                    $data['team'][0]['pi'] = $homePi[0]->id;
+                }
+            }
         }
         $sql = 'SELECT pi_id FROM iteam_tournament_pi WHERE team_id=:awayTeamId';
         $awayPi = DB::connection('mysql')->select($sql, ['awayTeamId' => $data['data'][0]->awayTeamId]);
         if($awayPi) {
             $data['team'][1]['pi'] = $awayPi[0]->pi_id;
+        } else {
+            if($data['data'][0]->awayMachineId !== '') {
+                $sql = 'SELECT id FROM iteam_pi WHERE machine_id=:awayMachineId';
+                $awayPi = DB::connection('mysql')->select($sql, ['awayMachineId' => $data['data'][0]->awayMachineId]);
+                if($awayPi) {
+                    $data['team'][1]['pi'] = $awayPi[0]->id;
+                }
+            }
         }
         $sql = 'SELECT audio FROM iteam_tournament_audio WHERE b_id=:id';
         $audio = DB::connection('mysql')->select($sql, ['id' => $request->id]);

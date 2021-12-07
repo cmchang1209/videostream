@@ -1,34 +1,45 @@
 <template>
     <div class="view no-user-select">
         <div v-if="show" class="view-lg view-tm">
-        	<f-header :name="name" :groupName="groupName" :sequence="sequence" :roundName="roundName" :date="date" :type="'tm'" :online="online" />
-        	<div v-for="(iteam, index) in team" :key="index" :class="['video-area', iteam.status[0] ? 'active' : '', boredrColor, 'game' ]">
-                <template v-if="iteam.pi !== 0">
-                    <div class="video-2">
-                        <f-player :id="iteam.pi" :usb="2" />
+            <f-header :name="name" :groupName="groupName" :sequence="sequence" :roundName="roundName" :date="date" :type="'tm'" :online="online" />
+            <template v-if="!onePiMode">
+                <div v-for="(iteam, index) in team" :key="index" :class="['video-area', iteam.status[0] ? 'active' : '', boredrColor, 'game' ]">
+                    <template v-if="iteam.pi !== -1">
+                        <div class="video-2">
+                            <f-player :id="iteam.pi" :usb="2" />
+                        </div>
+                        <div class="video-4">
+                            <f-player :id="iteam.pi" :usb="4" />
+                        </div>
+                        <div :class="['video-1', active[index] ? 'active' : '']" @click="changePcModel(index)">
+                            <f-player :id="iteam.pi" :usb="1" />
+                        </div>
+                        <div class="adr-name">
+                            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0,0,940,79">
+                                <text x="50.15%" y="62" font-size="36" stroke="#000" stroke-width="6" fill="#000" text-anchor="middle" letter-spacing="10" stroke-linejoin="round">
+                                    {{ iteam.storeName }}
+                                </text>
+                                <text x="50%" y="60" font-size="36" text-anchor="middle" fill="#fff" letter-spacing="10">
+                                    {{ iteam.storeName }}
+                                </text>
+                            </svg>
+                        </div>
+                    </template>
+                    <div v-else style="display: flex; align-items: center; justify-content: center; height: 100%;">
+                        <h1 style="color: white;">尚未設定直播設備</h1>
                     </div>
-                    <div class="video-4">
-                        <f-player :id="iteam.pi" :usb="4" />
-                    </div>
-                    <div :class="['video-1', active[index] ? 'active' : '']" @click="changePcModel(index)">
-                        <f-player :id="iteam.pi" :usb="1" />
-                    </div>
-                    <div class="adr-name">
-                        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0,0,940,79">
-                            <text x="50.15%" y="62" font-size="36" stroke="#000" stroke-width="6" fill="#000" text-anchor="middle" letter-spacing="10" stroke-linejoin="round">
-                                {{ iteam.storeName }}
-                            </text>
-                            <text x="50%" y="60" font-size="36" text-anchor="middle" fill="#fff" letter-spacing="10">
-                                {{ iteam.storeName }}
-                            </text>
-                        </svg>
+                </div>
+            </template>
+            <template v-else>
+                <template v-for="(iteam, index) in team">
+                    <div v-if="iteam.pi !== 0" :key="index" class="video-area active game">
+                        <div style="position: absolute; height: 100%; width: 74%; left: 13%; overflow: hidden;">
+                            <f-player :id="iteam.pi" :usb="1" />
+                        </div>
                     </div>
                 </template>
-                <div v-else style="display: flex; align-items: center; justify-content: center; height: 100%;">
-                    <h1 style="color: white;">尚未設定直播設備</h1>
-                </div>
-            </div>
-        	<f-footer :data="team" :gameStatus="gameStatus" :first="first" :set="set" :leg="leg" :ruleName="ruleName" @changShow="changShowModel" />
+            </template>
+            <f-footer :data="team" :gameStatus="gameStatus" :first="first" :set="set" :leg="leg" :ruleName="ruleName" @changShow="changShowModel" />
         </div>
         <div v-else class="view-lg" style="display: flex; align-items: center; justify-content: center">
             <h1 style="color: white;" v-show="showErrorMsg">無相關賽事</h1>
@@ -73,14 +84,15 @@ export default {
             audio: 0,
             ws: null,
             ruleName: '',
-            roundName: ''
+            roundName: '',
+            onePiMode: false
         }
     },
     created() {
         this.fetchData()
     },
     computed: {
-    	audioSrc() {
+        audioSrc() {
             let pi = 0
             //console.log(this.team)
             if (this.team.length > 0) {
@@ -131,6 +143,9 @@ export default {
                         //this.date = data.data[0].matchDate
                         this.audio = data.audio
                         this.team = data.team
+                        if (this.team[0].pi === 0 || this.team[1].pi === 0) {
+                            this.onePiMode = true
+                        }
                         this.runFFmpeg()
                         this.webSocket()
                         if (!this.gameStatus) {
@@ -145,7 +160,7 @@ export default {
                 })
         },
         changePcModel(i) {
-        	let d = [this.active[0], this.active[1]]
+            let d = [this.active[0], this.active[1]]
             d[i] = !this.active[i]
             this.mask = d[i]
             this.pcMode = d[i]
@@ -161,7 +176,7 @@ export default {
             this.active = d
         },
         changShowModel(value) {
-        	/* 不是 pc 放大模式 */
+            /* 不是 pc 放大模式 */
             if (!this.pcMode) {
                 /* 等待模式 */
                 if (!this.gameStatus) {
@@ -250,7 +265,7 @@ export default {
             }
         },
         runFFmpeg() {
-        	this.team.map(iteam => {
+            this.team.map(iteam => {
                 if (iteam.pi !== 0) {
                     this.$socket.client.emit('runFFmpeg', { id: iteam.pi, usb: 2 })
                     setTimeout(() => {
@@ -264,11 +279,11 @@ export default {
         },
         webSocket() {
             let ev = this.$store.state.gobalData.ev
-        	if (this.ws === null) {
+            if (this.ws === null) {
                 let urlData = this.$store.state.gobalData.ws
-                if(ev === 'test1') {
+                if (ev === 'test1') {
                     urlData = this.$store.state.gobalData.wsTest1
-                } else if(ev === 'test2') {
+                } else if (ev === 'test2') {
                     urlData = this.$store.state.gobalData.wsTest2
                 }
                 //let urlData = this.$store.state.gobalData.ws

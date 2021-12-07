@@ -11,7 +11,7 @@ class ApiLeagueController extends Controller
     {
         $data = [];
         $data['errorCode'] = 'er0000';
-        $sql = 'SELECT id, name, timezone FROM league';
+        $sql = 'SELECT id, name, timezone FROM league WHERE isDeleted=0 AND status!=5';
         $data['data'] = DB::connection('mysql')->select($sql);
         if($request->distributor_id === null || $request->distributor_id === '') {
             $sql = 'SELECT id, name, store_id FROM iteam_pi WHERE is_delete=0 ORDER BY id ASC';

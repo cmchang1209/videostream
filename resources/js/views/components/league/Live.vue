@@ -31,7 +31,7 @@
                     <p>{{ scope.row.homeTeamName }}</p>
                     <p>{{ scope.row.homeStoreName }}</p>
                     <el-select v-model="scope.row.homePi" :placeholder="$store.state.langData.cont.msg.placeholder.ph0002" clearable style="width: 100%">
-                        <el-option v-for="item in pi" :key="item.id" :label="item.name" :value="item.id">
+                        <el-option v-for="item in storePi(scope.row.homeStoreId)" :key="item.id" :label="item.name" :value="item.id">
                         </el-option>
                     </el-select>
                 </template>
@@ -41,13 +41,13 @@
                     <p>{{ scope.row.awayTeamName }}</p>
                     <p>{{ scope.row.awayStoreName }}</p>
                     <el-select v-model="scope.row.awayPi" :placeholder="$store.state.langData.cont.msg.placeholder.ph0002" clearable style="width: 100%">
-                        <el-option v-for="item in pi" :key="item.id" :label="item.name" :value="item.id">
+                        <el-option v-for="item in storePi(scope.row.awayStoreId)" :key="item.id" :label="item.name" :value="item.id">
                         </el-option>
                     </el-select>
                 </template>
             </el-table-column>
             <el-table-column label="audio" align="center" width="160">
-                <template slot-scope="scope" v-if="(scope.row.homePi!=='' && scope.row.awayPi!=='') && scope.row.homePi !== scope.row.awayPi">
+                <template slot-scope="scope" v-if="((scope.row.homePi!=='' && scope.row.homePi!==0) && (scope.row.awayPi!=='' && scope.row.awayPi!==0)) && scope.row.homePi !== scope.row.awayPi">
                     <el-radio v-model="scope.row.audio" :label="0" style="margin-right: 0;">主隊</el-radio><br>
                     <el-radio v-model="scope.row.audio" :label="1" style="margin-right: 0;">客隊</el-radio>
                 </template>
@@ -219,6 +219,15 @@ export default {
                 document.getSelection().removeAllRanges()
                 document.getSelection().addRange(selected)
             }
+        },
+        storePi(d) {
+            var piForStore = []
+            if (d !== '') {
+                piForStore = this.pi.filter((item, index, array) => {
+                    return (item.store_id === 0 || item.store_id === d)
+                })
+            }
+            return piForStore
         }
     }
 }

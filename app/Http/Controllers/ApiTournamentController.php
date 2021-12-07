@@ -110,12 +110,13 @@ class ApiTournamentController extends Controller
         $sql = 'SELECT id, name, timezone FROM tournament';
         $data['data'] = DB::connection('mysql')->select($sql);
         if($request->distributor_id === null || $request->distributor_id === '') {
-            $sql = 'SELECT id, name FROM iteam_pi WHERE is_delete=0 ORDER BY id ASC';
+            $sql = 'SELECT id, name, store_id FROM iteam_pi WHERE is_delete=0 ORDER BY id ASC';
             $data['pi'] = DB::connection('mysql')->select($sql);
         } else {
-            $sql = 'SELECT id, name FROM iteam_pi WHERE is_delete=0 AND distributor_id=:distributor_id ORDER BY id ASC';
+            $sql = 'SELECT id, name, store_id FROM iteam_pi WHERE is_delete=0 AND distributor_id=:distributor_id ORDER BY id ASC';
             $data['pi'] = DB::connection('mysql')->select($sql, ['distributor_id' => $request->distributor_id]);
         }
+        array_unshift($data['pi'] , (object)['id' => 0, "name" => "無設備", "store_id" => 0]);
         return compact('data');
     }
 
@@ -132,7 +133,7 @@ class ApiTournamentController extends Controller
     {
         $data = [];
         $data['errorCode'] = 'er0000';
-        $sql = 'SELECT id, tournamentId, sequence, isNetworkGame, homeStoreId, awayStoreId, homeTeamId, awayTeamId FROM tournament_battle WHERE tournamentId=:id AND groupId=:groupId ORDER BY sequence ASC';
+        $sql = 'SELECT id, tournamentId, sequence, isNetworkGame, homeStoreId, awayStoreId, homeTeamId, awayTeamId, homeMachineId, awayMachineId FROM tournament_battle WHERE tournamentId=:id AND groupId=:groupId ORDER BY sequence ASC';
         $data['data'] = DB::connection('mysql')->select($sql, ['id' => $request->id, 'groupId' => $request->groupId]);
         $sql = 'SELECT id, name FROM store';
         $tStore = DB::connection('mysql')->select($sql);
@@ -140,6 +141,8 @@ class ApiTournamentController extends Controller
         $tTeam = DB::connection('mysql')->select($sql, ['id' => $request->id, 'groupId' => $request->groupId]);
         $sql = 'SELECT team_id, pi_id FROM iteam_tournament_pi';
         $tPi = DB::connection('mysql')->select($sql);
+        $sql = 'SELECT id, machine_id FROM iteam_pi';
+        $pi = DB::connection('mysql')->select($sql);
         $sql = 'SELECT b_id, audio FROM iteam_tournament_audio';
         $audio = DB::connection('mysql')->select($sql);
         foreach ($data['data'] as $key => $value) {
@@ -176,11 +179,25 @@ class ApiTournamentController extends Controller
             $value->homePi = '';
             if($d) {
                 $value->homePi = $d->pi_id;
+            } else {
+                if($value->homeMachineId !== '') {
+                    $d = collect($pi)->where('machine_id', $value->homeMachineId)->first();
+                    if($d) {
+                        $value->homePi = $d->id;
+                    }
+                }
             }
             $d = collect($tPi)->where('team_id', $value->awayTeamId)->first();
             $value->awayPi = '';
             if($d) {
                 $value->awayPi = $d->pi_id;
+            } else {
+                if($value->awayMachineId !== '') {
+                    $d = collect($pi)->where('machine_id', $value->awayMachineId)->first();
+                    if($d) {
+                        $value->awayPi = $d->id;
+                    }
+                }
             }
             $value->audio = 0;
             $d = collect($audio)->where('b_id', $value->id)->first();

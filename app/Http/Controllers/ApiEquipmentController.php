@@ -101,15 +101,22 @@ class ApiEquipmentController extends Controller
         $data['data'] = [];
         $sql = 'SELECT id, storeId, distributorId  FROM machine WHERE storeId=:storeId';
         $machine = DB::connection('mysql')->select($sql, ['storeId' => $request->storeId]);
+        $sql = 'SELECT machine_id  FROM iteam_pi WHERE store_id=:storeId';
+        $machineAsUse = DB::connection('mysql')->select($sql, ['storeId' => $request->storeId]);
         if($machine) {
             foreach ($machine as $key => $value) {
-                if($request->name) {
+                if(!in_array($value->id,$machineAsUse)){
+                    array_push($data['data'], ['id' => $value->id, 'value' => $value->id, 'storeId' => $value->storeId, 'distributorId' => $value->distributorId]);
+                }
+                /*if($request->name) {
                     if(strpos(strtolower($value->id), strtolower($request->name)) !== false) {
+
                         array_push($data['data'], ['id' => $value->id, 'value' => $value->id, 'storeId' => $value->storeId, 'distributorId' => $value->distributorId]);
                     }
                 } else {
                     array_push($data['data'], ['id' => $value->id, 'value' => $value->id, 'storeId' => $value->storeId, 'distributorId' => $value->distributorId]);
-                }
+                }*/
+
             }
         }
 

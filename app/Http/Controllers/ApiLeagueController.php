@@ -14,12 +14,13 @@ class ApiLeagueController extends Controller
         $sql = 'SELECT id, name, timezone FROM league';
         $data['data'] = DB::connection('mysql')->select($sql);
         if($request->distributor_id === null || $request->distributor_id === '') {
-            $sql = 'SELECT id, name FROM iteam_pi WHERE is_delete=0 ORDER BY id ASC';
+            $sql = 'SELECT id, name, store_id FROM iteam_pi WHERE is_delete=0 ORDER BY id ASC';
             $data['pi'] = DB::connection('mysql')->select($sql);
         } else {
-            $sql = 'SELECT id, name FROM iteam_pi WHERE is_delete=0 AND distributor_id=:distributor_id ORDER BY id ASC';
+            $sql = 'SELECT id, name, store_id FROM iteam_pi WHERE is_delete=0 AND distributor_id=:distributor_id ORDER BY id ASC';
             $data['pi'] = DB::connection('mysql')->select($sql, ['distributor_id' => $request->distributor_id]);
         }
+        array_unshift($data['pi'] , (object)['id' => 0, 'name' => '無設備', 'store_id' => 0]);
         return compact('data');
     }
 
@@ -200,7 +201,7 @@ class ApiLeagueController extends Controller
             'teamName' => $data['data'][0]->homeTeamName,
             'player' => [],
             'row' => -1,
-            'pi' => 0,
+            'pi' => -1,
             'status' => [true, true]
         ];
         $data['team'][1] = [
@@ -208,7 +209,7 @@ class ApiLeagueController extends Controller
             'teamName' => $data['data'][0]->awayTeamName,
             'player' => [],
             'row' => -1,
-            'pi' => 0,
+            'pi' => -1,
             'status' => [false, false]
         ];
         $sql = 'SELECT pi_id FROM iteam_league_pi WHERE team_id=:homeTeamId';

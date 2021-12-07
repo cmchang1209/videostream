@@ -22,7 +22,7 @@
         </div>
         <div class="h_right">
             <svg xmlns="http://www.w3.org/2000/svg" viewBox="0,0,376,77">
-                <text x="376" y="60" text-anchor="end" font-size="34" fill="#fff" letter-spacing="3" style="font-family: 'Noto Sans TC';">
+                <text x="376" y="60" text-anchor="end" font-size="34" fill="#fff" letter-spacing="1" style="font-family: 'Noto Sans TC';">
                     {{ today }}
                 </text>
             </svg>

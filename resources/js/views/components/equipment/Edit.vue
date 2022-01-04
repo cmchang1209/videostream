@@ -133,7 +133,6 @@ export default {
                 })
                 .then(response => {
                     let data = response.data.data
-                    console.log(data)
                     if (data.errorCode === 'er0000') {
                         this.form = data.data
                         this.selected.distributor.value = this.form.distributor
@@ -251,7 +250,7 @@ export default {
                         if (data.errorCode === 'er0000') {
                             data.data.map(iteam => {
                                 var opt = {}
-                                opt.value = iteam.id
+                                opt.value = iteam.value
                                 opt.id = iteam.id
                                 opt.storeId = iteam.storeId
                                 opt.distributorId = iteam.distributorId

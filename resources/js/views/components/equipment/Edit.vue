@@ -137,7 +137,7 @@ export default {
                         this.form = data.data
                         this.selected.distributor.value = this.form.distributor
                         this.selected.store.value = this.form.store
-                        this.selected.machine.value = this.form.machineId
+                        this.selected.machine.value = this.form.machine
                         this.changeAppLoadingStatus(false)
                     }
                 }).catch(error => {
@@ -267,7 +267,7 @@ export default {
             }
         },
         handleMachineSelect(item) {
-            this.form.machineId = this.selected.machine.value = item.id
+            this.form.machineId = this.selected.machine.value = item.value
             this.selected.machine.storeId = item.storeId
         },
         handleMachineBlur() {

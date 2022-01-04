@@ -267,7 +267,8 @@ export default {
             }
         },
         handleMachineSelect(item) {
-            this.form.machineId = this.selected.machine.value = item.value
+            this.form.machineId = item.id
+            this.form.machine = this.selected.machine.value = item.value
             this.selected.machine.storeId = item.storeId
         },
         handleMachineBlur() {

@@ -101,7 +101,6 @@ class ApiEquipmentController extends Controller
         $data['data'] = [];
         $sql = 'SELECT id, storeId, distributorId, CONCAT( id, " ", name ) AS fullname  FROM machine WHERE storeId=:storeId';
         $machine = DB::connection('mysql')->select($sql, ['storeId' => $request->storeId]);
-        dd($machine);
         $sql = 'SELECT machine_id  FROM iteam_pi WHERE machine_id IS NOT NULL AND store_id=:storeId';
         $machineAsUse = DB::connection('mysql')->select($sql, ['storeId' => $request->storeId]);
         $mUse = [];

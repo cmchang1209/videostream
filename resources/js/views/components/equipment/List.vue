@@ -22,7 +22,7 @@
             </el-table-column>
             <el-table-column prop="d_name" :label="$store.state.langData.cont.pageFn.table.Distributor" v-if="$store.state.gobalData.me.roleCode === 1">
             </el-table-column>
-            <el-table-column prop="machine_id" :label="$store.state.langData.cont.pageFn.table.Machine" v-if="$store.state.gobalData.me.roleCode === 1">
+            <el-table-column prop="machine_name" :label="$store.state.langData.cont.pageFn.table.Machine" v-if="$store.state.gobalData.me.roleCode === 1">
             </el-table-column>
             <el-table-column prop="mac" :label="$store.state.langData.cont.pageFn.table.MAC" v-if="$store.state.gobalData.me.roleCode === 1">
             </el-table-column>
@@ -79,6 +79,7 @@ export default {
                 })
                 .then(response => {
                     let data = response.data.data
+                    console.log(data)
                     if (data.errorCode === 'er0000') {
                         this.tableData = data.data
                         this.changeAppLoadingStatus(false)

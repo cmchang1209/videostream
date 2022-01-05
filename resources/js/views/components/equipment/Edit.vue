@@ -9,8 +9,8 @@
             <el-form-item v-if="$store.state.gobalData.me.roleCode === 1" :label="$store.state.langData.cont.pageFn.table.Store" prop="store">
                 <el-autocomplete ref="store" v-model="form.store" clearable :fetch-suggestions="querySearchStoreAsync" :placeholder="$store.state.langData.cont.msg.placeholder.ph0002" @select="handleStoreSelect" @blur="handleStoreBlur" @clear="handleStoreClear" style="width: 100%"></el-autocomplete>
             </el-form-item>
-            <el-form-item v-if="$store.state.gobalData.me.roleCode === 1" :label="$store.state.langData.cont.pageFn.table.Machine" prop="machineId">
-                <el-autocomplete ref="machine" v-model="form.machineId" clearable :fetch-suggestions="querySearchMachineAsync" :placeholder="$store.state.langData.cont.msg.placeholder.ph0002" @select="handleMachineSelect" @blur="handleMachineBlur" @clear="handleMachineClear" style="width: 100%"></el-autocomplete>
+            <el-form-item v-if="$store.state.gobalData.me.roleCode === 1" :label="$store.state.langData.cont.pageFn.table.Machine" prop="machineValue">
+                <el-autocomplete ref="machine" v-model="form.machineValue" clearable :fetch-suggestions="querySearchMachineAsync" :placeholder="$store.state.langData.cont.msg.placeholder.ph0002" @select="handleMachineSelect" @blur="handleMachineBlur" @clear="handleMachineClear" style="width: 100%"></el-autocomplete>
             </el-form-item>
             <el-form-item v-if="$store.state.gobalData.me.roleCode === 1" :label="$store.state.langData.cont.pageFn.table.MAC" prop="mac">
                 <el-input v-model="form.mac"></el-input>
@@ -87,6 +87,7 @@ export default {
                 }
             ],
             form: {},
+            originalForm: {},
             selected: {
                 distributor: {
                     value: '',
@@ -134,10 +135,11 @@ export default {
                 .then(response => {
                     let data = response.data.data
                     if (data.errorCode === 'er0000') {
+                        this.originalForm = Object.assign({}, data.data)
                         this.form = data.data
                         this.selected.distributor.value = this.form.distributor
                         this.selected.store.value = this.form.store
-                        this.selected.machine.value = this.form.machine
+                        this.selected.machine.value = this.form.machineValue
                         this.changeAppLoadingStatus(false)
                     }
                 }).catch(error => {
@@ -232,6 +234,7 @@ export default {
             this.form.store = this.selected.store.value = ''
             this.form.storeId = ''
             this.selected.store.distributorId = ''
+            this.handleMachineClear()
             this.selected.store.clear = true
             setTimeout(() => {
                 this.selected.store.clear = false
@@ -256,6 +259,12 @@ export default {
                                 opt.distributorId = iteam.distributorId
                                 restaurants.push(opt)
                             })
+                            if (restaurants.length === 0) {
+                                var opt = {}
+                                opt.id = -1
+                                opt.value = '-- 無相關機台或機台均已綁定 --'
+                                restaurants.push(opt)
+                            }
                             cb(restaurants)
                         }
                     }).catch(error => {
@@ -267,16 +276,24 @@ export default {
             }
         },
         handleMachineSelect(item) {
-            this.form.machineId = item.id
-            this.form.machine = this.selected.machine.value = item.value
-            this.selected.machine.storeId = item.storeId
+            if (item.id === -1) {
+                this.$nextTick(() => {
+                    this.originalFormMachine()
+                })
+            } else {
+                this.form.machineValue = this.selected.machine.value = item.value
+                this.form.machineId = item.id
+                this.selected.machine.storeId = item.storeId
+
+            }
         },
         handleMachineBlur() {
-            this.form.machineId  = this.selected.machine.value
+            this.form.machine = this.selected.machine.value
         },
         handleMachineClear() {
             this.$refs.machine.$el.getElementsByTagName('input')[0].blur()
-            this.form.machineId = this.selected.machine.value = ''
+            this.form.machineValue = this.selected.machine.value = ''
+            this.form.machineId = ''
             this.selected.machine.storeId = ''
             this.selected.machine.clear = true
             setTimeout(() => {
@@ -287,6 +304,11 @@ export default {
             if (this.selected.machine.storeId !== this.form.storeId) {
                 this.handleMachineClear()
             }
+        },
+        originalFormMachine() {
+            this.form.machineValue = this.selected.machine.value = this.originalForm.machineValue
+            this.form.machineId = this.originalForm.machineId
+            this.selected.machine.storeId = this.originalForm.storeId
         },
         save() {
             this.$refs['ruleForm'].validate((valid) => {

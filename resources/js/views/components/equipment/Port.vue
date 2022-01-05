@@ -2,6 +2,7 @@
     <div class="equipment-port">
         <Breadcrumb :iteams="br" />
         <br>
+        <h3 style="text-align: center;">{{ eName }}</h3>
         <p style="text-align: center;">
             <a :href="viewUrl" target="_blank">
                 {{ $store.state.langData.cont.pageFn.table.View }}
@@ -68,7 +69,8 @@ export default {
                     isUrl: false
                 }
             ],
-            tableData: []
+            tableData: [],
+            e_name: ''
         }
     },
     created() {
@@ -78,6 +80,9 @@ export default {
     computed: {
         viewUrl() {
             return `http://${document.location.hostname}/view/eg?id=${this.id}`
+        },
+        eName() {
+            return this.e_name
         }
     },
     methods: {
@@ -89,8 +94,10 @@ export default {
                 })
                 .then(response => {
                     let data = response.data.data
+                    console.log(data)
                     if (data.errorCode === 'er0000') {
                         this.tableData = data.data
+                        this.e_name = this.tableData[0].ename
                         this.changeAppLoadingStatus(false)
                     }
                 }).catch(error => {

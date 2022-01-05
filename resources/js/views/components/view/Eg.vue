@@ -1,5 +1,6 @@
 <template>
     <div class="view-eg" v-loading="video_loading">
+        <h3 style="text-align: center;">{{ eName }}</h3>
         <el-row style="margin: 1.25rem 0;">
             <el-col :span="24" style="text-align: center;">
                 <span>頻道：</span>
@@ -111,7 +112,8 @@ export default {
             exposure: 0,
             video_loading: false,
             audioPlayer: null,
-            showAudioBt: false
+            showAudioBt: false,
+            e_name: ''
         }
     },
     created() {
@@ -132,6 +134,7 @@ export default {
                 }
             }
         }
+        this.fetchData()
     },
     computed: {
         ...mapGetters(['isIosDevice']),
@@ -155,12 +158,29 @@ export default {
                 default:
                     return 9
             }
+        },
+        eName() {
+            return this.e_name
         }
     },
     mounted() {
         this.video = document.getElementById(`video-player`)
     },
     methods: {
+        fetchData() {
+            axios
+                .get('/api/getEquipmentPort', {
+                    params: { id: this.id }
+                })
+                .then(response => {
+                    let data = response.data.data
+                    if (data.errorCode === 'er0000') {
+                        this.e_name = data.data[0].ename
+                    }
+                }).catch(error => {
+                    console.log(error)
+                })
+        },
         handlePlay() {
             let urlData = this.$store.state.gobalData.server
             if (this.radio) {

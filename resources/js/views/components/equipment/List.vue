@@ -79,7 +79,6 @@ export default {
                 })
                 .then(response => {
                     let data = response.data.data
-                    console.log(data)
                     if (data.errorCode === 'er0000') {
                         this.tableData = data.data
                         this.changeAppLoadingStatus(false)

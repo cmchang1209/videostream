@@ -252,7 +252,7 @@ class ApiEquipmentController extends Controller
         $data = [];
         $data['errorCode'] = 'er0000';
         $data['data'] = [];
-        $sql = 'SELECT u.usb_id, u.port_no, u.dev_name, p.audio FROM iteam_port_used AS u LEFT JOIN iteam_pi AS p ON p.id=u.pi_id WHERE pi_id=:id';
+        $sql = 'SELECT u.usb_id, u.port_no, u.dev_name, p.audio, CONCAT( p.no, " ", p.name, " / ", m.id, " ", m.name ) AS ename FROM iteam_port_used AS u LEFT JOIN iteam_pi AS p ON p.id=u.pi_id LEFT JOIN machine AS m ON m.id=p.machine_id WHERE pi_id=:id';
         $result = DB::connection('mysql')->select($sql, ['id' => $request->id]);
         if($result) {
             $data['data'] = $result;

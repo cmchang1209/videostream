@@ -5,6 +5,9 @@
             <el-col :span="6">
                 <el-button type="success" icon="el-icon-refresh" circle @click.native.prevent="handleRefresh"></el-button>
             </el-col>
+            <el-col :span="6">
+                <el-button type="danger" icon="el-icon-switch-button" circle @click.native.prevent="handleReboot"></el-button>
+            </el-col>
             <el-col v-if="$store.state.gobalData.me.roleCode === 1" :span="6" style="text-align: right;">
                 <el-button class="hidden-sm-and-down" type="success" round @click="addEquipment">{{ $store.state.langData.cont.pageFn.equipment.addBtn }}</el-button>
                 <el-button class="hidden-md-and-up" type="success" icon="el-icon-plus" circle @click="addEquipment"></el-button>
@@ -57,6 +60,11 @@ import { mapActions } from 'vuex'
 import Breadcrumb from '../layout/Breadcrumb.vue'
 export default {
     components: { Breadcrumb },
+    sockets: {
+        connect() {
+            console.log('connect')
+        },
+    },
     data() {
         return {
             br: [{
@@ -137,6 +145,9 @@ export default {
         handlePreview(index, row) {
             let routeData = this.$router.resolve({ name: 'Pv', query: { id: row.id } })
             window.open(routeData.href, '_blank')
+        },
+        handleReboot() {
+            this.$socket.client.emit('reboot')
         }
     }
 }

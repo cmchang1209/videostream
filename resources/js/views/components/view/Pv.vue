@@ -12,11 +12,7 @@
                 <f-player :id="id" :usb="4" />
             </el-col>
         </el-row>
-        <!-- <div class="view">
-            <div class="video video-2">
-                <f-player :id="id" :usb="2" />
-            </div>
-        </div> -->
+        <iframe allow="autoplay" :src="audioSrc" style="display: none;"></iframe>
     </div>
 </template>
 <script>

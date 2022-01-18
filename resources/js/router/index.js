@@ -27,6 +27,7 @@ import Audio from '../views/components/view/Audio'
 import Eg from '../views/components/view/Eg'
 import Bracket from '../views/components/view/Bracket'
 import Lg from '../views/components/view/Lg'
+import Pv from '../views/components/view/Pv'
 
 //不允許導航到當前位置
 const originalPush = VueRouter.prototype.push
@@ -201,6 +202,11 @@ export default new VueRouter({
                 path: 'tm',
                 name: 'Tm',
                 component: Tm,
+                props: (route) => ({ id: route.query.id })
+            }, {
+                path: 'pv',
+                name: 'Pv',
+                component: Pv,
                 props: (route) => ({ id: route.query.id })
             }]
         },

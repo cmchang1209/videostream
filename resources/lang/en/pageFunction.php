@@ -44,7 +44,8 @@ return [
 		'League' => 'League',
 		'LeagueGroup' => 'Group',
 		'TournamentGroupType' => '賽制',
-		'TournamentGroup' => 'Group'
+		'TournamentGroup' => 'Group',
+		'preview' => 'preview'
 	],
     'login' => [
     	'label'  => 'Sign in',

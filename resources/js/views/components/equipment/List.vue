@@ -29,6 +29,9 @@
             <el-table-column :label="$store.state.langData.cont.pageFn.table.IP">
                 <template slot-scope="scope">
                     <el-link v-if="scope.row.status" type="success" @click.native.prevent="handlePort(scope.$index, scope.row)">{{ scope.row.ip }}</el-link>
+                    <p>
+                        <el-link v-if="scope.row.status" type="success" @click.native.prevent="handlePreview(scope.$index, scope.row)">{{ $store.state.langData.cont.pageFn.table.preview }}</el-link>
+                    </p>
                     <p>version : {{ scope.row.version }}</p>
                 </template>
             </el-table-column>
@@ -130,6 +133,10 @@ export default {
         },
         handlePort(index, row) {
             this.$router.push({ name: 'PortEquipment', query: { id: row.id } })
+        },
+        handlePreview(index, row) {
+            let routeData = this.$router.resolve({ name: 'Pv', query: { id: row.id } })
+            window.open(routeData.href, '_blank')
         }
     }
 }

@@ -23,7 +23,7 @@
     "dependencies": {
         "element-ui": "^2.15.2",
         "element-ui-el-table-draggable": "^1.2.10",
-        "js-base64": "^3.6.1",
+        "js-base64": "^3.7.2",
         "socket.io-client": "^4.1.2",
         "vue-router": "^3.5.1",
         "vue-socket.io-extended": "^4.2.0",

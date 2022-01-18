@@ -1,52 +1,58 @@
 <template>
     <div class="view-eg" v-loading="video_loading">
-        <h3 style="text-align: center;">{{ eName }}</h3>
-        <el-row style="margin: 1.25rem 0;">
-            <el-col :span="24" style="text-align: center;">
-                <span>頻道：</span>
-                <el-radio-group v-model="radio">
-                    <el-radio :disabled="playstatus" :label="1">機台</el-radio>
-                    <el-radio :disabled="playstatus" :label="2">靶</el-radio>
-                    <el-radio :disabled="playstatus" :label="4">玩家</el-radio>
-                </el-radio-group>
-            </el-col>
-        </el-row>
-        <el-row style="margin: 1.25rem 0;">
-            <el-col :span="24" style="text-align: center;">
-                <el-button type="success" round @click.native.prevent="handlePlay">播放</el-button>
-                <el-button type="danger" round @click.native.prevent="handleStop">停止</el-button>
-            </el-col>
-        </el-row>
-        <div id="video-player" class="player eg">
-            <h3 v-if="!playstatus" style="text-align: center;">
-                請選擇頻道後，執行播放
-            </h3>
-        </div>
-        <div v-if="playstatus && !video_loading && radio === 2" class="block">
-            <el-form :model="form" label-position="top">
-                <el-form-item label="自動曝光(自定義曝光值需要先關閉自動曝光)">
-                    <el-switch v-model="form.exposure_auto" active-text="on" inactive-text="off" @change="changeexposureAuto">
-                    </el-switch>
-                </el-form-item>
-                <el-form-item v-if="!form.disabled" :label="'設定曝光值 ('+ exposure + ')'" style="margin-bottom: 5rem;">
-                    <el-slider v-model="form.exposure_absolute.k" :min="0" :max="2000" :step="100" show-stops :disabled="form.disabled">
-                    </el-slider>
-                    <el-slider v-model="form.exposure_absolute.b" :min="0" :max="b_max" :step="10" show-stops :disabled="form.disabled">
-                    </el-slider>
-                    <el-slider v-model="form.exposure_absolute.g" :min="g_min" :max="g_max" :step="1" show-stops :disabled="form.disabled">
-                    </el-slider>
-                    <br>
-                    <el-button type="primary" plain :disabled="form.disabled" @click="setV4l2ExposureAbsolute" :loading="loading">確定</el-button>
-                </el-form-item>
-            </el-form>
-        </div>
+        <template v-if="id !== ''">
+            <h3 style="text-align: center;">{{ eName }}</h3>
+            <el-row style="margin: 1.25rem 0;">
+                <el-col :span="24" style="text-align: center;">
+                    <span>頻道：</span>
+                    <el-radio-group v-model="radio">
+                        <el-radio :disabled="playstatus" :label="1">機台</el-radio>
+                        <el-radio :disabled="playstatus" :label="2">靶</el-radio>
+                        <el-radio :disabled="playstatus" :label="4">玩家</el-radio>
+                    </el-radio-group>
+                </el-col>
+            </el-row>
+            <el-row style="margin: 1.25rem 0;">
+                <el-col :span="24" style="text-align: center;">
+                    <el-button type="success" round @click.native.prevent="handlePlay">播放</el-button>
+                    <el-button type="danger" round @click.native.prevent="handleStop">停止</el-button>
+                </el-col>
+            </el-row>
+            <div id="video-player" class="player eg">
+                <h3 v-if="!playstatus" style="text-align: center;">
+                    請選擇頻道後，執行播放
+                </h3>
+            </div>
+            <div v-if="playstatus && !video_loading && radio === 2" class="block">
+                <el-form :model="form" label-position="top">
+                    <el-form-item label="自動曝光(自定義曝光值需要先關閉自動曝光)">
+                        <el-switch v-model="form.exposure_auto" active-text="on" inactive-text="off" @change="changeexposureAuto">
+                        </el-switch>
+                    </el-form-item>
+                    <el-form-item v-if="!form.disabled" :label="'設定曝光值 ('+ exposure + ')'" style="margin-bottom: 5rem;">
+                        <el-slider v-model="form.exposure_absolute.k" :min="0" :max="2000" :step="100" show-stops :disabled="form.disabled">
+                        </el-slider>
+                        <el-slider v-model="form.exposure_absolute.b" :min="0" :max="b_max" :step="10" show-stops :disabled="form.disabled">
+                        </el-slider>
+                        <el-slider v-model="form.exposure_absolute.g" :min="g_min" :max="g_max" :step="1" show-stops :disabled="form.disabled">
+                        </el-slider>
+                        <br>
+                        <el-button type="primary" plain :disabled="form.disabled" @click="setV4l2ExposureAbsolute" :loading="loading">確定</el-button>
+                    </el-form-item>
+                </el-form>
+            </div>
+        </template>
+        <template v-else>
+            <h1 style="text-align: center;">NOT FOUND PI DATA</h1>
+            <p style="text-align: center;">請聯絡 FIDODARTS 管理員</p>
+        </template>
     </div>
 </template>
 <script>
 import { mapGetters } from 'vuex'
 export default {
     components: {},
-    props: ['id'],
+    props: ['params'],
     sockets: {
         connect() {},
         echoV4l2Value(val) {
@@ -113,7 +119,8 @@ export default {
             video_loading: false,
             audioPlayer: null,
             showAudioBt: false,
-            e_name: ''
+            e_name: '',
+            id: ''
         }
     },
     created() {
@@ -168,6 +175,18 @@ export default {
     },
     methods: {
         fetchData() {
+            if (this.params) {
+                try {
+                    let id = Base64.decode(this.params)
+                    id = id.split('-')
+                    if(id[0] === 'fidodartsVideoLive') {
+                        this.id = id[1]
+                    }
+                } catch (e) {
+                    return
+                }
+
+            }
             axios
                 .get('/api/getEquipmentPort', {
                     params: { id: this.id }

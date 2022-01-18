@@ -79,7 +79,8 @@ export default {
     },
     computed: {
         viewUrl() {
-            return `http://${document.location.hostname}/view/eg?id=${this.id}`
+            let id = Base64.encode('fidodartsVideoLive-' + this.id)
+            return `http://${document.location.hostname}/view/eg?id=${id}`
         },
         eName() {
             return this.e_name

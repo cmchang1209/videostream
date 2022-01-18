@@ -186,7 +186,7 @@ export default new VueRouter({
                 path: 'eg',
                 name: 'Eg',
                 component: Eg,
-                props: (route) => ({ id: route.query.id })
+                props: (route) => ({ params: route.query.id })
             }, {
                 path: 'bracket',
                 name: 'Bracket',

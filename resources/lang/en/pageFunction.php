@@ -75,6 +75,8 @@ return [
     		'Dart target',
     		'-',
     		'Player'
-    	]
+    	],
+    	'reboot' => 'Reboot AWS',
+    	'rebootMsg' => '建議直播前重啟AWS，釋放記憶體'
     ]
 ];

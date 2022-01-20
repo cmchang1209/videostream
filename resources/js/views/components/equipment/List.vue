@@ -155,9 +155,10 @@ export default {
                     type: 'error'
                 }).then(() => {
                     this.$socket.client.emit('reboot')
+                    this.changeAppLoadingStatus(true)
                     setTimeout(() => {
                         location.reload()
-                    },1000)
+                    },10000)
             }).catch(() => {
                 this.$message({
                     type: 'info',

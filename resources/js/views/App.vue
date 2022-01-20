@@ -1,6 +1,6 @@
 <template>
     <div>
-        <el-container v-if="!isGuest && !isView" v-loading="appLoading" element-loading-spinner="el-icon-loading">
+        <el-container v-if="!isGuest && !isView" v-loading="appLoading" :element-loading-text="loadingText" element-loading-spinner="el-icon-loading">
             <!-- 側邊欄 -->
             <div class="hidden-sm-and-down">
                 <Aside />
@@ -51,6 +51,7 @@ export default {
     computed: mapState({
         isGuest: state => state.gobalData.isGuest,
         appLoading: state => state.gobalData.appLoading,
+        loadingText: state => state.gobalData.loadingText,
         drawer: state => state.gobalData.drawer,
         isView: state => state.gobalData.isView,
     }),

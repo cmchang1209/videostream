@@ -64,6 +64,10 @@ export default {
     sockets: {
         connect() {
             console.log('connect')
+            if (this.awsReboot) {
+                this.changeLoadingText('')
+                this.changeAppLoadingStatus(false)
+            }
         },
     },
     data() {
@@ -75,7 +79,8 @@ export default {
                 title: this.$store.state.langData.cont.slideMenu.List,
                 isUrl: false
             }],
-            tableData: []
+            tableData: [],
+            awsReboot: false
         }
     },
     created() {
@@ -83,7 +88,7 @@ export default {
         this.fetchData()
     },
     methods: {
-        ...mapActions(['changeAppLoadingStatus']),
+        ...mapActions(['changeAppLoadingStatus', 'changeLoadingText']),
         fetchData() {
             axios
                 .get('/api/getEquipmentListData', {
@@ -154,11 +159,10 @@ export default {
                     cancelButtonText: this.$store.state.langData.cont.pageFn.golbal.Cancel,
                     type: 'error'
                 }).then(() => {
-                    this.$socket.client.emit('reboot')
-                    this.changeAppLoadingStatus(true)
-                    setTimeout(() => {
-                        location.reload()
-                    },5000)
+                this.changeLoadingText(this.$store.state.langData.cont.msg.golbal.g0006)
+                this.changeAppLoadingStatus(true)
+                this.awsReboot = true
+                this.$socket.client.emit('reboot')
             }).catch(() => {
                 this.$message({
                     type: 'info',

@@ -6,7 +6,8 @@ return [
         'g0002' => 'Url was copied unsuccessful',
         'g0003' => '此操作將重啟AWS, 是否繼續?',
         'g0004' => '提示',
-        'g0005' => '已取消'
+        'g0005' => '已取消',
+        'g0006' => 'AWS重啟中'
     ],
     'validate' => [
     	'er0001' => 'Please enter your account',

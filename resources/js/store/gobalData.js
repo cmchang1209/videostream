@@ -3,6 +3,7 @@ export default {
         isGuest: true,
         me: {},
         appLoading: false,
+        loadingText: '',
         drawer: false,
         isView: false,
         wsTest2: {
@@ -44,6 +45,9 @@ export default {
         changeAppLoadingStatus(state, val) {
             state.appLoading = val
         },
+        changeLoadingText(state, val) {
+            state.loadingText = val
+        },
         changeDrawerStatus(state, val) {
             state.drawer = val
         },
@@ -66,6 +70,9 @@ export default {
         },
         changeAppLoadingStatus: ({ commit }, val) => {
             commit('changeAppLoadingStatus', val)
+        },
+        changeLoadingText: ({ commit }, val) => {
+            commit('changeLoadingText', val)
         },
         changeDrawerStatus: ({ commit }, val) => {
             commit('changeDrawerStatus', val)

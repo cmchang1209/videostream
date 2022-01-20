@@ -157,6 +157,7 @@ export default {
                 this.$store.state.langData.cont.msg.golbal.g0004, {
                     confirmButtonText: this.$store.state.langData.cont.pageFn.golbal.ok,
                     cancelButtonText: this.$store.state.langData.cont.pageFn.golbal.Cancel,
+                    confirmButtonClass: 'el-button--default',
                     type: 'error'
                 }).then(() => {
                 this.changeLoadingText(this.$store.state.langData.cont.msg.golbal.g0006)

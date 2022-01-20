@@ -158,7 +158,7 @@ export default {
                     this.changeAppLoadingStatus(true)
                     setTimeout(() => {
                         location.reload()
-                    },10000)
+                    },5000)
             }).catch(() => {
                 this.$message({
                     type: 'info',

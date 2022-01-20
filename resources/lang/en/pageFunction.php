@@ -3,11 +3,12 @@
 return [
 	'golbal' => [
 		'Add' => 'Add',
-		'Cancel' => 'Cancel',
+		'Cancel' => '取消',
 		'Edit' => 'Edit',
 		'Save' => 'Save',
 		'Port' => 'Port',
-		'Search' => 'Search'
+		'Search' => 'Search',
+		'ok' => '確定'
 	],
 	'breadcrumb' => [
 		'Back' => 'Back'

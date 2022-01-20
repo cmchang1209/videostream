@@ -2,14 +2,14 @@
     <div class="equipment-list">
         <Breadcrumb :iteams="br" />
         <el-row type="flex" justify="space-between" style="margin-bottom: 15px">
-            <el-col :xs="2" :sm="3":span="8">
+            <el-col :xs="2" :sm="3" :span="8">
                 <el-button type="success" icon="el-icon-refresh" circle @click.native.prevent="handleRefresh"></el-button>
             </el-col>
             <el-col :span="8" class="text-center">
                 <el-button type="danger" icon="el-icon-switch-button" @click.native.prevent="handleReboot">{{ $store.state.langData.cont.pageFn.equipment.reboot }}</el-button>
                 <p class="hidden-sm-and-down"><small style="font-size: .75rem">{{ $store.state.langData.cont.pageFn.equipment.rebootMsg }}</small></p>
             </el-col>
-            <el-col v-if="$store.state.gobalData.me.roleCode === 1" :xs="4" :sm="4":span="8" style="text-align: right;">
+            <el-col v-if="$store.state.gobalData.me.roleCode === 1" :xs="4" :sm="4" :span="8" style="text-align: right;">
                 <el-button class="hidden-sm-and-down" type="success" round @click="addEquipment">{{ $store.state.langData.cont.pageFn.equipment.addBtn }}</el-button>
                 <el-button class="hidden-md-and-up" type="success" icon="el-icon-plus" circle @click="addEquipment"></el-button>
             </el-col>
@@ -148,7 +148,22 @@ export default {
             window.open(routeData.href, '_blank')
         },
         handleReboot() {
-            this.$socket.client.emit('reboot')
+            this.$confirm(this.$store.state.langData.cont.msg.golbal.g0003,
+                this.$store.state.langData.cont.msg.golbal.g0004, {
+                    confirmButtonText: this.$store.state.langData.cont.pageFn.golbal.ok,
+                    cancelButtonText: this.$store.state.langData.cont.pageFn.golbal.Cancel,
+                    type: 'error'
+                }).then(() => {
+                    this.$socket.client.emit('reboot')
+                    setTimeout(() => {
+                        location.reload()
+                    },1000)
+            }).catch(() => {
+                this.$message({
+                    type: 'info',
+                    message: this.$store.state.langData.cont.msg.golbal.g0005
+                })
+            })
         }
     }
 }

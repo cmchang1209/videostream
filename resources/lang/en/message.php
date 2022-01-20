@@ -3,7 +3,10 @@
 return [
     'golbal' => [
         'g0001' => 'Url was copied successful',
-        'g0002' => 'Url was copied unsuccessful'
+        'g0002' => 'Url was copied unsuccessful',
+        'g0003' => '此操作將重啟AWS, 是否繼續?',
+        'g0004' => '提示',
+        'g0005' => '已取消'
     ],
     'validate' => [
     	'er0001' => 'Please enter your account',

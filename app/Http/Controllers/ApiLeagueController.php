@@ -38,7 +38,8 @@ class ApiLeagueController extends Controller
         $data = [];
         $data['errorCode'] = 'er0000';
         /*$sql = 'SELECT l.id, l.leagueId, l.sequence, l.isNetworkGame, l.homeStoreId, l.awayStoreId, l.homeTeamId, l.awayTeamId, DATE_ADD(l.matchDate, INTERVAL :timezone hour) AS matchDate, hs.name AS homeStoreName, ws.name AS awayStoreName, ht.name AS homeTeamName, wt.name AS awayTeamName FROM league_battle AS l INNER JOIN ( SELECT id, name FROM store ) AS hs ON hs.id=l.homeStoreId INNER JOIN ( SELECT id, name FROM store ) AS ws ON ws.id=l.awayStoreId INNER JOIN ( SELECT id, name FROM league_team ) AS ht ON ht.id=l.homeTeamId INNER JOIN ( SELECT id, name FROM league_team ) AS wt ON wt.id=l.awayTeamId WHERE l.leagueId=:id AND l.groupId=:groupId ORDER BY l.sequence';*/
-        $sql = 'SELECT id, leagueId, sequence, isNetworkGame, homeStoreId, awayStoreId, homeTeamId, awayTeamId, DATE_ADD(matchDate, INTERVAL :timezone hour) AS matchDate FROM league_battle WHERE leagueId=:id AND groupId=:groupId ORDER BY sequence, matchDate ASC';
+        /*$sql = 'SELECT id, leagueId, sequence, isNetworkGame, homeStoreId, awayStoreId, homeTeamId, awayTeamId, DATE_ADD(matchDate, INTERVAL :timezone hour) AS matchDate FROM league_battle WHERE leagueId=:id AND groupId=:groupId ORDER BY sequence, matchDate ASC';*/
+        $sql = 'SELECT id, leagueId, sequence, gameResult, isNetworkGame, homeStoreId, awayStoreId, homeTeamId, awayTeamId, DATE_ADD(matchDate, INTERVAL :timezone hour) AS matchDate FROM league_battle WHERE leagueId=:id AND groupId=:groupId ORDER BY matchDate, sequence ASC';
         $data['data'] = DB::connection('mysql')->select($sql, ['id' => $request->id, 'groupId' => $request->groupId, 'timezone' => $request->timezone]);
         $sql = 'SELECT id, name FROM store';
         $tStore = DB::connection('mysql')->select($sql);

@@ -1,13 +1,13 @@
 <template>
     <div>
-        <div :id="'video-player-'+id+'-'+usb" class="player"></div>
+        <div :id="'video-player-'+index+'-'+id+'-'+usb" class="player"></div>
     </div>
 </template>
 <script>
 import { mapGetters } from 'vuex'
 export default {
     components: {},
-    props: ['id', 'usb'],
+    props: ['id', 'usb', 'index'],
     data() {
         return {
             wk: null,
@@ -39,7 +39,8 @@ export default {
     },
     mounted() {
         let urlData = this.$store.state.gobalData.server
-        this.video = document.getElementById(`video-player-${this.id}-${this.usb}`)
+        this.video = document.getElementById(`video-player-${this.index}-${this.id}-${this.usb}`)
+        console.log(this.video)
         this.url = `ws://${urlData}:8082/p${this.id}-${this.usb}`
         this.canvas = document.createElement("CANVAS")
         this.video.appendChild(this.canvas)

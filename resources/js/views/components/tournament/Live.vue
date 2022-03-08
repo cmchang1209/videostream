@@ -128,7 +128,7 @@ export default {
                         let data = response.data.data
                         if (data.errorCode === 'er0000') {
                             this.form.groupData = data.data
-                            //console.log(this.form.groupData)
+                            console.log(this.form.groupData)
                             if (typeof this.groupId !== 'undefined') {
                                 let fData = this.form.groupData.filter(iteam => {
                                     return iteam.id === this.groupId

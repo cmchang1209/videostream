@@ -7,13 +7,13 @@
                 <div v-for="(iteam, index) in team" :key="index" :class="['video-area', iteam.status[0] ? 'active' : '', boredrColor, 'game' ]">
                     <template v-if="iteam.pi !== -1">
                         <div class="video-2">
-                            <f-player :id="iteam.pi" :usb="2" />
+                            <f-player :id="iteam.pi" :usb="2" :index="index" />
                         </div>
                         <div class="video-4">
-                            <f-player :id="iteam.pi" :usb="4" />
+                            <f-player :id="iteam.pi" :usb="4" :index="index" />
                         </div>
                         <div :class="['video-1', active[index] ? 'active' : '']" @click="changePcModel(index)">
-                            <f-player :id="iteam.pi" :usb="1" />
+                            <f-player :id="iteam.pi" :usb="1" :index="index" />
                         </div>
                         <div class="adr-name">
                             <svg xmlns="http://www.w3.org/2000/svg" viewBox="0,0,940,79">

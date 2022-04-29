@@ -65,8 +65,8 @@ export default {
                 this.$socket.client.emit('runFFmpeg', { id: this.id, usb: 4 })
                 setTimeout(() => {
                     this.$socket.client.emit('runFFmpeg', { id: this.id, usb: 1 })
-                }, 1000)
-            }, 1000)
+                }, 10000)
+            }, 10000)
         }
     }
 }

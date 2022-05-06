@@ -272,11 +272,11 @@ export default {
         runFFmpeg() {
             this.team.map(iteam => {
                 if (iteam.pi !== 0) {
-                    this.$socket.client.emit('runFFmpeg', { id: iteam.pi, usb: 2 })
+                    this.$socket.client.emit('runFFmpeg', { id: iteam.pi, usb: 1 })
                     setTimeout(() => {
                         this.$socket.client.emit('runFFmpeg', { id: iteam.pi, usb: 4 })
                         setTimeout(() => {
-                            this.$socket.client.emit('runFFmpeg', { id: iteam.pi, usb: 1 })
+                            this.$socket.client.emit('runFFmpeg', { id: iteam.pi, usb: 2 })
                         }, 10000)
                     }, 10000)
                 }

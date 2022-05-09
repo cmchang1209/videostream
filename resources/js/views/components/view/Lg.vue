@@ -267,8 +267,8 @@ export default {
                         this.$socket.client.emit('runFFmpeg', { id: iteam.pi, usb: 4 })
                         setTimeout(() => {
                             this.$socket.client.emit('runFFmpeg', { id: iteam.pi, usb: 2 })
-                        }, 10000)
-                    }, 10000)
+                        }, 1000)
+                    }, 5000)
                 }
             })
         },

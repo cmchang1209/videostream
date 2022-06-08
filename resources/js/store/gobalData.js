@@ -21,7 +21,7 @@ export default {
             port: 4649,
             tmPort: 2410
         },
-        server: '52.196.115.119',
+        server: 'videostream.fidodarts.com',
         ev: 'official'
     },
     getters: {

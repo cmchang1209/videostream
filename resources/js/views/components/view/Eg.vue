@@ -24,11 +24,14 @@
                 </h3>
             </div>
             <div v-if="playstatus && !video_loading && radio === 2" class="block">
-                <el-form :model="form" label-position="top">
-                    <el-form-item label="自動曝光(自定義曝光值需要先關閉自動曝光)">
+                <el-form :model="form">
+                    <el-form-item label="自動曝光" style="margin-bottom: 0">
                         <el-switch v-model="form.exposure_auto" active-text="on" inactive-text="off" @change="changeexposureAuto">
                         </el-switch>
                     </el-form-item>
+                    <p style="margin-top: 0; font-size: .75rem;">(自定義曝光值需要先關閉自動曝光)</p>
+                </el-form>
+                <el-form :model="form" label-position="top">
                     <el-form-item v-if="!form.disabled" :label="'設定曝光值 ('+ exposure + ')'" style="margin-bottom: 5rem;">
                         <el-slider v-model="form.exposure_absolute.k" :min="0" :max="2000" :step="100" show-stops :disabled="form.disabled">
                         </el-slider>
@@ -312,9 +315,9 @@ export default {
 }
 
 .block {
-    width: 640px;
+    width: 960px;
     max-width: 90%;
-    margin: 1.25rem auto;
+    margin: .25rem auto;
 }
 
 </style>
